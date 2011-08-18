@@ -1,4 +1,4 @@
-package tabula.model
+package tabula
 
 import scala.xml._
 

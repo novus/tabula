@@ -1,4 +1,4 @@
-package tabula.model
+package tabula
 
 import java.math.{MathContext, RoundingMode}
 import java.text.DecimalFormat

@@ -1,6 +1,6 @@
 /**
  */
-package tabula.model
+package tabula
 
 import com.mongodb.casbah.Imports._
 import org.apache.poi.hssf.usermodel.HSSFWorkbook

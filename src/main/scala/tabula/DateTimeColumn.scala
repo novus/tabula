@@ -1,4 +1,4 @@
-package tabula.model
+package tabula
 
 import org.scala_tools.time.Imports._
 

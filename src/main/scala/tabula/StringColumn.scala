@@ -1,4 +1,4 @@
-package tabula.model
+package tabula
 
 object StringColumn {
   def apply(o: Option[String]): StringColumn = apply(o.getOrElse(""))

@@ -1,4 +1,4 @@
-package tabula.model
+package tabula
 
 import org.apache.poi.hssf.usermodel._
 

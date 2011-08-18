@@ -1,4 +1,4 @@
-package tabula.model
+package tabula
 
 import com.novus.salat.annotations._
 
