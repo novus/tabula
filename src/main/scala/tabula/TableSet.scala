@@ -31,17 +31,17 @@ trait AsTableSet extends AsCSV with AsXLS {
               case (c, colIdx) => {
                 val cell = row.createCell(colIdx)
                 c match {
-                  case StringColumn(value) => cell.setCellValue(value)
-                  case DateTimeColumn(Some(date)) => {
+                  case StringCell(value) => cell.setCellValue(value)
+                  case DateTimeCell(Some(date)) => {
                     cell.setCellStyle(DateTimeCellStyle)
                     cell.setCellValue(date.toDate)
                   }
-                  case DateTimeColumn(_) => {}
-                  case bdc @ BigDecimalColumn(_, _, _, _) => bdc.scaled.foreach {
+                  case DateTimeCell(_) => {}
+                  case bdc @ BigDecimalCell(_, _, _, _) => bdc.scaled.foreach {
                     scaled =>
                       if (scaled != null) cell.setCellValue(scaled.doubleValue)
                   }
-                  case EmptyColumn(_)                           => {}
+                  case EmptyCell(_)                           => {}
                   case x                                        => throw new IllegalArgumentException("been adding columns, haven't you? %s".format(x.getClass))
                 }
               }

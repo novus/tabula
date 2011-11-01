@@ -3,18 +3,18 @@ package tabula
 import com.novus.salat.annotations._
 
 @Salat
-trait Column {
+trait Cell {
   def format: String
 }
 
-trait LinkedColumn extends Column {
+trait LinkedCell extends Cell {
   val url: String
   val text: Option[String]
   val classes: List[String]
 }
 
-trait LinkableColumn extends Column {
-  def linkTo(url: String, text: Option[String], classes: List[String]): LinkedColumn
+trait LinkableCell extends Cell {
+  def linkTo(url: String, text: Option[String], classes: List[String]): LinkedCell
 }
 
 trait HasValue {

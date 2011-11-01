@@ -5,13 +5,13 @@ import scala.xml._
 import org.scala_tools.time.Imports._
 import com.mongodb.casbah.commons.Imports._
 
-case class Row(columns: List[Column]) {
+case class Row(columns: List[Cell]) {
   lazy val asCSV = columns.map(_.format).mkString(",")
-  lazy val values = columns.map { case StringColumn(value) => value }.toList
+  lazy val values = columns.map { case StringCell(value) => value }.toList
 }
 
-case class EmptyColumn(value: String = "") extends Column with HasValue with DumbValueFormatter
+case class EmptyCell(value: String = "") extends Cell with HasValue with DumbValueFormatter
 
-case class NodeSeqColumn(value: NodeSeq) extends Column with HasValue {
+case class NodeSeqCell(value: NodeSeq) extends Cell with HasValue {
   val format = ""
 }
