@@ -1,5 +1,3 @@
-/**
- */
 package tabula
 
 import com.mongodb.casbah.Imports._
