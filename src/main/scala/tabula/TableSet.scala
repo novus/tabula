@@ -41,8 +41,8 @@ trait AsTableSet extends AsCSV with AsXLS {
                     scaled =>
                       if (scaled != null) cell.setCellValue(scaled.doubleValue)
                   }
-                  case EmptyCell(_)                           => {}
-                  case x                                        => throw new IllegalArgumentException("been adding columns, haven't you? %s".format(x.getClass))
+                  case EmptyCell(_) => {}
+                  case x => throw new IllegalArgumentException("been adding columns, haven't you? %s".format(x.getClass))
                 }
               }
             }
