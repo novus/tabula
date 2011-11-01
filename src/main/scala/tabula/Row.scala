@@ -5,15 +5,7 @@ import scala.xml._
 import org.scala_tools.time.Imports._
 import com.mongodb.casbah.commons.Imports._
 
-object Row {
-  def apply(columns: Seq[Column]): Row = new Row(columns = columns)
-}
-
-case class Row(_id: ObjectId = new ObjectId,
-               tableId: Option[ObjectId] = None,
-               columns: Seq[Column],
-               idx: Option[Int] = None) {
-
+case class Row(columns: Seq[Column]) {
   lazy val asCSV = columns.map(_.format).mkString(",")
   lazy val values = columns.map { case StringColumn(value) => value }.toList
 }

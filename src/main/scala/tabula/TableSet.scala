@@ -22,10 +22,10 @@ trait AsTableSet extends AsCSV with AsXLS {
       style
     }
     tables.foreach {
-      case table @ Table(_id, tableSetId, table_name, header, rows, _) => {
+      case table @ Table(table_name, header, rows) => {
         val sheet = workbook.createSheet(table_name)
         (header :: rows.toList ::: Nil).zipWithIndex.foreach {
-          case (Row(_id, tableId, columns, _), idx) => {
+          case (Row(columns), idx) => {
             val row = sheet.createRow(idx)
             columns.zipWithIndex.foreach {
               case (c, colIdx) => {
@@ -62,6 +62,4 @@ object TableSet {
   val empty = TableSet(name = "", tables = Nil)
 }
 
-case class TableSet(_id: ObjectId = new ObjectId,
-                    name: String,
-                    tables: List[Table]) extends AsTableSet
+case class TableSet(name: String, tables: List[Table]) extends AsTableSet
