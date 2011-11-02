@@ -1,8 +1,5 @@
 package tabula
 
-import com.novus.salat.annotations._
-
-@Salat
 trait Cell {
   def format: String
 }
@@ -25,6 +22,6 @@ trait DumbValueFormatter {
   self: HasValue =>
   def format: String = "\"%s\"".format((value match {
     case o: Option[Any] => o
-    case _ => Option(value)
+    case _              => Option(value)
   }).map(_.toString).getOrElse("").replaceAll("\"", "\"\""))
 }

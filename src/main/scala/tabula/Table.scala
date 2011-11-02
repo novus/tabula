@@ -1,6 +1,5 @@
 package tabula
 
-import com.mongodb.casbah.Imports._
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
 
 case class Table(name: String, header: Row, rows: List[Row]) extends AsCSV with AsXLS {

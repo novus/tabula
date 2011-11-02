@@ -1,8 +1,7 @@
 package tabula
 
-import java.math.{MathContext, RoundingMode}
+import java.math.{ MathContext, RoundingMode }
 import java.text.DecimalFormat
-import com.novus.salat.annotations._
 
 object BigDecimalCell {
   val DefaultRoundingMode = RoundingMode.HALF_UP
@@ -21,9 +20,9 @@ object BigDecimalCell {
 }
 
 case class BigDecimalCell(value: Option[BigDecimal],
-                            @Ignore mathContext: MathContext = BigDecimalCell.DefaultMathContext,
-                            multiplier: Option[BigDecimal] = BigDecimalCell.One,
-                            @Ignore formatter: DecimalFormat = BigDecimalCell.Fractional) extends Cell with HasValue with LinkableCell {
+                          mathContext: MathContext = BigDecimalCell.DefaultMathContext,
+                          multiplier: Option[BigDecimal] = BigDecimalCell.One,
+                          formatter: DecimalFormat = BigDecimalCell.Fractional) extends Cell with HasValue with LinkableCell {
   import BigDecimalCell._
 
   lazy val scaled = multiplier.flatMap(m => value.map(v => m * v)).map(_(mathContext))

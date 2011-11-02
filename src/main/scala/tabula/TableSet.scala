@@ -1,10 +1,7 @@
 package tabula
 
 import org.apache.poi.hssf.usermodel._
-import com.novus.salat.annotations._
-import com.mongodb.casbah.Imports._
 
-@Salat
 trait AsTableSet extends AsCSV with AsXLS {
 
   val name: String
@@ -42,7 +39,7 @@ trait AsTableSet extends AsCSV with AsXLS {
                       if (scaled != null) cell.setCellValue(scaled.doubleValue)
                   }
                   case EmptyCell(_) => {}
-                  case x => throw new IllegalArgumentException("been adding columns, haven't you? %s".format(x.getClass))
+                  case x            => throw new IllegalArgumentException("been adding columns, haven't you? %s".format(x.getClass))
                 }
               }
             }
