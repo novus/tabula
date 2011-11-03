@@ -27,6 +27,7 @@ case class CanBeCell(column: Cell, next: Option[CanBeCell] = None) {
 
 object `package` {
   val Blank = StringCell(None)
+  type CellFun[F] = PartialFunction[Option[F], Option[Cell]]
 
   implicit def bdcpimp(col: Cell) = new {
     def reformat(f: => DecimalFormat): Cell = col match {
