@@ -6,4 +6,3 @@ trait TableModel[T] {
   def rows(xs: List[T]): List[Row] = xs.map(x => Row(columns.map(_(x).getOrElse(Blank))))
   def footer(xs: List[T]): Option[Row]
 }
-

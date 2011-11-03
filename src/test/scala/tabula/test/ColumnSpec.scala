@@ -4,16 +4,17 @@ import tabula._
 import org.specs._
 
 case class A(a: String)
-object ColumnA extends Column[A] {
+
+object ColumnOne extends Column[A] {
   val name = "a"
   val label = "A"
-  def apply(a: A) = Some(StringCell(Some(a.a)))
+  def apply(x: Option[A]) = x.map { case A(a) => StringCell(Some(a)) }
 }
 
 class ColumnSpec extends Specification {
   "a column" should {
     "make a cell" in {
-      ColumnA(A("a")) must beSome[StringCell].which {
+      ColumnOne(A("a")) must beSome[Cell].which {
         case StringCell(a) => a must_== "a"
       }
     }
