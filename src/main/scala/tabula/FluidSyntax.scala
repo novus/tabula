@@ -29,6 +29,8 @@ object `package` {
   val Blank = StringCell(None)
   type CellFun[F] = PartialFunction[Option[F], Option[Cell]]
 
+  implicit def column2fun[F](col: Column[F]): CellFun[F] = col.apply
+
   implicit def bdcpimp(col: Cell) = new {
     def reformat(f: => DecimalFormat): Cell = col match {
       case bdc: BigDecimalCell => bdc.copy(formatter = f)

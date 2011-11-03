@@ -13,12 +13,15 @@ object ColumnOne extends Column[A] {
   }
 }
 
+case class ColumnTwo(first: CellFun[StringCell], columns: List[Column[Cell]]) extends Columns[StringCell]
+
 class ColumnSpec extends Specification {
   "a column" should {
     "make a cell" in {
       ColumnOne(A("a")) must beSome[Cell].which {
         case StringCell(a) => a must_== "a"
       }
+      //      val b = ColumnTwo(ColumnOne, Nil)
     }
   }
 }
