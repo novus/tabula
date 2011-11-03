@@ -10,14 +10,12 @@ trait Columns[F] extends Column[F] {
 
   def first: CellFun[F]
 
-  def last(x: Option[Cell]) = x
-
   def apply: CellFun[F] = {
     case x =>
-      last(columns.foldLeft(first(x)) {
+      columns.foldLeft(first(x)) {
         case (cell @ Some(_), col) => col(cell)
         case _                     => None
-      })
+      }
   }
 }
 
