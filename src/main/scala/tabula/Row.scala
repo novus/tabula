@@ -8,8 +8,6 @@ case class Row(columns: List[Cell]) {
   lazy val values = columns.map { case StringCell(value) => value }.toList
 }
 
-case class EmptyCell(value: String = "") extends Cell with HasValue with DumbValueFormatter
-
 case class NodeSeqCell(value: NodeSeq) extends Cell with HasValue {
   val format = ""
 }

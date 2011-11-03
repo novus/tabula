@@ -87,8 +87,7 @@ object `package` {
 
           case e: Enumeration#Value       => StringCell(e.toString)
 
-          case None                       => EmptyCell()
-          case null                       => EmptyCell()
+          case None | null                => Blank
 
           case x if (x != null)           => StringCell(x.toString)
         }

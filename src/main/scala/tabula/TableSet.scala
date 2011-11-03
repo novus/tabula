@@ -28,6 +28,7 @@ trait AsTableSet extends AsCSV with AsXLS {
               case (c, colIdx) => {
                 val cell = row.createCell(colIdx)
                 c match {
+                  case Blank             => {}
                   case StringCell(value) => cell.setCellValue(value)
                   case DateTimeCell(Some(date)) => {
                     cell.setCellStyle(DateTimeCellStyle)
@@ -38,8 +39,7 @@ trait AsTableSet extends AsCSV with AsXLS {
                     scaled =>
                       if (scaled != null) cell.setCellValue(scaled.doubleValue)
                   }
-                  case EmptyCell(_) => {}
-                  case x            => throw new IllegalArgumentException("been adding columns, haven't you? %s".format(x.getClass))
+                  case x => throw new IllegalArgumentException("been adding columns, haven't you? %s".format(x.getClass))
                 }
               }
             }
