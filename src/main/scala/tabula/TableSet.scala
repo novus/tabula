@@ -21,7 +21,7 @@ trait AsTableSet extends AsCSV with AsXLS {
     tables.foreach {
       case Table(table_name, header, rows, footer) => {
         val sheet = workbook.createSheet(table_name)
-        (header :: rows.toList ::: Nil).zipWithIndex.foreach {
+        (header.toList ::: rows.toList ::: footer.toList).zipWithIndex.foreach {
           case (Row(columns), idx) => {
             val row = sheet.createRow(idx)
             columns.zipWithIndex.foreach {
