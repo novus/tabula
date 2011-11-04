@@ -4,16 +4,15 @@ trait Column[F] {
   def apply: CellFun[F]
 }
 
-trait Columns[F] extends Column[F] {
-  val columns: List[Column[Cell]]
+trait Columns[F, C <: Cell] extends Column[F] {
+  val columns: ColumnsChain[C]
 
-  def first: CellFun[F]
+  def first: Column[F]
 
   def apply: CellFun[F] = {
     case x =>
-      columns.foldLeft(first(x)) {
-        case (cell @ Some(_), col) => col.apply(cell)
-        case _                     => None
+      columns.foldLeft(first.apply(x)) {
+        case (cell: Option[C], col) => col.apply(cell)
       }
   }
 }

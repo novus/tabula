@@ -13,15 +13,25 @@ object ColumnOne extends Column[A] {
   }
 }
 
-case class ColumnTwo(first: CellFun[StringCell], columns: List[Column[Cell]]) extends Columns[StringCell]
+case class ColumnTwo[C <: Cell](first: Column[A], columns: ColumnsChain[Cell]) extends Columns[A, Cell]
+
+object Up extends Column[StringCell] {
+  def apply = {
+    case Some(StringCell(s)) => Some(StringCell(s.toUpperCase))
+  }
+}
 
 class ColumnSpec extends Specification {
   "a column" should {
     "make a cell" in {
-      ColumnOne(A("a")) must beSome[Cell].which {
+      ColumnOne.apply(Some(A("a"))) must beSome[Cell].which {
         case StringCell(a) => a must_== "a"
       }
-      //      val b = ColumnTwo(ColumnOne, Nil)
+    }
+    "participate in chains" in {
+      ColumnTwo(ColumnOne, Up :: Nil).apply(Some(A("b"))) must beSome[Cell].which {
+        case StringCell(b) => b must_== "B"
+      }
     }
   }
 }
