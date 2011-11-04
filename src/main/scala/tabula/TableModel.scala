@@ -13,12 +13,12 @@ object TableModel {
 }
 
 trait TableModelWithHeader[F] extends TableModel[F] {
-  private def header_? = columns.exists { case ColumnWithMeta(_, _, _) => true case _ => false }
+  private def header_? = columns.exists { case Named(_, _, _) => true case _ => false }
   def header =
     if (header_?)
       Some(Row(columns.map {
-        case ColumnWithMeta(_, name, label) => StringCell(label.getOrElse(name))
-        case _                              => Blank
+        case Named(_, name, label) => StringCell(label.getOrElse(name))
+        case _                     => Blank
       }))
     else None
 
