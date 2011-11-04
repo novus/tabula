@@ -5,7 +5,7 @@ trait TableModel[T] {
   def header: Option[Row]
   def rows(xs: List[T]): List[Row] = xs.map(x => Row(columns.map(_.apply(Some(x)).getOrElse(Blank))))
   def footer: Option[Row]
-  def table(xs: List[T]) = Table(name = "", header = header.getOrElse(Row(Nil)), rows = rows(xs))
+  def table(xs: List[T]) = Table(name = "", rows = rows(xs))
 }
 
 object TableModel {
@@ -16,7 +16,7 @@ object TableModel {
   }
 }
 
-trait TableModelHeader[T] {
+trait TableModelWithHeader[T] {
   self: TableModel[T] =>
 
   def header = Row(columns.map {

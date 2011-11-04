@@ -19,7 +19,7 @@ trait AsTableSet extends AsCSV with AsXLS {
       style
     }
     tables.foreach {
-      case table @ Table(table_name, header, rows) => {
+      case Table(table_name, header, rows, footer) => {
         val sheet = workbook.createSheet(table_name)
         (header :: rows.toList ::: Nil).zipWithIndex.foreach {
           case (Row(columns), idx) => {
@@ -35,17 +35,15 @@ trait AsTableSet extends AsCSV with AsXLS {
                     cell.setCellValue(date.toDate)
                   }
                   case DateTimeCell(_) => {}
-                  case bdc @ BigDecimalCell(_, _, _, _) => bdc.scaled.foreach {
-                    scaled =>
-                      if (scaled != null) cell.setCellValue(scaled.doubleValue)
-                  }
+                  case bdc @ BigDecimalCell(_, _, _, _) =>
+                    bdc.scaled.flatMap(Option(_)).foreach(s => cell.setCellValue(s.doubleValue))
                   case x => throw new IllegalArgumentException("been adding columns, haven't you? %s".format(x.getClass))
                 }
               }
             }
           }
         }
-        if (autoSize) header.columns.zipWithIndex.foreach {
+        if (autoSize) header.map(_.columns).getOrElse(Nil).zipWithIndex.foreach {
           case (_, i) => sheet.autoSizeColumn(i)
         }
       }
