@@ -19,6 +19,12 @@ object Up extends Column[StringCell] {
   }
 }
 
+case class TimesN(n: Int) extends Column[StringCell] {
+  def apply = {
+    case Some(StringCell(s)) => Some(StringCell(s * n))
+  }
+}
+
 class ColumnSpec extends Specification {
   "a column" should {
     "make a cell" in {
@@ -29,6 +35,14 @@ class ColumnSpec extends Specification {
     "participate in chains" in {
       Columns(ColumnOne, Up :: Nil).apply(Some(A("b"))) must beSome[Cell].which {
         case StringCell(b) => b must_== "B"
+      }
+    }
+    "participate in longer chains" in {
+      Columns(Columns(ColumnOne, Up :: Nil), TimesN(2) :: Nil).apply(Some(A("b"))) must beSome[Cell].which {
+        case StringCell(b) => b must_== "BB"
+      }
+      Columns(ColumnOne, Up :: TimesN(2) :: Nil).apply(Some(A("b"))) must beSome[Cell].which {
+        case StringCell(b) => b must_== "BB"
       }
     }
   }
