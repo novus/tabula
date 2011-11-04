@@ -1,26 +1,26 @@
 package tabula
 
-trait TableModel[T] {
-  def columns: List[Column[T]]
-  def header: Option[Row]
-  def rows(xs: List[T]): List[Row] = xs.map(x => Row(columns.map(_.apply(Some(x)).getOrElse(Blank))))
-  def footer: Option[Row]
-  def table(xs: List[T]) = Table(name = "", rows = rows(xs))
+trait TableModel[F] {
+  self =>
+
+  def columns: List[Column[F]]
+  def rows(xs: List[F]): List[Row] = xs.map(x => Row(columns.map(_.apply(Some(x)).getOrElse(Blank))))
+  def table(xs: List[F]) = Table(name = "", rows = rows(xs))
 }
 
 object TableModel {
-  def apply[F](cs: List[Column[F]]) = new TableModel[F] {
-    val columns = cs
-    val header = None
-    val footer = None
-  }
+  def apply[F](cs: List[Column[F]]) = new TableModel[F] { val columns = cs }
 }
 
-trait TableModelWithHeader[T] {
-  self: TableModel[T] =>
+trait TableModelWithHeader[F] extends TableModel[F] {
+  private def header_? = columns.exists { case ColumnWithMeta(_, _, _) => true case _ => false }
+  def header =
+    if (header_?)
+      Some(Row(columns.map {
+        case ColumnWithMeta(_, name, label) => StringCell(label.getOrElse(name))
+        case _                              => Blank
+      }))
+    else None
 
-  def header = Row(columns.map {
-    case ColumnWithMeta(_, name, label) => StringCell(label.getOrElse(name))
-    case _                              => Blank
-  })
+  override def table(xs: List[F]) = super.table(xs).copy(header = header)
 }

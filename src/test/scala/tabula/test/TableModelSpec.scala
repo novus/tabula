@@ -35,6 +35,7 @@ class TableModelSpec extends Specification {
         n => Person("mR. %d".format(n), "bOvEy %d".format(n), age = mkage(n))
       }
       val table = TableModel(List(FirstName |> Capitalize, LastName |> Capitalize, Age)).table(people)
+      println(table.asCSV)
       table.rows mustNot beEmpty
       for ((row, idx) <- table.rows.zipWithIndex) {
         row.columns.size must_== 3
