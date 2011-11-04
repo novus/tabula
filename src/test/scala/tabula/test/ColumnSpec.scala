@@ -13,8 +13,6 @@ object ColumnOne extends Column[A] {
   }
 }
 
-case class ColumnTwo[C <: Cell](first: Column[A], columns: ColumnsChain[Cell]) extends Columns[A, Cell]
-
 object Up extends Column[StringCell] {
   def apply = {
     case Some(StringCell(s)) => Some(StringCell(s.toUpperCase))
@@ -29,7 +27,7 @@ class ColumnSpec extends Specification {
       }
     }
     "participate in chains" in {
-      ColumnTwo(ColumnOne, Up :: Nil).apply(Some(A("b"))) must beSome[Cell].which {
+      Columns(ColumnOne, Up :: Nil).apply(Some(A("b"))) must beSome[Cell].which {
         case StringCell(b) => b must_== "B"
       }
     }

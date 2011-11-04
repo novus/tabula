@@ -16,3 +16,11 @@ trait Columns[F, C <: Cell] extends Column[F] {
       }
   }
 }
+
+object Columns {
+  def apply[F, C <: Cell](f: Column[F], cs: ColumnsChain[C]) =
+    new Columns[F, C] {
+      val first = f
+      val columns = cs
+    }
+}
