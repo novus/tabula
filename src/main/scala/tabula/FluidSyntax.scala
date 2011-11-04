@@ -32,6 +32,10 @@ object `package` {
 
   implicit def wtf(c: Column[_]): Column[Cell] = c.asInstanceOf[Column[Cell]]
 
+  implicit def colpimp[F](col: Column[F]) = new {
+    def |>[N <: Cell](next: Column[N]) = Columns(col, next :: Nil)
+  }
+
   implicit def bdcpimp(col: Cell) = new {
     def reformat(f: => DecimalFormat): Cell = col match {
       case bdc: BigDecimalCell => bdc.copy(formatter = f)
