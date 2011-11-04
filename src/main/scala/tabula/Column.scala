@@ -4,6 +4,10 @@ trait Column[F] {
   def apply: CellFun[F]
 }
 
+case class ColumnWithMeta[F](column: Column[F], name: String, label: Option[String] = None) extends Column[F] {
+  def apply = column.apply
+}
+
 trait Columns[F, C <: Cell] extends Column[F] {
   val columns: ColumnsChain[C]
 
