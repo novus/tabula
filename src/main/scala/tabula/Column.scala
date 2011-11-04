@@ -28,3 +28,9 @@ object Columns {
       val columns = cs
     }
 }
+
+trait Aggregated[F, C <: Cell] extends Column[F] {
+  val column: Column[F]
+  def apply = column.apply
+  val fun: AggregationFun[F, C]
+}

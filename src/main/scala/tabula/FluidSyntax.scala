@@ -28,6 +28,7 @@ case class CanBeCell(column: Cell, next: Option[CanBeCell] = None) {
 object `package` {
   val Blank = StringCell(None)
   type CellFun[F] = Option[F] => Option[Cell]
+  type AggregationFun[F, C <: Cell] = List[F] => Option[C]
   type ColumnsChain[C] = List[Column[C]]
 
   implicit def wtf(c: Column[_]): Column[Cell] = c.asInstanceOf[Column[Cell]]
