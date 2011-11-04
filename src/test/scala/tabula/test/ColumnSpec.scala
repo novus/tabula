@@ -8,7 +8,7 @@ case class A(a: String)
 object ColumnOne extends Column[A] {
   val name = "a"
   val label = "A"
-  def apply: CellFun[A] = {
+  def apply = {
     case Some(A(a)) => Some(StringCell(a))
   }
 }

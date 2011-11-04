@@ -9,7 +9,7 @@ trait Columns[F, C <: Cell] extends Column[F] {
 
   def first: Column[F]
 
-  def apply: CellFun[F] = {
+  def apply = {
     case x =>
       columns.foldLeft(first.apply(x)) {
         case (cell: Option[C], col) => col.apply(cell)
