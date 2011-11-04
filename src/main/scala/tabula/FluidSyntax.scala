@@ -33,7 +33,10 @@ object `package` {
   implicit def wtf(c: Column[_]): Column[Cell] = c.asInstanceOf[Column[Cell]]
 
   implicit def colpimp[F](col: Column[F]) = new {
-    def |>[N <: Cell](next: Column[N]) = Columns(col, next :: Nil)
+    def |>[N <: Cell](next: Column[N]): Columns[F, N] = col match {
+      case chain: Columns[F, N] => Columns(chain.first, chain.columns ::: next :: Nil)
+      case _                    => Columns(col, next :: Nil)
+    }
   }
 
   implicit def bdcpimp(col: Cell) = new {

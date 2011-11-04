@@ -46,4 +46,19 @@ class ColumnSpec extends Specification {
       }
     }
   }
+  "column DSL" should {
+    "optimize longer chains" in {
+      val chain = C |> A |> F |> E |> B |> A |> B |> E
+      chain.first.asInstanceOf[X[_]].x must_== "C"
+      chain.columns.size must_== 7
+      (chain.first :: chain.columns).map(_.asInstanceOf[X[_]].x).mkString("") must_== "CAFEBABE"
+    }
+  }
 }
+
+abstract class X[F](val x: String) extends Column[F] { def apply = { case _ => Some(Blank) } }
+object C extends X[Int]("C")
+object A extends X[Cell]("A")
+object F extends X[Cell]("F")
+object E extends X[Cell]("E")
+object B extends X[Cell]("B")
