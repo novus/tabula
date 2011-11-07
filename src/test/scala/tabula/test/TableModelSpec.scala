@@ -50,8 +50,8 @@ class TableModelSpec extends Specification {
       println(table.asCSV)
       table.rows mustNot beEmpty
       for ((row, idx) <- table.rows.zipWithIndex) {
-        row.columns.size must_== 3
-        row.columns match {
+        row.cells.size must_== 3
+        row.cells match {
           case StringCell(first) :: StringCell(last) :: BigDecimalCell(Some(age), _, _, _) :: Nil => {
             first must_== "Mr. %d".format(idx)
             last must_== "Bovey %d".format(idx)
@@ -60,7 +60,7 @@ class TableModelSpec extends Specification {
           case _ => fail
         }
       }
-      table.footer.flatMap(_.columns.lastOption) must beSome[Cell].which {
+      table.footer.flatMap(_.cells.lastOption) must beSome[Cell].which {
         case BigDecimalCell(Some(avg), _, _, _) => avg must_== people.map(_.age).sum / people.size
       }
     }

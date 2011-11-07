@@ -5,7 +5,7 @@ import java.math.{ BigDecimal => JavaBigDecimal }
 import java.text.DecimalFormat
 import org.scala_tools.time.Imports._
 
-case class CanBeCell(column: Cell, next: Option[CanBeCell] = None) {
+case class CanBeCell(cell: Cell, next: Option[CanBeCell] = None) {
   def `!:`(x: Any): CanBeCell = {
     any2cbc(x).copy(next = Some(this))
   }
@@ -17,7 +17,7 @@ case class CanBeCell(column: Cell, next: Option[CanBeCell] = None) {
     }
   }
 
-  def asCells: List[Cell] = column :: {
+  def asCells: List[Cell] = cell :: {
     next match {
       case Some(cbc) => cbc.asCells
       case _         => Nil
@@ -65,7 +65,7 @@ object `package` {
 
   def linked_any2cbc(a: Any, url: String, text: Option[String]): CanBeCell = {
     any2cbc(a) match {
-      case cbc @ CanBeCell(lc: LinkableCell, _) => cbc.copy(column = lc.linkTo(url, text, Nil))
+      case cbc @ CanBeCell(lc: LinkableCell, _) => cbc.copy(cell = lc.linkTo(url, text, Nil))
       case x                                    => x
     }
   }
@@ -73,7 +73,7 @@ object `package` {
   implicit def any2cbc(a: Any): CanBeCell = {
     if (a.isInstanceOf[CanBeCell]) a.asInstanceOf[CanBeCell]
     else
-      CanBeCell(column = {
+      CanBeCell(cell = {
         a match {
           case c: Cell                    => c
 
@@ -105,9 +105,9 @@ object `package` {
       })
   }
 
-  implicit def cbc2row(cbc: CanBeCell): Row = Row(columns = cbc.asCells)
+  implicit def cbc2row(cbc: CanBeCell): Row = Row(cbc.asCells)
 
-  implicit def cbc2columns(cbc: CanBeCell): Seq[Cell] = cbc.asCells
+  implicit def cbc2cells(cbc: CanBeCell): Seq[Cell] = cbc.asCells
 
   implicit def things2cbc(as: Seq[_]): Seq[Cell] = as.map(any2cbc _).map(_.asCells.head)
 

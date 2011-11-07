@@ -41,7 +41,7 @@ trait TableModelWithFooter[F] {
     if (footer_?)
       Some(Row(columns.zipWithIndex.map {
         case (agg: Aggregated[F, Cell], idx) => {
-          agg.fun(xs.zip(rows.flatMap(_.columns.lift(idx)))).getOrElse(Blank)
+          agg.fun(xs.zip(rows.flatMap(_.cells.lift(idx)))).getOrElse(Blank)
         }
         case _ => Blank
       }))

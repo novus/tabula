@@ -43,7 +43,7 @@ trait AsTableSet extends AsCSV with AsXLS {
             }
           }
         }
-        if (autoSize) header.map(_.columns).getOrElse(Nil).zipWithIndex.foreach {
+        if (autoSize) header.map(_.cells).getOrElse(Nil).zipWithIndex.foreach {
           case (_, i) => sheet.autoSizeColumn(i)
         }
       }
