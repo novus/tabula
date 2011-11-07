@@ -32,5 +32,13 @@ object Columns {
 trait Aggregated[F, C <: Cell] extends Column[F] {
   val column: Column[F]
   def apply = column.apply
-  val fun: AggregationFun[F, C]
+  def fun: AggregationFun[F, C]
+}
+
+object Aggregated {
+  def apply[F, C <: Cell](c: Column[F])(f: AggregationFun[F, C]) =
+    new Aggregated[F, C] {
+      val column = c
+      val fun = f
+    }
 }
