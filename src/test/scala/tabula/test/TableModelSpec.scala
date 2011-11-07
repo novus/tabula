@@ -46,7 +46,7 @@ class TableModelSpec extends Specification {
       val people = (0 to 9).toList.map {
         n => Person("mR. %d".format(n), "bOvEy %d".format(n), age = mkage(n))
       }
-      val table = TableModel(List(FirstName |> Capitalize, LastName |> Capitalize, Averaged(Age))).table(people)
+      val table = TableModel(List(FirstName | Capitalize, LastName | Capitalize, Averaged(Age))).table(people)
       println(table.asCSV)
       table.rows mustNot beEmpty
       for ((row, idx) <- table.rows.zipWithIndex) {

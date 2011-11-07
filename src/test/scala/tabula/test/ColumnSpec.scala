@@ -48,7 +48,7 @@ class ColumnSpec extends Specification {
   }
   "column DSL" should {
     "optimize longer chains" in {
-      val chain = C |> A |> F |> E |> B |> A |> B |> E
+      val chain = C | A | F | E | B | A | B | E
       chain.first.asInstanceOf[X[_]].x must_== "C"
       chain.columns.size must_== 7
       (chain.first :: chain.columns).map(_.asInstanceOf[X[_]].x).mkString("") must_== "CAFEBABE"
