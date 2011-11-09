@@ -30,11 +30,11 @@ trait AsTableSet extends AsCSV with AsXLS {
                 c match {
                   case Blank             => {}
                   case StringCell(value) => cell.setCellValue(value)
-                  case DateTimeCell(Some(date)) => {
+                  case DateTimeCell(Some(date), _) => {
                     cell.setCellStyle(DateTimeCellStyle)
                     cell.setCellValue(date.toDate)
                   }
-                  case DateTimeCell(_) => {}
+                  case DateTimeCell(_, _) => {}
                   case bdc @ BigDecimalCell(_, _, _, _) =>
                     bdc.scaled.flatMap(Option(_)).foreach(s => cell.setCellValue(s.doubleValue))
                   case x => throw new IllegalArgumentException("been adding columns, haven't you? %s".format(x.getClass))
