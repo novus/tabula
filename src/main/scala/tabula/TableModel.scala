@@ -21,9 +21,9 @@ object TableModel {
 trait TableModelWithHeader[F] {
   self: TableModel[F] =>
 
-  private def header_? = columns.exists { case Named(_, _, _) => true case _ => false }
+  private lazy val header_? = columns.exists { case Named(_, _, _) => true case _ => false }
 
-  override def header =
+  override lazy val header =
     if (header_?)
       Some(Row(columns.map {
         case Named(_, name, label) => StringCell(label.getOrElse(name))
@@ -35,7 +35,7 @@ trait TableModelWithHeader[F] {
 trait TableModelWithFooter[F] {
   self: TableModel[F] =>
 
-  private def footer_? = columns.exists { case _: Aggregated[_, _] => true case _ => false }
+  private lazy val footer_? = columns.exists { case _: Aggregated[_, _] => true case _ => false }
 
   override def footer(xs: List[F], rows: List[Row]) =
     if (footer_?)
