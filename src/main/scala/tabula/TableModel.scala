@@ -5,7 +5,8 @@ trait TableModel[F] {
 
   def columns: List[Column[F]]
   def header: Option[Row]
-  def rows(xs: List[F]): List[Row] = xs.map(x => Row(columns.map(_.cell(Some(x)).getOrElse(Blank))))
+  def rows(xs: List[F]): List[Row] =
+    xs.map(Option(_)).map(x => Row(columns.flatMap(_.cellOrBlank(x))))
   def footer(xs: List[F], rows: List[Row]): Option[Row]
   def table(xs: List[F]) = {
     val table = Table(name = "", header = header, rows = rows(xs))

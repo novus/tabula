@@ -2,6 +2,7 @@ package tabula
 
 trait Column[F] {
   def cell: CellFun[F]
+  def cellOrBlank: CellFun[F] = { case x => cell.lift(x).getOrElse(SomeBlank) }
 }
 
 case class Named[F](column: Column[F], name: String, label: Option[String] = None) extends Column[F] {
@@ -15,8 +16,8 @@ trait Columns[F, C <: Cell] extends Column[F] {
 
   def cell = {
     case x =>
-      columns.foldLeft(first.cell(x)) {
-        case (cell: Option[C], col) => col.cell(cell)
+      columns.foldLeft(first.cellOrBlank(x)) {
+        case (cell: Option[C], col) => col.cellOrBlank(cell)
       }
   }
 }

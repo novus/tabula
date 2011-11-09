@@ -4,7 +4,9 @@ import java.text.DecimalFormat
 
 object `package` {
   val Blank = StringCell(None)
-  type CellFun[F] = Option[F] => Option[Cell]
+  val SomeBlank = Some(Blank)
+
+  type CellFun[F] = PartialFunction[Option[F], Option[Cell]]
   type AggregationFun[F, C <: Cell] = List[(F, Cell)] => Option[C]
   type ColumnsChain[C] = List[Column[C]]
 
