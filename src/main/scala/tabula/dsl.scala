@@ -1,8 +1,8 @@
-package tabula
+package tabula.dsl
 
+import tabula._
 import scala.math.{ BigDecimal => ScalaBigDecimal }
 import java.math.{ BigDecimal => JavaBigDecimal }
-import java.text.DecimalFormat
 import org.scala_tools.time.Imports._
 
 case class CanBeCell(cell: Cell, next: Option[CanBeCell] = None) {
@@ -26,43 +26,6 @@ case class CanBeCell(cell: Cell, next: Option[CanBeCell] = None) {
 }
 
 object `package` {
-  val Blank = StringCell(None)
-  type CellFun[F] = Option[F] => Option[Cell]
-  type AggregationFun[F, C <: Cell] = List[(F, Cell)] => Option[C]
-  type ColumnsChain[C] = List[Column[C]]
-
-  implicit def wtf(c: Column[_]): Column[Cell] = c.asInstanceOf[Column[Cell]]
-
-  implicit def colpimp[F](col: Column[F]) = new {
-    def |[N <: Cell](next: Column[N]): Columns[F, N] = col match {
-      case chain: Columns[F, N] => Columns(chain.first, chain.columns ::: next :: Nil)
-      case _                    => Columns(col, next :: Nil)
-    }
-  }
-
-  implicit def bdcpimp(col: Cell) = new {
-    def reformat(f: => DecimalFormat): Cell = col match {
-      case bdc: BigDecimalCell => bdc.copy(formatter = f)
-      case _                   => col
-    }
-
-    def number: Option[BigDecimal] = col match {
-      case bdc: BigDecimalCell => bdc.scaled
-      case _                   => None
-    }
-
-    def mapNumber(f: Option[BigDecimal] => Option[BigDecimal]): Cell = col match {
-      case bdc: BigDecimalCell => bdc.copy(value = f(bdc.scaled))
-      case _                   => col
-    }
-  }
-
-  implicit def pimpmanybdcs(cols: List[Cell]) = new {
-    def reformat(f: => DecimalFormat): List[Cell] = cols.map(_.reformat(f))
-
-    def mapNumber(f: Option[BigDecimal] => Option[BigDecimal]): List[Cell] = cols.map(_.mapNumber(f))
-  }
-
   def linked_any2cbc(a: Any, url: String, text: Option[String]): CanBeCell = {
     any2cbc(a) match {
       case cbc @ CanBeCell(lc: LinkableCell, _) => cbc.copy(cell = lc.linkTo(url, text, Nil))
@@ -106,17 +69,7 @@ object `package` {
   }
 
   implicit def cbc2row(cbc: CanBeCell): Row = Row(cbc.asCells)
-
   implicit def cbc2cells(cbc: CanBeCell): Seq[Cell] = cbc.asCells
-
   implicit def things2cbc(as: Seq[_]): Seq[Cell] = as.map(any2cbc _).map(_.asCells.head)
-
   implicit def optint2optbd(i: Option[Int]): Option[ScalaBigDecimal] = i.map(ScalaBigDecimal(_))
-
-  def sortIndexable(a: Indexable, b: Indexable) =
-    a.idx.orElse(b.idx).getOrElse(-1) <= b.idx.orElse(a.idx).getOrElse(-1)
-}
-
-trait Indexable {
-  val idx: Option[Int]
 }
