@@ -1,11 +1,11 @@
 package tabula
 
 trait Column[F] {
-  def apply: CellFun[F]
+  def cell: CellFun[F]
 }
 
 case class Named[F](column: Column[F], name: String, label: Option[String] = None) extends Column[F] {
-  def apply = column.apply
+  def cell = column.cell
 }
 
 trait Columns[F, C <: Cell] extends Column[F] {
@@ -13,10 +13,10 @@ trait Columns[F, C <: Cell] extends Column[F] {
 
   def first: Column[F]
 
-  def apply = {
+  def cell = {
     case x =>
-      columns.foldLeft(first.apply(x)) {
-        case (cell: Option[C], col) => col.apply(cell)
+      columns.foldLeft(first.cell(x)) {
+        case (cell: Option[C], col) => col.cell(cell)
       }
   }
 }
@@ -31,7 +31,7 @@ object Columns {
 
 trait Aggregated[F, C <: Cell] extends Column[F] {
   val column: Column[F]
-  def apply = column.apply
+  def cell = column.cell
   def fun: AggregationFun[F, C]
 }
 

@@ -6,14 +6,14 @@ import org.specs._
 case class Person(first: String, last: String, age: Int)
 
 class NameColumn(f: Person => String) extends Column[Person] {
-  def apply = { case Some(p) => Some(StringCell(f(p))) }
+  def cell = { case Some(p) => Some(StringCell(f(p))) }
 }
 
 object FirstName extends NameColumn(_.first)
 object LastName extends NameColumn(_.last)
 
 object Capitalize extends Column[StringCell] {
-  def apply = {
+  def cell = {
     case Some(StringCell(name)) => Some(StringCell({
       name.split("").drop(1).toList match {
         case head :: tail => head.toUpperCase + tail.mkString("").toLowerCase
@@ -24,7 +24,7 @@ object Capitalize extends Column[StringCell] {
 }
 
 object Age extends Column[Person] {
-  def apply = { case Some(Person(_, _, age)) => Some(BigDecimalCell(age)) }
+  def cell = { case Some(Person(_, _, age)) => Some(BigDecimalCell(age)) }
 }
 
 case class Averaged[F](column: Column[F]) extends Aggregated[F, BigDecimalCell] {

@@ -8,19 +8,19 @@ case class A(a: String)
 object ColumnOne extends Column[A] {
   val name = "a"
   val label = "A"
-  def apply = {
+  def cell = {
     case Some(A(a)) => Some(StringCell(a))
   }
 }
 
 object Up extends Column[StringCell] {
-  def apply = {
+  def cell = {
     case Some(StringCell(s)) => Some(StringCell(s.toUpperCase))
   }
 }
 
 case class TimesN(n: Int) extends Column[StringCell] {
-  def apply = {
+  def cell = {
     case Some(StringCell(s)) => Some(StringCell(s * n))
   }
 }
@@ -28,20 +28,20 @@ case class TimesN(n: Int) extends Column[StringCell] {
 class ColumnSpec extends Specification {
   "a column" should {
     "make a cell" in {
-      ColumnOne.apply(Some(A("a"))) must beSome[Cell].which {
+      ColumnOne.cell(Some(A("a"))) must beSome[Cell].which {
         case StringCell(a) => a must_== "a"
       }
     }
     "participate in chains" in {
-      Columns(ColumnOne, Up :: Nil).apply(Some(A("b"))) must beSome[Cell].which {
+      Columns(ColumnOne, Up :: Nil).cell(Some(A("b"))) must beSome[Cell].which {
         case StringCell(b) => b must_== "B"
       }
     }
     "participate in longer chains" in {
-      Columns(Columns(ColumnOne, Up :: Nil), TimesN(2) :: Nil).apply(Some(A("b"))) must beSome[Cell].which {
+      Columns(Columns(ColumnOne, Up :: Nil), TimesN(2) :: Nil).cell(Some(A("b"))) must beSome[Cell].which {
         case StringCell(b) => b must_== "BB"
       }
-      Columns(ColumnOne, Up :: TimesN(2) :: Nil).apply(Some(A("b"))) must beSome[Cell].which {
+      Columns(ColumnOne, Up :: TimesN(2) :: Nil).cell(Some(A("b"))) must beSome[Cell].which {
         case StringCell(b) => b must_== "BB"
       }
     }
@@ -56,7 +56,7 @@ class ColumnSpec extends Specification {
   }
 }
 
-abstract class X[F](val x: String) extends Column[F] { def apply = { case _ => Some(Blank) } }
+abstract class X[F](val x: String) extends Column[F] { def cell = { case _ => Some(Blank) } }
 object C extends X[Int]("C")
 object A extends X[Cell]("A")
 object F extends X[Cell]("F")

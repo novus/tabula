@@ -40,16 +40,16 @@ object Purchases {
 
 // what we bought
 object ItemName extends Column[Purchase] {
-  def apply = { case Some(Purchase(UselessItem(name, _), _, _)) => Some(StringCell(name)) }
+  def cell = { case Some(Purchase(UselessItem(name, _), _, _)) => Some(StringCell(name)) }
 }
 
 // how much we paid
 object ItemPrice extends Column[Purchase] {
-  def apply = { case Some(Purchase(UselessItem(_, price), _, _)) => Some(BigDecimalCell(Some(BigDecimal(price)))) }
+  def cell = { case Some(Purchase(UselessItem(_, price), _, _)) => Some(BigDecimalCell(Some(BigDecimal(price)))) }
 }
 
 object PriceAsWholeDollars extends Column[BigDecimalCell] {
-  def apply = {
+  def cell = {
     case Some(bdc @ BigDecimalCell(Some(_), _, _, _)) =>
       Some(StringCell("$%s".format(bdc.copy(formatter = BigDecimalCell.Whole).human)))
   }
@@ -57,18 +57,18 @@ object PriceAsWholeDollars extends Column[BigDecimalCell] {
 
 // where we bought it
 object PurchaseLocation extends Column[Purchase] {
-  def apply = { case Some(Purchase(_, _, PretentiousPurveyor(_, location))) => Some(StringCell(location)) }
+  def cell = { case Some(Purchase(_, _, PretentiousPurveyor(_, location))) => Some(StringCell(location)) }
 }
 
 // date of purchase
 object DateOfPurchase extends Column[Purchase] {
-  def apply = { case Some(Purchase(_, date, _)) => Some(DateTimeCell(date)) }
+  def cell = { case Some(Purchase(_, date, _)) => Some(DateTimeCell(date)) }
 }
 
 object HumanReadableDate extends Column[DateTimeCell] {
   import org.scala_tools.time.Imports._
   private lazy val formatter = Some(DateTimeFormat.forPattern("MMMM d, YYYY"))
-  def apply = { case Some(dtc @ DateTimeCell(_, _)) => Some(dtc.copy(formatter = formatter)) }
+  def cell = { case Some(dtc @ DateTimeCell(_, _)) => Some(dtc.copy(formatter = formatter)) }
 }
 
 object ShowcaseSpec {
