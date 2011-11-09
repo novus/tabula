@@ -48,6 +48,13 @@ object ItemPrice extends Column[Purchase] {
   def apply = { case Some(Purchase(UselessItem(_, price), _, _)) => Some(BigDecimalCell(Some(BigDecimal(price)))) }
 }
 
+object PriceAsWholeDollars extends Column[BigDecimalCell] {
+  def apply = {
+    case Some(bdc @ BigDecimalCell(Some(_), _, _, _)) =>
+      Some(StringCell("$%s".format(bdc.copy(formatter = BigDecimalCell.Whole).human)))
+  }
+}
+
 // where we bought it
 object PurchaseLocation extends Column[Purchase] {
   def apply = { case Some(Purchase(_, _, PretentiousPurveyor(_, location))) => Some(StringCell(location)) }
@@ -58,15 +65,29 @@ object DateOfPurchase extends Column[Purchase] {
   def apply = { case Some(Purchase(_, date, _)) => Some(DateTimeCell(date)) }
 }
 
+object HumanReadableDate extends Column[DateTimeCell] {
+  import org.scala_tools.time.Imports._
+  private lazy val formatter = Some(DateTimeFormat.forPattern("MMMM d, YYYY"))
+  def apply = { case Some(dtc @ DateTimeCell(_, _)) => Some(dtc.copy(formatter = formatter)) }
+}
+
+object ShowcaseSpec {
+  // define some column chains, | means "pipe"
+  val price = ItemPrice | PriceAsWholeDollars
+  val date = DateOfPurchase | HumanReadableDate
+
+  // tell TableModel which columns to use when making a Table
+  val model = TableModel(ItemName :: price :: PurchaseLocation :: date :: Nil)
+
+  // produce Table from a List[Purchase]
+  val table = model.table(Purchases.*)
+}
+
 // let's do it!
 class ShowcaseSpec extends Specification {
   "a purchase history" should {
     "print out a list of things we've bought" in {
-      // tell TableModel which columns to use when making a Table
-      val model = TableModel(ItemName :: ItemPrice :: PurchaseLocation :: DateOfPurchase :: Nil)
-
-      // produce Table from a List[Purchase]
-      val table = model.table(Purchases.*)
+      import ShowcaseSpec._
 
       // show me the monay!
       println(table.asCSV)
