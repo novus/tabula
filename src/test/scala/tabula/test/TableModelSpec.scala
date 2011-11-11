@@ -30,23 +30,26 @@ object Age extends Column[Person] {
 case class Averaged[F](column: Column[F]) extends Aggregated[F, BigDecimalCell] {
   def fun = {
     case cells => {
-      val bdcs: List[BigDecimalCell] = cells.flatMap {
-        case (_, bdc @ BigDecimalCell(Some(_), _, _, _)) => bdc :: Nil
-        case _ => Nil
-      }
-      Some(BigDecimalCell(Some(bdcs.flatMap(_.scaled).sum / bdcs.size)))
+      Some(BigDecimalCell(Some(
+        BigDecimal(cells.map { case (Person(_, _, age), _) => age }.sum / cells.size))))
     }
   }
+}
+
+case class TableModelSpecData(howMany: Int) {
+  def mkage(n: Int) = (n + 7) * 30 / 4
+  lazy val people = (0 until howMany).toList.map {
+    n => Person("mR. %d".format(n), "bOvEy %d".format(n), age = mkage(n))
+  }
+  lazy val model = TableModel(List(FirstName | Capitalize, LastName | Capitalize, Averaged(Age)))
+  lazy val table = model.table(people)
 }
 
 class TableModelSpec extends Specification {
   "a table model" should {
     "create tables" in {
-        def mkage(n: Int) = (n + 7) * 30 / 4
-      val people = (0 to 9).toList.map {
-        n => Person("mR. %d".format(n), "bOvEy %d".format(n), age = mkage(n))
-      }
-      val table = TableModel(List(FirstName | Capitalize, LastName | Capitalize, Averaged(Age))).table(people)
+      val data = TableModelSpecData(51)
+      import data._
       println(table.asCSV)
       table.rows mustNot beEmpty
       for ((row, idx) <- table.rows.zipWithIndex) {
