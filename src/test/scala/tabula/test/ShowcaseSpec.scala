@@ -90,7 +90,7 @@ class ShowcaseSpec extends Specification {
       import ShowcaseSpec._
 
       // show me the monay!
-      println(table.asCSV)
+      println(CSV(table))
     }
   }
 }

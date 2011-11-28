@@ -50,7 +50,7 @@ class TableModelSpec extends Specification {
     "create tables" in {
       val data = TableModelSpecData(51)
       import data._
-      println(table.asCSV)
+      println(CSV(table))
       table.rows mustNot beEmpty
       for ((row, idx) <- table.rows.zipWithIndex) {
         row.cells.size must_== 3
