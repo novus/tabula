@@ -83,6 +83,13 @@ object ShowcaseSpec {
   val table = model.table(Purchases.*)
 }
 
+object HtmlThis extends HTML {
+  val title = "List of Pretentious Purchases"
+  val classes = Nil
+  val id = Some("hipsters_in_da_haus")
+  val placeholder = Some("no purchases found, sowwy :(")
+}
+
 // let's do it!
 class ShowcaseSpec extends Specification {
   "a purchase history" should {
@@ -90,7 +97,7 @@ class ShowcaseSpec extends Specification {
       import ShowcaseSpec._
 
       // show me the monay!
-      println(CSV(table))
+      println(HtmlThis(table))
     }
   }
 }
