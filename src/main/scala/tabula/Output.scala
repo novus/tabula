@@ -23,7 +23,7 @@ object CSV extends Output[String] {
     case Blank                                  => quote()
     case StringCell(value)                      => quote(Option(value))
     case dtc @ DateTimeCell(Some(_), _)         => quote(Option(dtc.format))
-    case bdc @ BigDecimalCell(Some(_), _, _, _) => quote(Option(bdc.format))
+    case bdc @ BigDecimalCell(Some(_), _, _, _) => bdc.format
     case _                                      => quote()
   }
 }
