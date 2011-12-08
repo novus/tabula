@@ -18,27 +18,4 @@ object `package` {
       case _                    => Columns(col, next :: Nil)
     }
   }
-
-  implicit def bdcpimp(col: Cell) = new {
-    def reformat(f: => DecimalFormat): Cell = col match {
-      case bdc: BigDecimalCell => bdc.copy(formatter = f)
-      case _                   => col
-    }
-
-    def number: Option[BigDecimal] = col match {
-      case bdc: BigDecimalCell => bdc.scaled
-      case _                   => None
-    }
-
-    def mapNumber(f: Option[BigDecimal] => Option[BigDecimal]): Cell = col match {
-      case bdc: BigDecimalCell => bdc.copy(value = f(bdc.scaled))
-      case _                   => col
-    }
-  }
-
-  implicit def pimpmanybdcs(cols: List[Cell]) = new {
-    def reformat(f: => DecimalFormat): List[Cell] = cols.map(_.reformat(f))
-
-    def mapNumber(f: Option[BigDecimal] => Option[BigDecimal]): List[Cell] = cols.map(_.mapNumber(f))
-  }
 }
