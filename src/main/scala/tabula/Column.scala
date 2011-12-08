@@ -5,10 +5,6 @@ trait Column[F] {
   def cellOrBlank: CellFun[F] = { case x => cell.lift(x).getOrElse(SomeBlank) }
 }
 
-case class Named[F](column: Column[F], name: String, label: Option[String] = None) extends Column[F] {
-  def cell = column.cell
-}
-
 trait Columns[F, C <: Cell] extends Column[F] {
   val columns: ColumnsChain[C]
 
