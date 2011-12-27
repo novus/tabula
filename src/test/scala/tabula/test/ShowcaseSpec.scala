@@ -98,6 +98,7 @@ class ShowcaseSpec extends Specification {
 
       // show me the monay!
       println(HtmlThis(table))
+      println(CSV(table))
     }
   }
 }
