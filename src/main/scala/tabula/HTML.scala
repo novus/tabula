@@ -35,6 +35,7 @@ trait HTML extends Output[NodeSeq] {
     c match {
       case StringCell(value)              => cellulize(Nil)(value)
       case dtc @ DateTimeCell(Some(_), _) => cellulize(Nil)(dtc.format)
+      case NodeSeqCell(xml)               => cellulize(Nil)(xml)
       case bdc @ BigDecimalCell(Some(_), _, _, _) => {
         val classes = "numeric" :: (
           if (bdc.positive_?) "positive" :: Nil
@@ -53,6 +54,8 @@ trait HTML extends Output[NodeSeq] {
     }
   }
 
+  def tfoot(table: Table): NodeSeq = <tfoot/>
+
   def apply(table: Table) =
     table match {
       case Table(name, header, rows, footer) =>
@@ -61,7 +64,7 @@ trait HTML extends Output[NodeSeq] {
           <table>
             { thead(table) }
             { tbody(table) }
-            <tfoot></tfoot>
+            { tfoot(table) }
           </table>
         </div>
     }
