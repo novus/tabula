@@ -10,13 +10,6 @@ case class CanBeCell(cell: Cell, next: Option[CanBeCell] = None) {
     any2cbc(x).copy(next = Some(this))
   }
 
-  def `#:`(x: Any): CanBeCell = {
-    x match {
-      case ((a: Any, url: String), text: Option[String]) => linked_any2cbc(a, url, text).copy(next = Some(this))
-      case _ => `!:`(x)
-    }
-  }
-
   def asCells: List[Cell] = cell :: {
     next match {
       case Some(cbc) => cbc.asCells
@@ -26,13 +19,6 @@ case class CanBeCell(cell: Cell, next: Option[CanBeCell] = None) {
 }
 
 object `package` {
-  def linked_any2cbc(a: Any, url: String, text: Option[String]): CanBeCell = {
-    any2cbc(a) match {
-      case cbc @ CanBeCell(lc: LinkableCell, _) => cbc.copy(cell = lc.linkTo(url, text, Nil))
-      case x                                    => x
-    }
-  }
-
   implicit def any2cbc(a: Any): CanBeCell = {
     if (a.isInstanceOf[CanBeCell]) a.asInstanceOf[CanBeCell]
     else

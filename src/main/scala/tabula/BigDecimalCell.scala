@@ -22,7 +22,7 @@ object BigDecimalCell {
 case class BigDecimalCell(value: Option[BigDecimal],
                           mathContext: MathContext = BigDecimalCell.DefaultMathContext,
                           multiplier: Option[BigDecimal] = BigDecimalCell.One,
-                          formatter: DecimalFormat = BigDecimalCell.Fractional) extends Cell with LinkableCell {
+                          formatter: DecimalFormat = BigDecimalCell.Fractional) extends Cell {
   import BigDecimalCell._
 
   lazy val scaled = multiplier.flatMap(m => value.map(v => m * v)).map(_(mathContext))
@@ -37,12 +37,4 @@ case class BigDecimalCell(value: Option[BigDecimal],
   lazy val positive_? = scaled.map(_ > NakedZero).getOrElse(false)
 
   lazy val displayZero_? = (!zero_? || scaled.isDefined) && ((human == "0.00") || (human == "-0.00") || (human == "0"))
-
-  def linkTo(u: String, t: Option[String] = None, cs: List[String] = Nil) = {
-    new BigDecimalCell(value, mathContext, multiplier, formatter) with LinkedCell {
-      val url = u
-      val text = t
-      val classes = cs
-    }
-  }
 }
