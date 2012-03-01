@@ -2,15 +2,11 @@ import sbt._
 import Keys._
 import com.typesafe.sbtscalariform.ScalariformPlugin
 import com.typesafe.sbtscalariform.ScalariformPlugin.ScalariformKeys
-import com.github.siasia.WebPlugin._
-import com.github.siasia.PluginKeys._
-import ScalatePlugin._
 
 object Versions {
   val ScalaVersion = "2.9.1"
   val ScalaTimeVersion = "0.5"
   val SpecsVersion = "1.6.9"
-  val ScalazVersion = "6.0.4"
   val PoiVersion = "3.7"
 }
 
@@ -76,10 +72,9 @@ object Deps {
 
   val time = "org.scala-tools.time" %% "time" % ScalaTimeVersion
   val specs = "org.scala-tools.testing" %% "specs" % SpecsVersion % "test"
-  val scalaz = "org.scalaz" %% "scalaz-core" % ScalazVersion
   val poi = "org.apache.poi" % "poi" % PoiVersion
 
-  val TabulaDeps = Seq(time, specs, scalaz, poi)
+  val TabulaDeps = Seq(time, specs, poi)
 }
 
 object TabulaBuild extends Build {

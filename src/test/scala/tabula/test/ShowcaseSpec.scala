@@ -1,6 +1,7 @@
 package tabula.test
 
 import tabula._
+import Tabula._
 import org.specs._
 import org.scala_tools.time.Imports._
 
@@ -18,7 +19,7 @@ object Items {
   val whatIsThis = UselessItem("Faux Professional Tool Pouch", 48.00)
 }
 
-object PlacesNormalPeopleOoNotGo {
+object PlacesNormalPeopleDoNotGo {
   val SchizophrenicMonkey = PretentiousPurveyor("Tinkering Monkey", "SF Bay Area")
   val BrooklynSlateWtf = PretentiousPurveyor("Brooklyn Slate Co.", "Brokelyn")
   val HeritageInsanityCo = PretentiousPurveyor("Heritage Leather Co.", "Somewhere in Cali")
@@ -26,7 +27,7 @@ object PlacesNormalPeopleOoNotGo {
 
 object Purchases {
   import Items._
-  import PlacesNormalPeopleOoNotGo._
+  import PlacesNormalPeopleDoNotGo._
 
   val * = {
     Purchase(item = justSomeCoatRack, date = Some(DateTime.now), from = SchizophrenicMonkey) ::
@@ -39,55 +40,28 @@ object Purchases {
 // column descriptions
 
 // what we bought
-object ItemName extends Column[Purchase] {
-  def cell = { case Some(Purchase(UselessItem(name, _), _, _)) => Some(StringCell(name)) }
-}
+object ItemName extends Column[Purchase, String](_.item.name)
 
 // how much we paid
-object ItemPrice extends Column[Purchase] {
-  def cell = { case Some(Purchase(UselessItem(_, price), _, _)) => Some(BigDecimalCell(Some(BigDecimal(price)))) }
-}
-
-object PriceAsWholeDollars extends Column[BigDecimalCell] {
-  def cell = {
-    case Some(bdc @ BigDecimalCell(Some(_), _, _, _)) =>
-      Some(StringCell("$%s".format(bdc.copy(formatter = BigDecimalCell.Whole).human)))
-  }
-}
+object ItemPrice extends Column[Purchase, BigDecimal](_.item.price)
 
 // where we bought it
-object PurchaseLocation extends Column[Purchase] {
-  def cell = { case Some(Purchase(_, _, PretentiousPurveyor(_, location))) => Some(StringCell(location)) }
-}
+object PurchaseLocation extends Column[Purchase, String](_.from.location)
 
 // date of purchase
-object DateOfPurchase extends Column[Purchase] {
-  def cell = { case Some(Purchase(_, date, _)) => Some(DateTimeCell(date)) }
-}
-
-object HumanReadableDate extends Column[DateTimeCell] {
-  import org.scala_tools.time.Imports._
-  private lazy val formatter = Some(DateTimeFormat.forPattern("MMMM d, YYYY"))
-  def cell = { case Some(dtc @ DateTimeCell(_, _)) => Some(dtc.copy(formatter = formatter)) }
-}
+object DateOfPurchase extends Column[Purchase, String](_.date.map("%s".format(_)).getOrElse("N/A"))
 
 object ShowcaseSpec {
-  // define some column chains, | means "pipe"
-  val price = ItemPrice | PriceAsWholeDollars
-  val date = DateOfPurchase | HumanReadableDate
-
   // tell TableModel which columns to use when making a Table
-  val model = TableModel(ItemName :: price :: PurchaseLocation :: date :: Nil)
+  val model = {
+    "Item Name" -> ItemName ||
+      "Item Price" -> ItemPrice ||
+      "Bought At" -> PurchaseLocation ||
+      "Date of Purchase" -> DateOfPurchase
+  }
 
-  // produce Table from a List[Purchase]
-  val table = model.table(Purchases.*)
-}
-
-object HtmlThis extends HTML {
-  val title = "List of Pretentious Purchases"
-  val classes = Nil
-  val id = Some("hipsters_in_da_haus")
-  val placeholder = Some("no purchases found, sowwy :(")
+  // produce List[Row] from a List[Purchase]
+  val rows = model(Purchases.*)
 }
 
 // let's do it!
@@ -95,10 +69,8 @@ class ShowcaseSpec extends Specification {
   "a purchase history" should {
     "print out a list of things we've bought" in {
       import ShowcaseSpec._
-
-      // show me the monay!
-      println(HtmlThis(table))
-      println(CSV(table))
+      for (row <- rows)
+        println(row.cells.flatMap(_.value).mkString(" | "))
     }
   }
 }
