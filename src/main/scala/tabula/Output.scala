@@ -4,6 +4,9 @@ import org.scala_tools.time.Imports._
 import scala.math.{ BigDecimal => ScalaBigDecimal }
 
 abstract class Output {
+  type RowForm
+  type TableForm
+
   abstract class Format[T] {
     type Form
     def apply(x: Option[T]): Form
@@ -16,10 +19,14 @@ abstract class Output {
 
   implicit def manifest2format[T](m: Manifest[_]): Format[T] = {
     m.erasure match {
-      case c if c == classOf[String] => implicitly[Format[String]]
-      case x                         => sys.error("can't format Cell[%s]".format(x.getName))
+      case c if c == classOf[String]          => implicitly[Format[String]]
+      case c if c == classOf[DateTime]        => implicitly[Format[DateTime]]
+      case c if c == classOf[ScalaBigDecimal] => implicitly[Format[ScalaBigDecimal]]
+      case x                                  => sys.error("can't format Cell[%s]".format(x.getName))
     }
   }.asInstanceOf[Format[T]]
 
   def apply[T](c: Cell[T])(implicit fmt: Format[T]) = fmt(c)
+  def apply(row: Row): RowForm
+  def apply(table: Table): TableForm
 }

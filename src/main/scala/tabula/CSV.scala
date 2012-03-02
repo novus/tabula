@@ -36,6 +36,12 @@ trait CSV extends Output {
     type Form = String
     def apply(x: Option[ScalaBigDecimal]) = scrub(x.map(bigDecimalFormat.format)).getOrElse("")
   }
+
+  type RowForm = String
+  def apply(row: Row) = row.cells.map(c => apply(c)(c.m)).mkString(",")
+
+  type TableForm = String
+  def apply(table: Table) = table.rows.map(apply).mkString("\n")
 }
 
 object CSV extends CSV

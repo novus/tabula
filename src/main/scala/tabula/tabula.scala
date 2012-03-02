@@ -25,7 +25,7 @@ abstract class Column[F, T](val f: F => T)(implicit val cz: Cellulizer[T, T]) {
 
 case class TableModel[F](header: List[NamedColumn[F, _]]) {
   def apply(f: F): Row = Row(header.map(_(f)))
-  def apply(fs: List[F]): List[Row] = fs.map(apply)
+  def apply(fs: List[F]): Table = Table(rows = fs.map(apply))
   def &(next: NamedColumn[F, _]) = copy(header :+ next)
   def &&(other: TableModel[F]) = copy(header ::: other.header)
 }
@@ -35,4 +35,4 @@ case class NamedColumn[F, T](name: Cell[String], column: Column[F, T]) extends C
 }
 
 case class Row(cells: List[Cell[_]])
-case class Table(name: String, header: Option[Row] = None, rows: List[Row], footer: Option[Row] = None)
+case class Table(name: Option[String] = None, header: Option[Row] = None, rows: List[Row], footer: Option[Row] = None)

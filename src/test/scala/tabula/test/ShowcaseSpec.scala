@@ -61,7 +61,7 @@ object ShowcaseSpec {
   }
 
   // produce List[Row] from a List[Purchase]
-  val rows = model(Purchases.*)
+  val table = model(Purchases.*)
 }
 
 // let's do it!
@@ -69,8 +69,7 @@ class ShowcaseSpec extends Specification {
   "a purchase history" should {
     "print out a list of things we've bought" in {
       import ShowcaseSpec._
-      for (row <- rows)
-        println(row.cells.flatMap(_.value).mkString(" | "))
+      println(CSV(table))
     }
   }
 }
