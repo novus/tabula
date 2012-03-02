@@ -21,7 +21,7 @@ abstract class Column[F, T, C](val f: F => Option[T])(implicit val cz: Cellulize
   def |[TT, CC](right: Column[T, TT, CC]) = new Transform[F, T, C, TT, CC](this, right) {}
 }
 
-case class TableModel[F](header: List[NamedColumn[F, _, _]]) {
+case class TableModel[F](private val header: List[NamedColumn[F, _, _]]) {
   def apply(f: F): Row = Row(header.map(_(f)))
   def apply(fs: List[F]): Table = Table(rows = fs.map(apply))
   def &(next: NamedColumn[F, _, _]) = copy(header :+ next)
