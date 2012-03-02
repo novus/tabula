@@ -8,6 +8,7 @@ object Tabula extends Cellulizers {
 trait Cell[A] {
   self =>
   def value: Option[A]
+  def m: Manifest[A]
   def map[B](f: A => B)(implicit cz: Cellulizer[Option[B], B]): Cell[B] = cz(value.map(f))
   def flatMap[B](f: Option[A] => Option[B])(implicit cz: Cellulizer[Option[B], B]): Cell[B] = (f andThen cz.apply)(value)
 }
