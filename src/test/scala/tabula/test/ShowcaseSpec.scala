@@ -54,9 +54,9 @@ object DateOfPurchase extends Column[Purchase, String](_.date.map("%s".format(_)
 object ShowcaseSpec {
   // tell TableModel which columns to use when making a Table
   val model = {
-    "Item Name" -> ItemName ||
-      "Item Price" -> ItemPrice ||
-      "Bought At" -> PurchaseLocation ||
+    "Item Name" -> ItemName &
+      "Item Price" -> ItemPrice &
+      "Bought At" -> PurchaseLocation &
       "Date of Purchase" -> DateOfPurchase
   }
 
