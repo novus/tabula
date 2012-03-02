@@ -14,8 +14,8 @@ case class Purchase(item: UselessItem, date: Option[DateTime], from: Pretentious
 // some test data
 
 object Items {
-  val justSomeCoatRack = UselessItem("Honest Abe", 90.00)
-  val cheeseParkingSpot = UselessItem("Fancy Cheese Board", 30.00)
+  val justSomeCoatRack = UselessItem("Honest Abe", 90.39)
+  val cheeseParkingSpot = UselessItem("Fancy Cheese Board", 39.95)
   val whatIsThis = UselessItem("Faux Professional Tool Pouch", 48.00)
 }
 
@@ -40,16 +40,16 @@ object Purchases {
 // column descriptions
 
 // what we bought
-object ItemName extends Column[Purchase, String](_.item.name)
+object ItemName extends Column((p: Purchase) => p.item.name)
 
 // how much we paid
-object ItemPrice extends Column[Purchase, BigDecimal](_.item.price)
+object ItemPrice extends Column((p: Purchase) => p.item.price)
 
 // where we bought it
-object PurchaseLocation extends Column[Purchase, String](_.from.location)
+object PurchaseLocation extends Column((p: Purchase) => p.from.location)
 
 // date of purchase
-object DateOfPurchase extends Column[Purchase, String](_.date.map("%s".format(_)).getOrElse("N/A"))
+object DateOfPurchase extends Column((p: Purchase) => p.date)
 
 object ShowcaseSpec {
   // tell TableModel which columns to use when making a Table

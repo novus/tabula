@@ -1,37 +1,35 @@
 package tabula
 
 object Tabula extends Cellulizers {
-  implicit def nameColumn[F, T](args: (String, Column[F, T])) =
+  implicit def optionize[T](t: T): Option[T] = Option(t)
+  implicit def nameColumn[F, T, C](args: (String, Column[F, T, C])) =
     NamedColumn(cellulize(args._1), args._2)
 }
 
 trait Cell[A] {
-  self =>
   def value: Option[A]
   def m: Manifest[A]
-  def map[B](f: A => B)(implicit cz: Cellulizer[Option[B], B]): Cell[B] = cz(value.map(f))
-  def flatMap[B](f: Option[A] => Option[B])(implicit cz: Cellulizer[Option[B], B]): Cell[B] = (f andThen cz.apply)(value)
 }
 
-abstract class Column[F, T](val f: F => T)(implicit val cz: Cellulizer[T, T]) {
-  def apply(x: F): Cell[T] = (f andThen cz.apply)(x)
+abstract class Column[F, T, C](val f: F => Option[T])(implicit val cz: Cellulizer[T, C]) {
+  def apply(x: F): Cell[C] = (f andThen cz.apply)(x)
 
-  abstract class ValueTransform[F, T, TT](
-    val left: Column[F, T],
-    val right: Column[T, TT]) extends Column[F, TT](
-    left.f andThen right.f)(right.cz)
-  def |[TT](right: Column[T, TT]) = new ValueTransform[F, T, TT](this, right) {}
+  abstract class Transform[F, T, C1, TT, C2](
+    val left: Column[F, T, C1],
+    val right: Column[T, TT, C2]) extends Column[F, TT, C2](left.f(_).flatMap(right.f))(right.cz)
+
+  def |[TT, CC](right: Column[T, TT, CC]) = new Transform[F, T, C, TT, CC](this, right) {}
 }
 
-case class TableModel[F](header: List[NamedColumn[F, _]]) {
+case class TableModel[F](header: List[NamedColumn[F, _, _]]) {
   def apply(f: F): Row = Row(header.map(_(f)))
   def apply(fs: List[F]): Table = Table(rows = fs.map(apply))
-  def &(next: NamedColumn[F, _]) = copy(header :+ next)
-  def &&(other: TableModel[F]) = copy(header ::: other.header)
+  def &(next: NamedColumn[F, _, _]) = copy(header :+ next)
+  def ++(other: TableModel[F]) = copy(header ::: other.header)
 }
 
-case class NamedColumn[F, T](name: Cell[String], column: Column[F, T]) extends Column[F, T](column.f)(column.cz) {
-  def &[TT](next: NamedColumn[F, TT]) = TableModel[F](this :: next :: Nil)
+case class NamedColumn[F, T, C](name: Cell[String], column: Column[F, T, C]) extends Column[F, T, C](column.f)(column.cz) {
+  def &[TT, CC](next: NamedColumn[F, TT, CC]) = TableModel[F](this :: next :: Nil)
 }
 
 case class Row(cells: List[Cell[_]])
