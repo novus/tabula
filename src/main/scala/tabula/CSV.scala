@@ -4,6 +4,8 @@ import org.scala_tools.time.Imports._
 import scala.math.{ BigDecimal => ScalaBigDecimal }
 
 trait CSV extends Output {
+  type CellForm = String
+
   private def scrub(x: Option[String]) = {
     x
       .flatMap(Option(_))
@@ -38,7 +40,7 @@ trait CSV extends Output {
   }
 
   type RowForm = String
-  def apply(row: Row) = row.cells.map(c => apply(c)(c.m)).mkString(",")
+  def apply(row: Row) = apply(row.cells).mkString(",")
 
   type TableForm = String
   def apply(table: Table) = table.rows.map(apply).mkString("\n")

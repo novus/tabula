@@ -4,11 +4,12 @@ import org.scala_tools.time.Imports._
 import scala.math.{ BigDecimal => ScalaBigDecimal }
 
 abstract class Output {
+  type CellForm
   type RowForm
   type TableForm
 
   abstract class Format[T] {
-    type Form
+    type Form <: CellForm
     def apply(x: Option[T]): Form
     def apply(c: Cell[T]): Form = apply(c.value)
   }
@@ -26,7 +27,8 @@ abstract class Output {
     }
   }.asInstanceOf[Format[T]]
 
-  def apply[T](c: Cell[T])(implicit fmt: Format[T]) = fmt(c)
+  def apply[T](c: Cell[T])(implicit fmt: Format[T]): CellForm = fmt(c)
+  def apply(cs: List[Cell[_]]): List[CellForm] = cs.map(c => apply(c)(c.m))
   def apply(row: Row): RowForm
   def apply(table: Table): TableForm
 }
