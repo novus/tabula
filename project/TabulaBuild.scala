@@ -8,6 +8,7 @@ object Versions {
   val ScalaTimeVersion = "0.5"
   val SpecsVersion = "1.6.9"
   val PoiVersion = "3.7"
+  val LiftVersion = "2.4"
 }
 
 object BuildSettings {
@@ -73,13 +74,22 @@ object Deps {
   val time = "org.scala-tools.time" %% "time" % ScalaTimeVersion
   val specs = "org.scala-tools.testing" %% "specs" % SpecsVersion % "test"
   val poi = "org.apache.poi" % "poi" % PoiVersion
+  val lift_json = "net.liftweb" %% "lift-json" % LiftVersion
 
   val TabulaDeps = Seq(time, specs, poi)
+  val JsonDeps = Seq(lift_json)
 }
 
 object TabulaBuild extends Build {
   import BuildSettings._
   import Deps._
 
-  lazy val tabula = Project(id = "tabula", base = file("."), settings = buildSettings ++ Seq(libraryDependencies ++= TabulaDeps))
+  lazy val tabula = Project(
+    id = "tabula", base = file("."),
+    settings = buildSettings ++ Seq(libraryDependencies ++= TabulaDeps)
+  )
+  lazy val json = Project(
+    id = "json", base = file("json"),
+    settings = buildSettings ++ Seq(libraryDependencies ++= (TabulaDeps ++ JsonDeps))
+  ) dependsOn(tabula % "compile->test")
 }
