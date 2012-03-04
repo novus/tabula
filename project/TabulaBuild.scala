@@ -4,7 +4,7 @@ import com.typesafe.sbtscalariform.ScalariformPlugin
 import com.typesafe.sbtscalariform.ScalariformPlugin.ScalariformKeys
 
 object Versions {
-  val ScalaVersion = "2.9.1"
+  val ScalaVersion = "2.10.0-SNAPSHOT"
   val ScalaTimeVersion = "0.5"
   val SpecsVersion = "1.6.9"
   val PoiVersion = "3.7"
@@ -61,6 +61,7 @@ object BuildSettings {
 
 object Resolvers {
   val All = Seq(
+    ScalaToolsSnapshots,
     "Novus Releases" at "http://repo.novus.com/releases",
     "Novus Snapshots" at "http://repo.novus.com/snapshots",
     "Coda Hale's repo" at "http://repo.codahale.com",
@@ -71,10 +72,10 @@ object Resolvers {
 object Deps {
   import Versions._
 
-  val time = "org.scala-tools.time" %% "time" % ScalaTimeVersion
-  val specs = "org.scala-tools.testing" %% "specs" % SpecsVersion % "test"
+  val time = "org.scala-tools.time" % "time_2.9.1" % ScalaTimeVersion
+  val specs = "org.scala-tools.testing" % "specs_2.9.1" % SpecsVersion % "test"
   val poi = "org.apache.poi" % "poi" % PoiVersion
-  val lift_json = "net.liftweb" %% "lift-json" % LiftVersion
+  val lift_json = "net.liftweb" % "lift-json_2.9.1" % LiftVersion
   val shapeless = "com.chuusai" %% "shapeless" % "1.1.0"
 
   val TabulaDeps = Seq(time, specs, poi, shapeless)
