@@ -6,6 +6,8 @@ import java.math.{ BigDecimal => JavaBigDecimal }
 
 trait Cellulizer[F, T] {
   def apply(t: Option[F]): Cell[T]
+  implicit def convert(f: Option[F]): Cell[T] = apply(f)
+  implicit def convert(f: F): Cell[T] = apply(Option(f))
 }
 
 trait Cellulizers {

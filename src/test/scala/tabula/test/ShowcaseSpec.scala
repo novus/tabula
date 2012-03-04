@@ -2,6 +2,7 @@ package tabula.test
 
 import tabula._
 import Tabula._
+import tabula.util._
 import org.specs._
 import org.scala_tools.time.Imports._
 
@@ -52,13 +53,17 @@ object PurchaseLocation extends Column((p: Purchase) => p.from.location)
 object DateOfPurchase extends Column((p: Purchase) => p.date)
 
 object ShowcaseSpec {
-  // tell TableModel which columns to use when making a Table
-  val model = {
+  // tell TableModel which columns to use when making a Table's rows
+  val row = {
     "Item Name" -> ItemName &
       "Item Price" -> ItemPrice &
       "Bought At" -> PurchaseLocation &
       "Date of Purchase" -> DateOfPurchase
   }
+
+  object TotalPaid extends Fold(ItemPrice)(0)(_ + _)
+
+  val model = TableModel(row, agg = Map(TotalPaid))
 
   // produce List[Row] from a List[Purchase]
   val table = model(Purchases.*)

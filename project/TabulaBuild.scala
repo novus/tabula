@@ -75,8 +75,9 @@ object Deps {
   val specs = "org.scala-tools.testing" %% "specs" % SpecsVersion % "test"
   val poi = "org.apache.poi" % "poi" % PoiVersion
   val lift_json = "net.liftweb" %% "lift-json" % LiftVersion
+  val shapeless = "com.chuusai" %% "shapeless" % "1.1.0"
 
-  val TabulaDeps = Seq(time, specs, poi)
+  val TabulaDeps = Seq(time, specs, poi, shapeless)
   val JsonDeps = Seq(lift_json)
 }
 

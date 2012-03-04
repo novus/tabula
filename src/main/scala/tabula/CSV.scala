@@ -43,7 +43,7 @@ trait CSV extends Output {
   def apply(row: Row) = apply(row.cells).mkString(",")
 
   type TableForm = String
-  def apply(table: Table) = table.rows.map(apply).mkString("\n")
+  def apply(table: Table) = (table.rows ::: table.footer.toList).map(apply).mkString("\n")
 }
 
 object CSV extends CSV
