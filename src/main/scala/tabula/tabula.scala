@@ -63,14 +63,19 @@ case class NamedColumn2[F, T, C](name: Cell[String], column: Column[F, T, C])(im
 }
 
 object ColToF extends Poly {
-  implicit def default[F, T, C] = case1[(NamedColumn2[F, T, C], F)] { case (col, x) => col(x) }
+  implicit def default[F, T, C, InH <: NamedColumn2[F, T, C]] = case1[(InH, F)] { case (col, x) => col(x) }
 }
 
-case class RowModel2[F, T, C, InH <: NamedColumn2[F, T, C], InT <: HList, OutH <: Cell[C], OutT <: HList, FsT <: HList](
-    columns: InH :: InT)(implicit val cm: ConstMapperAux[F, InH :: InT, F :: FsT]) {
+case class RowModel2[F, T, C, InH <: NamedColumn2[F, T, C], InT <: HList, OutH <: Cell[C], OutT <: HList, FsT <: HList](columns: InH :: InT)(implicit val cm: ConstMapperAux[F, InH :: InT, F :: FsT]) {
 
-  def apply(x: F)(implicit zipper: Zip[(InH :: InT) :: (F :: FsT) :: HNil]) =
-    columns.zip(columns.mapConst(x))
+  import ColToF._
+
+  case class row(x: F)(implicit val zipper: Zip[(InH :: InT) :: (F :: FsT) :: HNil]) {
+    lazy val zipped = columns.zip(columns.mapConst(x))
+    def cells(implicit mapper: Mapper[ColToF.type, zipper.Out]) = {
+      zipped.map(ColToF)
+    }
+  }
 
   def !:[TT, CC](next: NamedColumn2[F, TT, CC])(implicit mcc: Manifest[CC], cm3: ConstMapperAux[F, NamedColumn2[F, TT, CC] :: InH :: InT, F :: F :: FsT]) =
     RowModel2[F, TT, CC, NamedColumn2[F, TT, CC], InH :: InT, Cell[CC], OutH :: OutT, F :: FsT](next :: columns)
