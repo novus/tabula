@@ -4,7 +4,7 @@ import com.typesafe.sbtscalariform.ScalariformPlugin
 import com.typesafe.sbtscalariform.ScalariformPlugin.ScalariformKeys
 
 object Versions {
-  val ScalaVersion = "2.10.0-SNAPSHOT"
+  val ScalaVersion = "2.9.1"
   val ScalaTimeVersion = "0.5"
   val SpecsVersion = "1.6.9"
   val PoiVersion = "3.7"
@@ -21,7 +21,7 @@ object BuildSettings {
     organization := "tabula",
     version := "0.0.1-SNAPSHOT",
     scalaVersion := ScalaVersion,
-    scalacOptions ++= Seq("-deprecation",  "-unchecked", "-Xexperimental"),
+    scalacOptions ++= Seq("-deprecation",  "-unchecked", "-Xexperimental"),// "-Xprint:typer"),
     shellPrompt := prompt,
     showTiming := true,
     parallelExecution := true,
@@ -72,10 +72,10 @@ object Resolvers {
 object Deps {
   import Versions._
 
-  val time = "org.scala-tools.time" % "time_2.9.1" % ScalaTimeVersion
-  val specs = "org.scala-tools.testing" % "specs_2.9.1" % SpecsVersion % "test"
+  val time = "org.scala-tools.time" %% "time" % ScalaTimeVersion
+  val specs = "org.scala-tools.testing" %% "specs" % SpecsVersion % "test"
   val poi = "org.apache.poi" % "poi" % PoiVersion
-  val lift_json = "net.liftweb" % "lift-json_2.9.1" % LiftVersion
+  val lift_json = "net.liftweb" %% "lift-json" % LiftVersion
   val shapeless = "com.chuusai" %% "shapeless" % "1.1.0"
 
   val TabulaDeps = Seq(time, specs, poi, shapeless)

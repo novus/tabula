@@ -1,43 +1,27 @@
 package tabula
 
+import Tabula._
 import shapeless._
 import shapeless.HList._
 import shapeless.Poly._
-import shapeless.TypeOperators._
-import shapeless.Mapper._
-import shapeless.MapperAux._
 
 object Tabula extends Cellulizers {
   implicit def optionize[T](t: T): Option[T] = Option(t)
   implicit def nameColumn[F, T, C](args: (String, Column[F, T, C])) = NamedColumn(cellulize(args._1), args._2)
-  implicit def nameColumn2[F, T, C](args: (String, Column[F, T, C]))(implicit m: Manifest[C]) = NamedColumn2(cellulize(args._1), args._2)
+  implicit def nameColumn2[F, T, C](args: (String, Column[F, T, C]))(implicit m: Manifest[C], cm: ConstMapperAux[F, NamedColumn2[F, T, C] :: HNil, F :: HNil]) = NamedColumn2(cellulize(args._1), args._2)(cm)
   class Blank[T](implicit val m: Manifest[T]) extends Cell[T] {
     val value = None
   }
   def blank[T](implicit m: Manifest[T]) = new Blank[T]
   implicit def aggregator2agg[F, T, C](aggregator: Aggregator[F, T, C]): (Column[F, T, C], Aggregator[F, T, C]) = aggregator.col -> aggregator
-
-  type Column1From[F] = { type l[a] = Column1[a] { type From = F } }
-  type Column1In[F] = Column1From[F]
-  type Column1Out[F] = ({ type l[a] = F => Cell[a] })
-  type Column1HRFn[F] = (Column1In[F]#l ~> Column1Out[F]#l)
 }
-
-import Tabula._
 
 trait Cell[A] {
   def value: Option[A]
   def m: Manifest[A]
 }
 
-abstract class Column1[C] {
-  type From
-  def apply(x: From): Cell[C]
-}
-
 abstract class Column[F, T, C](val f: F => Option[T])(implicit val cz: Cellulizer[T, C]) extends (F => Cell[C]) {
-  self =>
-
   def apply(x: F): Cell[C] = (f andThen cz.apply)(x)
 
   abstract class Transform[F, T, C1, TT, C2](
@@ -46,11 +30,6 @@ abstract class Column[F, T, C](val f: F => Option[T])(implicit val cz: Cellulize
 
   def |[TT, CC](right: Column[T, TT, CC]) =
     new Transform[F, T, C, TT, CC](this, right) {}
-
-  lazy val column1: Column1From[F]#l[C] = new Column1[C] {
-    type From = F
-    def apply(x: From): Cell[C] = self(x)
-  }
 
   override lazy val hashCode = f.hashCode
   override def equals(x: Any): Boolean =
@@ -78,20 +57,23 @@ case class NamedColumn[F, T, C](name: Cell[String], column: Column[F, T, C]) ext
 
 // ################################################################################
 
-case class NamedColumn2[F, T, C](name: Cell[String], column: Column[F, T, C]) extends Column[F, T, C](column.f)(column.cz) {
-  def !:[TT, CC](next: NamedColumn2[F, TT, CC])(implicit mcc: Manifest[CC]) =
-    next !: RowModel2[F, T, C, NamedColumn2[F, T, C], HNil, (F => Cell[C]), HNil](this :: HNil)
+case class NamedColumn2[F, T, C](name: Cell[String], column: Column[F, T, C])(implicit val cm: ConstMapperAux[F, NamedColumn2[F, T, C] :: HNil, F :: HNil]) extends Column[F, T, C](column.f)(column.cz) {
+  def !:[TT, CC](next: NamedColumn2[F, TT, CC])(implicit mcc: Manifest[CC], cm2: ConstMapperAux[F, NamedColumn2[F, TT, CC] :: NamedColumn2[F, T, C] :: HNil, F :: F :: HNil]) =
+    next !: RowModel2[F, T, C, NamedColumn2[F, T, C], HNil, Cell[C], HNil, HNil](this :: HNil)(cm)
 }
 
-class Runner[F, T] extends (({ type l[a] = NamedColumn2[F, T, a] })#l ~> ({ type l[a] = F => Cell[a] })#l) with NoDefault
-object Runner extends (Column1 ~> Cell) with NoDefault
+object ColToF extends Poly {
+  implicit def default[F, T, C] = case1[(NamedColumn2[F, T, C], F)] { case (col, x) => col(x) }
+}
 
-case class RowModel2[F, T, C, InH <: NamedColumn2[F, T, C], InT <: HList, OutH <: (F => Cell[C]), OutT <: HList](columns: InH :: InT) {
-  lazy val runner = new Runner[F, T]
-  implicit val funny = runner.λ[C](_.apply)
+case class RowModel2[F, T, C, InH <: NamedColumn2[F, T, C], InT <: HList, OutH <: Cell[C], OutT <: HList, FsT <: HList](
+    columns: InH :: InT)(implicit val cm: ConstMapperAux[F, InH :: InT, F :: FsT]) {
 
-  def !:[TT, CC](next: NamedColumn2[F, TT, CC])(implicit mcc: Manifest[CC]) =
-    RowModel2[F, TT, CC, NamedColumn2[F, TT, CC], InH :: InT, (F => Cell[CC]), OutH :: OutT](next :: columns)
+  def apply(x: F)(implicit zipper: Zip[(InH :: InT) :: (F :: FsT) :: HNil]) =
+    columns.zip(columns.mapConst(x))
+
+  def !:[TT, CC](next: NamedColumn2[F, TT, CC])(implicit mcc: Manifest[CC], cm3: ConstMapperAux[F, NamedColumn2[F, TT, CC] :: InH :: InT, F :: F :: FsT]) =
+    RowModel2[F, TT, CC, NamedColumn2[F, TT, CC], InH :: InT, Cell[CC], OutH :: OutT, F :: FsT](next :: columns)
 }
 
 case class Row(cells: List[Cell[_]]) {
@@ -110,7 +92,7 @@ abstract class Aggregator[F, T, C] {
 
 abstract class Reduce[F, T, C](val col: Column[F, T, C])(f: (Option[C], Option[C]) => Option[T])(implicit cz: Cellulizer[T, C]) extends Aggregator[F, T, C] {
   def apply(cs: List[Cell[C]]): Cell[C] =
-    cs.reduceLeft((a, b) => Tabula.cellulize(f(a.value, b.value)))
+    cs.reduceLeft((a, b) => cellulize(f(a.value, b.value)))
 }
 
 abstract class Fold[F, T, C](val col: Column[F, T, C])(init: => T)(f: (Option[C], Option[C]) => Option[T])(implicit cz: Cellulizer[T, C]) extends Aggregator[F, T, C] {

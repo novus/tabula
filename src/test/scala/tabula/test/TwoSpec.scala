@@ -15,7 +15,7 @@ import org.specs._
 case class Person(name: String, age: Int, timestamp: DateTime)
 object Name extends Column((p: Person) => "name is '%s'".format(p.name))
 object Age extends Column((p: Person) => "age is '%d'".format(p.age))
-object Timestamp extends Column((p: Person) => "timestamp is '%s'".format(p.timestamp))
+object Timestamp extends Column((p: Person) => p.timestamp)
 object TwoSpec {
   val n = "NAME" -> Name
   val a = "AGE" -> Age
@@ -29,6 +29,7 @@ class TwoSpec extends Specification {
     "be first" in {
       import TwoSpec._
       println(rm)
+      println(rm(p))
     }
   }
 }
