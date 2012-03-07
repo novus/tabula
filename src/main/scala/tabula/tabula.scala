@@ -62,8 +62,8 @@ case class NamedColumn2[F, T, C](name: Cell[String], column: Column[F, T, C])(im
     next !: RowModel2[F, T, C, NamedColumn2[F, T, C], HNil, Cell[C], HNil, HNil](this :: HNil)(cm)
 }
 
-object ColToF extends Poly {
-  implicit def default[F, T, C, InH <: NamedColumn2[F, T, C]] = case1[(InH, F)] { case (col, x) => col(x) }
+object ColToF extends Poly1 {
+  implicit def default[F, T, C, InH <: NamedColumn2[F, T, C]] = at[(InH, F)] { case (col, x) => col(x) }
 }
 
 case class RowModel2[F, T, C, InH <: NamedColumn2[F, T, C], InT <: HList, OutH <: Cell[C], OutT <: HList, FsT <: HList](columns: InH :: InT)(implicit val cm: ConstMapperAux[F, InH :: InT, F :: FsT]) {
