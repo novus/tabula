@@ -12,8 +12,8 @@ import net.liftweb.json.JsonDSL._
 class JsonSpec extends Specification {
   "a JSON output" should {
     "produce JSON" in {
-      import ShowcaseSpec._
-      println(prettyJson(render(JSON(table))))
+      // import ShowcaseSpec._
+      // println(prettyJson(render(JSON(table))))
     }
   }
 }
