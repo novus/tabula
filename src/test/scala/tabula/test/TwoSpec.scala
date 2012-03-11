@@ -23,8 +23,8 @@ object TwoSpec {
   val a = "AGE" -> Age
   val t = "TIMESTAMP" -> Timestamp
   val p = Person("max", 26, DateTime.now)
-  val rm = n |: a |: t
-  val cells = rm.zip(rm.mapConst(p)).map(Runner)
+  val rm = RowModel(n |: a |: t)
+  val row = rm.row(p)
 }
 
 class TwoSpec extends Specification {
@@ -32,7 +32,7 @@ class TwoSpec extends Specification {
     "be first" in {
       import TwoSpec._
       println(rm)
-      println(cells)
+      println(row.cells)
     }
   }
 }

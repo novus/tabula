@@ -18,6 +18,16 @@ object Tabula extends Cellulizers {
   implicit def aggregator2agg[F, T, C](aggregator: Aggregator[F, T, C]): (Column[F, T, C], Aggregator[F, T, C]) = aggregator.col -> aggregator
 }
 
+case class RowModel[F, T, C, NcT <: HList](cols: NamedColumn[F, T, C] :: NcT) {
+  case class row(x: F) {
+    object Runner extends Poly1 {
+      implicit def default[T, C] = at[NamedColumn[F, T, C]](_(x))
+    }
+
+    def cells(implicit mapper: Mapper[Runner.type, NamedColumn[F, T, C] :: NcT]) = cols.map(Runner)
+  }
+}
+
 trait Cell[A] {
   def value: Option[A]
   def m: Manifest[A]
@@ -43,10 +53,6 @@ abstract class Column[F, T, C](val f: F => Option[T])(implicit val cz: Cellulize
 
 case class NamedColumn[F, T, C](name: Cell[String], column: Column[F, T, C]) extends Column[F, T, C](column.f)(column.cz) {
   def |:[TT, CC](next: NamedColumn[F, TT, CC]) = next :: this :: HNil
-}
-
-object Runner extends Poly1 {
-  implicit def default[F, T, C] = at[(NamedColumn[F, T, C], F)] { case (col, x) => col(x) }
 }
 
 case class Row(cells: List[Cell[_]]) {
