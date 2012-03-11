@@ -55,26 +55,26 @@ object DateOfPurchase extends Column((p: Purchase) => p.date)
 object ShowcaseSpec {
   // tell TableModel which columns to use when making a Table's rows
   val row = {
-    "Item Name" -> ItemName &
-      "Item Price" -> ItemPrice &
-      "Bought At" -> PurchaseLocation &
+    "Item Name" -> ItemName |:
+      "Item Price" -> ItemPrice |:
+      "Bought At" -> PurchaseLocation |:
       "Date of Purchase" -> DateOfPurchase
   }
 
-  object TotalPaid extends Fold(ItemPrice)(0)(_ + _)
+  // object TotalPaid extends Fold(ItemPrice)(0)(_ + _)
 
-  val model = TableModel(row, agg = Map(TotalPaid))
+  // val model = TableModel(row, agg = Map(TotalPaid))
 
   // produce List[Row] from a List[Purchase]
-  val table = model(Purchases.*)
+  // val table = model(Purchases.*)
 }
 
 // let's do it!
-class ShowcaseSpec extends Specification {
-  "a purchase history" should {
-    "print out a list of things we've bought" in {
-      import ShowcaseSpec._
-      println(CSV(table))
-    }
-  }
-}
+// class ShowcaseSpec extends Specification {
+//   "a purchase history" should {
+//     "print out a list of things we've bought" in {
+//       import ShowcaseSpec._
+//       println(CSV(table))
+//     }
+//   }
+// }

@@ -8,7 +8,9 @@ import shapeless.Poly._
 object Tabula extends Cellulizers {
   implicit def optionize[T](t: T): Option[T] = Option(t)
   implicit def nameColumn[F, T, C](args: (String, Column[F, T, C])) = NamedColumn(cellulize(args._1), args._2)
-  implicit def nameColumn2[F, T, C](args: (String, Column[F, T, C]))(implicit m: Manifest[C], cm: ConstMapperAux[F, NamedColumn2[F, T, C] :: HNil, F :: HNil]) = NamedColumn2(cellulize(args._1), args._2)(cm)
+  implicit def ncspimp[F, T, C, NcT <: HList](ncs: NamedColumn[F, T, C] :: NcT) = new {
+    def |:[TT, CC](next: NamedColumn[F, TT, CC]) = next :: ncs
+  }
   class Blank[T](implicit val m: Manifest[T]) extends Cell[T] {
     val value = None
   }
@@ -39,46 +41,12 @@ abstract class Column[F, T, C](val f: F => Option[T])(implicit val cz: Cellulize
     }
 }
 
-case class TableModel[F](private val row: RowModel[F], private val agg: Map[Column[_, _, _], Aggregator[_, _, _]] = Map.empty) {
-  def apply(fs: List[F]): Table = Table(rows = fs.map(row(_)))
-}
-
-// ################################################################################
-case class RowModel[F](private[tabula] val columns: List[NamedColumn[F, _, _]]) {
-  def apply(f: F): Row = Row(columns.map(_(f)))
-  def apply(fs: List[F]): List[Row] = fs.map(apply)
-  def &(next: NamedColumn[F, _, _]) = copy(columns :+ next)
-  def ++(other: RowModel[F]) = copy(columns ::: other.columns)
-}
-
 case class NamedColumn[F, T, C](name: Cell[String], column: Column[F, T, C]) extends Column[F, T, C](column.f)(column.cz) {
-  def &[TT, CC](next: NamedColumn[F, TT, CC]) = RowModel[F](this :: next :: Nil)
+  def |:[TT, CC](next: NamedColumn[F, TT, CC]) = next :: this :: HNil
 }
 
-// ################################################################################
-
-case class NamedColumn2[F, T, C](name: Cell[String], column: Column[F, T, C])(implicit val cm: ConstMapperAux[F, NamedColumn2[F, T, C] :: HNil, F :: HNil]) extends Column[F, T, C](column.f)(column.cz) {
-  def !:[TT, CC](next: NamedColumn2[F, TT, CC])(implicit mcc: Manifest[CC], cm2: ConstMapperAux[F, NamedColumn2[F, TT, CC] :: NamedColumn2[F, T, C] :: HNil, F :: F :: HNil]) =
-    next !: RowModel2[F, T, C, NamedColumn2[F, T, C], HNil, Cell[C], HNil, HNil](this :: HNil)(cm)
-}
-
-object ColToF extends Poly1 {
-  implicit def default[F, T, C, InH <: NamedColumn2[F, T, C]] = at[(InH, F)] { case (col, x) => col(x) }
-}
-
-case class RowModel2[F, T, C, InH <: NamedColumn2[F, T, C], InT <: HList, OutH <: Cell[C], OutT <: HList, FsT <: HList](columns: InH :: InT)(implicit val cm: ConstMapperAux[F, InH :: InT, F :: FsT]) {
-
-  import ColToF._
-
-  case class row(x: F)(implicit val zipper: Zip[(InH :: InT) :: (F :: FsT) :: HNil]) {
-    lazy val zipped = columns.zip(columns.mapConst(x))
-    def cells(implicit mapper: Mapper[ColToF.type, zipper.Out]) = {
-      zipped.map(ColToF)
-    }
-  }
-
-  def !:[TT, CC](next: NamedColumn2[F, TT, CC])(implicit mcc: Manifest[CC], cm3: ConstMapperAux[F, NamedColumn2[F, TT, CC] :: InH :: InT, F :: F :: FsT]) =
-    RowModel2[F, TT, CC, NamedColumn2[F, TT, CC], InH :: InT, Cell[CC], OutH :: OutT, F :: FsT](next :: columns)
+object Runner extends Poly1 {
+  implicit def default[F, T, C] = at[(NamedColumn[F, T, C], F)] { case (col, x) => col(x) }
 }
 
 case class Row(cells: List[Cell[_]]) {

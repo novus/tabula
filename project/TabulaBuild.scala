@@ -21,7 +21,7 @@ object BuildSettings {
     organization := "tabula",
     version := "0.0.1-SNAPSHOT",
     scalaVersion := ScalaVersion,
-    scalacOptions ++= Seq("-deprecation",  "-unchecked", "-Xexperimental"),// "-Xprint:typer"),
+    scalacOptions ++= Seq("-deprecation",  "-unchecked", "-Xexperimental"),
     shellPrompt := prompt,
     showTiming := true,
     parallelExecution := true,

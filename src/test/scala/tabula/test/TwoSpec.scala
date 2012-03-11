@@ -10,19 +10,21 @@ import shapeless.Functions._
 import shapeless.TypeOperators._
 import shapeless.Mapper._
 import shapeless.MapperAux._
+import shapeless.ZipApply._
+import shapeless.ZipApplyAux._
 import org.specs._
 
 case class Person(name: String, age: Int, timestamp: DateTime)
 object Name extends Column((p: Person) => "name is '%s'".format(p.name))
-object Age extends Column((p: Person) => "age is '%d'".format(p.age))
+object Age extends Column((p: Person) => p.age)
 object Timestamp extends Column((p: Person) => p.timestamp)
 object TwoSpec {
   val n = "NAME" -> Name
   val a = "AGE" -> Age
   val t = "TIMESTAMP" -> Timestamp
   val p = Person("max", 26, DateTime.now)
-  val rm = n !: a !: t
-  val row = rm.row(p)
+  val rm = n |: a |: t
+  val cells = rm.zip(rm.mapConst(p)).map(Runner)
 }
 
 class TwoSpec extends Specification {
@@ -30,7 +32,7 @@ class TwoSpec extends Specification {
     "be first" in {
       import TwoSpec._
       println(rm)
-      println(row.zipped)
+      println(cells)
     }
   }
 }
