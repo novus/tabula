@@ -33,6 +33,7 @@ class TwoSpec extends Specification {
       import TwoSpec._
       println(rm)
       println(row.cells)
+      println(row.cells.map(CSV).toList.mkString(","))
     }
   }
 }

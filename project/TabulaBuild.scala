@@ -6,6 +6,7 @@ import com.typesafe.sbtscalariform.ScalariformPlugin.ScalariformKeys
 object Versions {
   val ScalaVersion = "2.9.1"
   val ScalaTimeVersion = "0.5"
+  val ShapelessVersion = "1.2.0"
   val SpecsVersion = "1.6.9"
   val PoiVersion = "3.7"
   val LiftVersion = "2.4"
@@ -76,7 +77,7 @@ object Deps {
   val specs = "org.scala-tools.testing" %% "specs" % SpecsVersion % "test"
   val poi = "org.apache.poi" % "poi" % PoiVersion
   val lift_json = "net.liftweb" %% "lift-json" % LiftVersion
-  val shapeless = "com.chuusai" %% "shapeless" % "1.1.0"
+  val shapeless = "com.chuusai" %% "shapeless" % ShapelessVersion
 
   val TabulaDeps = Seq(time, specs, poi, shapeless)
   val JsonDeps = Seq(lift_json)
