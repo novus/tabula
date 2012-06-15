@@ -5,13 +5,6 @@ import Tabula._
 import org.scala_tools.time.Imports._
 import shapeless._
 import shapeless.HList._
-import shapeless.Poly._
-import shapeless.Functions._
-import shapeless.TypeOperators._
-import shapeless.Mapper._
-import shapeless.MapperAux._
-import shapeless.ZipApply._
-import shapeless.ZipApplyAux._
 import org.specs._
 
 case class Person(name: String, age: Int, timestamp: DateTime)
