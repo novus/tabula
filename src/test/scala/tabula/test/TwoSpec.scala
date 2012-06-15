@@ -24,7 +24,7 @@ object TwoSpec {
   val t = "TIMESTAMP" -> Timestamp
   val p = Person("max", 26, DateTime.now)
   val rm = RowModel(n |: a |: t)
-  val row = rm.row(p)
+  val row = rm.Row(p)
 }
 
 class TwoSpec extends Specification {

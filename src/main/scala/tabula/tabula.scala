@@ -19,7 +19,7 @@ object Tabula extends Cellulizers {
 }
 
 case class RowModel[F, T, C, NcT <: HList](cols: NamedColumn[F, T, C] :: NcT) {
-  case class row(x: F) {
+  case class Row(x: F) {
     object Runner extends Poly1 {
       implicit def default[T, C] = at[NamedColumn[F, T, C]](_(x))
     }
@@ -42,29 +42,13 @@ abstract class Column[F, T, C](val f: F => Option[T])(implicit val cz: Cellulize
 
   def |[TT, CC](right: Column[T, TT, CC]) =
     new Transform[F, T, C, TT, CC](this, right) {}
-
-  override lazy val hashCode = f.hashCode
-  override def equals(x: Any): Boolean =
-    x match {
-      case other: Column[_, _, _] => other.hashCode == hashCode
-      case _                      => false
-    }
 }
 
 case class NamedColumn[F, T, C](name: Cell[String], column: Column[F, T, C]) extends Column[F, T, C](column.f)(column.cz) {
   def |:[TT, CC](next: NamedColumn[F, TT, CC]) = next :: this :: HNil
 }
 
-case class Row(cells: List[Cell[_]]) {
-  def at(idx: Int) =
-    if (cells.isDefinedAt(idx)) Option(cells(idx))
-    else None
-  def apply(idx: Int) = at(idx).getOrElse(blank)
-}
-case class Table(name: Option[String] = None, header: Option[Row] = None, rows: List[Row], footer: Option[Row] = None)
-
 abstract class Aggregator[F, T, C] {
-  type CellType = C
   def col: Column[F, T, C]
   def apply(cs: List[Cell[C]]): Cell[C]
 }
