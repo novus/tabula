@@ -4,7 +4,7 @@ import tabula._
 import Tabula._
 import tabula.util._
 import org.specs._
-import org.scala_tools.time.Imports._
+import com.github.nscala_time.time.Imports._
 
 // a pretend data model
 

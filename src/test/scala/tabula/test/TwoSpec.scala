@@ -2,7 +2,7 @@ package tabula.test
 
 import tabula._
 import Tabula._
-import org.scala_tools.time.Imports._
+import com.github.nscala_time.time.Imports._
 import shapeless._
 import shapeless.HList._
 import org.specs._

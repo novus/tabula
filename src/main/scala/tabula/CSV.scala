@@ -1,6 +1,6 @@
 package tabula
 
-import org.scala_tools.time.Imports._
+import com.github.nscala_time.time.Imports._
 import scala.math.{ BigDecimal => ScalaBigDecimal }
 
 abstract class CSV extends Output[String] {

@@ -1,12 +1,13 @@
 import sbt._
 import Keys._
-import com.typesafe.sbtscalariform.ScalariformPlugin
-import com.typesafe.sbtscalariform.ScalariformPlugin.ScalariformKeys
+import com.typesafe.sbt.SbtScalariform._
+import scalariform.formatter.preferences._
 
 object Versions {
-  val ScalaVersion = "2.9.1"
-  val ScalaTimeVersion = "0.5"
-  val ShapelessVersion = "1.2.2"
+  val ScalaVersion = "2.10.0"
+  val ScalaTimeVersion = "0.6"
+  val NScalaTimeVersion = "0.2.0"
+  val ShapelessVersion = "1.2.3"
   val SpecsVersion = "1.6.9"
   val PoiVersion = "3.7"
   val LiftVersion = "2.4"
@@ -22,7 +23,7 @@ object BuildSettings {
     organization := "tabula",
     version := "0.0.1-SNAPSHOT",
     scalaVersion := ScalaVersion,
-    scalacOptions ++= Seq("-deprecation",  "-unchecked", "-Xexperimental"),
+    scalacOptions ++= Seq("-deprecation",  "-unchecked", "-feature", "-language:implicitConversions", "-language:reflectiveCalls"),
     shellPrompt := prompt,
     showTiming := true,
     parallelExecution := true,
@@ -33,13 +34,12 @@ object BuildSettings {
     offline := false
   )
 
-  lazy val formatSettings = ScalariformPlugin.scalariformSettings ++ Seq(
+  lazy val formatSettings = Seq(
     ScalariformKeys.preferences in Compile := formattingPreferences,
     ScalariformKeys.preferences in Test    := formattingPreferences
   )
 
   lazy val formattingPreferences = {
-    import scalariform.formatter.preferences._
     FormattingPreferences().
     setPreference(AlignParameters, true).
     setPreference(AlignSingleLineCaseStatements, true).
@@ -73,13 +73,13 @@ object Resolvers {
 object Deps {
   import Versions._
 
-  val time = "org.scala-tools.time" %% "time" % ScalaTimeVersion
+  val nscala_time = "com.github.nscala-time" %% "nscala-time" % NScalaTimeVersion
   val specs = "org.scala-tools.testing" %% "specs" % SpecsVersion % "test"
   val poi = "org.apache.poi" % "poi" % PoiVersion
   val lift_json = "net.liftweb" %% "lift-json" % LiftVersion
   val shapeless = "com.chuusai" %% "shapeless" % ShapelessVersion
 
-  val TabulaDeps = Seq(time, specs, poi, shapeless)
+  val TabulaDeps = Seq(nscala_time, specs, poi, shapeless)
   val JsonDeps = Seq(lift_json)
 }
 

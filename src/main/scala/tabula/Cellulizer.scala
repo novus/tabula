@@ -1,6 +1,6 @@
 package tabula
 
-import org.scala_tools.time.Imports._
+import com.github.nscala_time.time.Imports._
 import scala.math.{ BigDecimal => ScalaBigDecimal }
 import java.math.{ BigDecimal => JavaBigDecimal }
 

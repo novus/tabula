@@ -1,1 +1,1 @@
-addSbtPlugin("com.typesafe.sbtscalariform" % "sbtscalariform" % "0.3.1")
+addSbtPlugin("com.typesafe.sbt" % "sbt-scalariform" % "1.0.1")
