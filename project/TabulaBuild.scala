@@ -7,7 +7,7 @@ object Versions {
   val ScalaVersion = "2.10.0"
   val ScalaTimeVersion = "0.6"
   val NScalaTimeVersion = "0.2.0"
-  val ShapelessVersion = "1.2.3"
+  val ShapelessVersion = "1.2.4"
   val SpecsVersion = "1.6.9"
   val PoiVersion = "3.7"
   val LiftVersion = "2.4"
@@ -19,7 +19,7 @@ object BuildSettings {
   def prompt(state: State) =
     "[%s]> ".format(Project.extract(state).currentProject.id)
 
-  lazy val buildSettings = Defaults.defaultSettings ++ formatSettings ++ Seq(
+  lazy val buildSettings = Defaults.defaultSettings ++ Seq(
     organization := "tabula",
     version := "0.0.1-SNAPSHOT",
     scalaVersion := ScalaVersion,
@@ -31,8 +31,14 @@ object BuildSettings {
     testFrameworks += TestFrameworks.Specs,
     libraryDependencies += Deps.specs,
     resolvers ++= Resolvers.All,
-    offline := false
-  )
+    offline := false,
+    initialCommands in console := """
+    import tabula._
+    import Tabula._
+    import shapeless._
+    import tabula.test.TwoSpec._
+    """
+  ) ++ scalariformSettings ++ formatSettings
 
   lazy val formatSettings = Seq(
     ScalariformKeys.preferences in Compile := formattingPreferences,
