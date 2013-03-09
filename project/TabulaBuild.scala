@@ -36,7 +36,7 @@ object BuildSettings {
     import tabula._
     import Tabula._
     import shapeless._
-    import tabula.test.TwoSpec._
+    import shapeless.HList._
     """
   ) ++ scalariformSettings ++ formatSettings
 
