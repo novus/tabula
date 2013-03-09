@@ -15,17 +15,11 @@ object Tabula extends Cellulizers {
     val value = None
   }
   def blank[T](implicit m: Manifest[T]) = new Blank[T]
-  implicit def aggregator2agg[F, T, C](aggregator: Aggregator[F, T, C]): (Column[F, T, C], Aggregator[F, T, C]) = aggregator.col -> aggregator
-}
-
-case class RowModel[F, T, C, NcT <: HList](cols: NamedColumn[F, T, C] :: NcT) {
-  case class Row(x: F) {
-    object Runner extends Poly1 {
-      implicit def default[T, C] = at[NamedColumn[F, T, C]](_(x))
-    }
-
-    def cells(implicit mapper: Mapper[Runner.type, NamedColumn[F, T, C] :: NcT]) = cols.map(Runner)
+  def row[F, T, C, NcT <: HList, O <: HList](cols: NamedColumn[F, T, C] :: NcT)(implicit aa: ApplyAll[F, tabula.NamedColumn[F, T, C] :: NcT, Cell[C] :: O]): F => Cell[C] :: O = {
+    import ApplyAll._
+    x => applyAllTo(x)(cols)
   }
+  implicit def aggregator2agg[F, T, C](aggregator: Aggregator[F, T, C]): (Column[F, T, C], Aggregator[F, T, C]) = aggregator.col -> aggregator
 }
 
 trait Cell[A] {
@@ -44,7 +38,7 @@ abstract class Column[F, T, C](val f: F => Option[T])(implicit val cz: Cellulize
     new Transform[F, T, C, TT, CC](this, right) {}
 }
 
-case class NamedColumn[F, T, C](name: Cell[String], column: Column[F, T, C]) extends Column[F, T, C](column.f)(column.cz) {
+case class NamedColumn[F, T, C](name: Cell[String], column: Column[F, T, C]) extends Column[F, T, C](column.f)(column.cz) with (F => Cell[C]) {
   def |:[TT, CC](next: NamedColumn[F, TT, CC]) = next :: this :: HNil
 }
 

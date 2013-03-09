@@ -6,8 +6,7 @@ import scala.math.{ BigDecimal => ScalaBigDecimal }
 
 abstract class Output[CellForm] extends Pullback1[CellForm] {
   self =>
-  def apply[C, CT <: HList](cells: Cell[C] :: CT)(
-    implicit mapper: Mapper[Output[CellForm], Cell[C] :: CT]) =
+  def apply[C, CT <: HList](cells: Cell[C] :: CT)(implicit mapper: Mapper[Output[CellForm], Cell[C] :: CT]) =
     cells.map(self)
 
   protected def string(cell: Cell[String]): CellForm
