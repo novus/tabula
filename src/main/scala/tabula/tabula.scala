@@ -10,10 +10,8 @@ object Tabula extends Cellulizers with Aggregators {
   implicit def ncspimp[F, T, C, NcT <: HList](ncs: NamedColumn[F, T, C] :: NcT) = new {
     def |:[TT, CC](next: NamedColumn[F, TT, CC]) = next :: ncs
   }
-  def row[F, T, C, NcT <: HList, O <: HList](cols: NamedColumn[F, T, C] :: NcT)(implicit aa: ApplyAll[F, tabula.NamedColumn[F, T, C] :: NcT, Cell[C] :: O]): F => Cell[C] :: O = {
-    import ApplyAll._
-    x => applyAllTo(x)(cols)
-  }
+  def row[F, T, C, NcT <: HList, O <: HList](cols: NamedColumn[F, T, C] :: NcT)(implicit aa: ApplyAll[F, tabula.NamedColumn[F, T, C] :: NcT, Cell[C] :: O]) =
+    (x: F) => ApplyAll(x)(cols)
 }
 
 trait Cell[A] {

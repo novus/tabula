@@ -21,6 +21,6 @@ object ApplyAll {
       def apply(a: F, l: NamedColumn[F, T, C] :: L) = l.head(a) :: aa(a, l.tail)
     }
 
-  implicit def applyAllTo[A, L <: HList, O <: HList](a: A)(l: L)(implicit aa: ApplyAll[A, L, O]) =
+  def apply[A, L <: HList, O <: HList](a: A)(l: L)(implicit aa: ApplyAll[A, L, O]) =
     aa(a, l)
 }
