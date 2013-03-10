@@ -73,10 +73,11 @@ class ShowcaseSpec extends Specification {
     val rowF = row(columns)
 
     "print out a list of things we've bought" in {
-      for {
-        purchase <- Purchases.*
-        cells = rowF(purchase)
-      } println(cells.map(CSV).toList.mkString(","))
+      for (purchase <- Purchases.*) {
+        val cells = rowF(purchase)
+        println(cells)
+        println(cells.map(CSV).toList.mkString(","))
+      }
     }
   }
 }

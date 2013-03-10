@@ -1,6 +1,7 @@
 package tabula
 
 import shapeless._
+import Tabula._
 
 // shamelessly stolen from https://gist.github.com/travisbrown/5124684
 
@@ -17,7 +18,7 @@ object ApplyAll {
     }
 
   implicit def hlistNamedColumnApplyAll[F, T, C, L <: HList, O <: HList](implicit aa: ApplyAll[F, L, O]) =
-    new ApplyAll[F, NamedColumn[F, T, C]:: L, Cell[C]:: O] {
+    new ApplyAll[F, NamedColumn[F, T, C]:: L, ColumnAndCell[F, T, C]:: O] {
       def apply(a: F, l: NamedColumn[F, T, C] :: L) = l.head(a) :: aa(a, l.tail)
     }
 
