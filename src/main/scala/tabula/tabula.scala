@@ -23,15 +23,20 @@ trait Cell[A] {
 }
 
 abstract class Column[F, T, C](val f: F => Option[T])(implicit val cz: Cellulizer[T, C], val mf: Manifest[F], val mc: Manifest[C]) extends (F => Cell[C]) {
-  def apply(x: F): Cell[C] = (f andThen cz.apply)(x)
+  column =>
+
+  def apply(x: F): Cell[C] = (f andThen cz)(x)
 
   class Transform[TT, CC](
-    val left: Column[F, T, C],
-    val right: Column[T, TT, CC])(implicit mcc: Manifest[CC]) extends Column[F, TT, CC](left.f(_).flatMap(right.f))(right.cz, mf, mcc)
+      val right: Column[T, TT, CC])(implicit mcc: Manifest[CC]) extends Column[F, TT, CC](column.f(_).flatMap(right.f))(right.cz, mf, mcc) {
+    override def toString = "(%s | %s)(%s -> %s -> %s)".format(column.getClass.getSimpleName, right.getClass.getSimpleName, mf.runtimeClass.getSimpleName, mc.runtimeClass.getSimpleName, mcc.runtimeClass.getSimpleName)
+  }
 
-  def |[TT, CC](right: Column[T, TT, CC])(implicit mcc: Manifest[CC]) = new Transform[TT, CC](this, right)
+  def |[TT, CC](right: Column[T, TT, CC])(implicit mcc: Manifest[CC]) = new Transform[TT, CC](right)
 
-  override def toString = "Column(%s -> %s)".format(mf.runtimeClass.getSimpleName, mc.runtimeClass.getSimpleName)
+  override def toString = "%s(%s -> %s)".format(getClass.getSimpleName, mf.runtimeClass.getSimpleName, mc.runtimeClass.getSimpleName)
+
+  def `@@`(name: String) = new NamedColumn[F, T, C](cellulize(name), this)
 }
 
 case class NamedColumn[F, T, C](name: Cell[String], column: Column[F, T, C]) extends Column[F, T, C](column.f)(column.cz, column.mf, column.mc) with (F => Cell[C]) {

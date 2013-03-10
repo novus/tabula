@@ -2,10 +2,12 @@ package tabula.test
 
 import tabula._
 import Tabula._
+import tabula.util._
 import shapeless.HList._
 import org.specs._
 import com.github.nscala_time.time.Imports._
 import org.apache.commons.lang3.text.WordUtils.capitalize
+
 // a pretend data model
 
 case class UselessItem(name: String, price: Double)
@@ -55,11 +57,13 @@ object DateOfPurchase extends Column((_: Purchase).date)
 // transformer column: capitalize words
 object Capitalize extends Column(capitalize)
 
+object TotalPaid extends Fold(ItemPrice)(0)(_ + _)
+
 // let's do it!
 class ShowcaseSpec extends Specification {
   "a purchase history" should {
     val columns =
-      "Item Name" -> (ItemName | Capitalize) |:
+      (ItemName | Capitalize) @@ "Item Name" |:
         "Item Price" -> ItemPrice |:
         "Bought At" -> PurchaseLocation |:
         "Date of Purchase" -> DateOfPurchase

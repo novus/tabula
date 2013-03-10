@@ -35,6 +35,7 @@ object BuildSettings {
     initialCommands in console := """
     import tabula._
     import Tabula._
+    import tabula.test._
     import shapeless._
     import shapeless.HList._
     """
