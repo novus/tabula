@@ -64,9 +64,9 @@ class ShowcaseSpec extends Specification {
   "a purchase history" should {
     val columns =
       (ItemName | Capitalize) @@ "Item Name" |:
-        "Item Price" -> ItemPrice |:
-        "Bought At" -> PurchaseLocation |:
-        "Date of Purchase" -> DateOfPurchase
+        ItemPrice @@ "Item Price" |:
+        PurchaseLocation @@ "Bought At" |:
+        DateOfPurchase @@ "Date of Purchase"
 
     println(columns)
 

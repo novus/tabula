@@ -7,7 +7,6 @@ import shapeless.Poly._
 
 object Tabula extends Cellulizers with Aggregators {
   implicit def optionize[T](t: T): Option[T] = Option(t)
-  implicit def nameColumn[F, T, C](args: (String, Column[F, T, C])) = NamedColumn(cellulize(args._1), args._2)
   implicit def ncspimp[F, T, C, NcT <: HList](ncs: NamedColumn[F, T, C] :: NcT) = new {
     def |:[TT, CC](next: NamedColumn[F, TT, CC]) = next :: ncs
   }
