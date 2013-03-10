@@ -22,17 +22,17 @@ trait Cell[A] {
   def m: Manifest[A]
 }
 
-abstract class Column[F, T, C](val f: F => Option[T])(implicit val cz: Cellulizer[T, C]) extends (F => Cell[C]) {
+abstract class Column[F, T, C](val f: F => Option[T])(implicit val cz: Cellulizer[T, C], val mf: Manifest[F], val mc: Manifest[C]) extends (F => Cell[C]) {
   def apply(x: F): Cell[C] = (f andThen cz.apply)(x)
 
-  abstract class Transform[F, T, C1, TT, C2](
-    val left: Column[F, T, C1],
-    val right: Column[T, TT, C2]) extends Column[F, TT, C2](left.f(_).flatMap(right.f))(right.cz)
+  abstract class Transform[TT, CC](
+    val left: Column[F, T, C],
+    val right: Column[T, TT, CC])(implicit mcc: Manifest[CC]) extends Column[F, TT, CC](left.f(_).flatMap(right.f))(right.cz, mf, mcc)
 
-  def |[TT, CC](right: Column[T, TT, CC]) =
-    new Transform[F, T, C, TT, CC](this, right) {}
+  def |[TT, CC](right: Column[T, TT, CC])(implicit mcc: Manifest[CC]) =
+    new Transform[TT, CC](this, right) {}
 }
 
-case class NamedColumn[F, T, C](name: Cell[String], column: Column[F, T, C]) extends Column[F, T, C](column.f)(column.cz) with (F => Cell[C]) {
+case class NamedColumn[F, T, C](name: Cell[String], column: Column[F, T, C]) extends Column[F, T, C](column.f)(column.cz, column.mf, column.mc) with (F => Cell[C]) {
   def |:[TT, CC](next: NamedColumn[F, TT, CC]) = next :: this :: HNil
 }
