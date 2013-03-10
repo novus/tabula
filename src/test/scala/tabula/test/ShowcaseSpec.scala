@@ -41,16 +41,16 @@ object Purchases {
 // column descriptions
 
 // what we bought
-object ItemName extends Column((p: Purchase) => p.item.name)
+object ItemName extends Column((_: Purchase).item.name)
 
 // how much we paid
-object ItemPrice extends Column((p: Purchase) => p.item.price)
+object ItemPrice extends Column((_: Purchase).item.price)
 
 // where we bought it
-object PurchaseLocation extends Column((p: Purchase) => p.from.location)
+object PurchaseLocation extends Column((_: Purchase).from.location)
 
 // date of purchase
-object DateOfPurchase extends Column((p: Purchase) => p.date)
+object DateOfPurchase extends Column((_: Purchase).date)
 
 // transformer column: capitalize words
 object Capitalize extends Column(capitalize)
