@@ -11,10 +11,6 @@ object Tabula extends Cellulizers {
   implicit def ncspimp[F, T, C, NcT <: HList](ncs: NamedColumn[F, T, C] :: NcT) = new {
     def |:[TT, CC](next: NamedColumn[F, TT, CC]) = next :: ncs
   }
-  class Blank[T](implicit val m: Manifest[T]) extends Cell[T] {
-    val value = None
-  }
-  def blank[T](implicit m: Manifest[T]) = new Blank[T]
   def row[F, T, C, NcT <: HList, O <: HList](cols: NamedColumn[F, T, C] :: NcT)(implicit aa: ApplyAll[F, tabula.NamedColumn[F, T, C] :: NcT, Cell[C] :: O]): F => Cell[C] :: O = {
     import ApplyAll._
     x => applyAllTo(x)(cols)
