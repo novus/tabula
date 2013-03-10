@@ -60,6 +60,9 @@ class ShowcaseSpec extends Specification {
         "Item Price" -> ItemPrice |:
         "Bought At" -> PurchaseLocation |:
         "Date of Purchase" -> DateOfPurchase
+
+    println(columns)
+
     val rowF = row(columns)
 
     "print out a list of things we've bought" in {

@@ -31,8 +31,11 @@ abstract class Column[F, T, C](val f: F => Option[T])(implicit val cz: Cellulize
 
   def |[TT, CC](right: Column[T, TT, CC])(implicit mcc: Manifest[CC]) =
     new Transform[TT, CC](this, right) {}
+
+  override def toString = "Column(%s -> %s)".format(mf.runtimeClass.getSimpleName, mc.runtimeClass.getSimpleName)
 }
 
 case class NamedColumn[F, T, C](name: Cell[String], column: Column[F, T, C]) extends Column[F, T, C](column.f)(column.cz, column.mf, column.mc) with (F => Cell[C]) {
   def |:[TT, CC](next: NamedColumn[F, TT, CC]) = next :: this :: HNil
+  override def toString = "%s(%s)".format(column, name.value.getOrElse("N/A"))
 }
