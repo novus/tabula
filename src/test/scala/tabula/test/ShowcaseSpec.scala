@@ -5,7 +5,7 @@ import Tabula._
 import shapeless.HList._
 import org.specs._
 import com.github.nscala_time.time.Imports._
-
+import org.apache.commons.lang3.text.WordUtils.capitalize
 // a pretend data model
 
 case class UselessItem(name: String, price: Double)
@@ -15,9 +15,9 @@ case class Purchase(item: UselessItem, date: Option[DateTime], from: Pretentious
 // some test data
 
 object Items {
-  val justSomeCoatRack = UselessItem("Honest Abe", 90.39)
-  val cheeseParkingSpot = UselessItem("Fancy Cheese Board", 39.95)
-  val whatIsThis = UselessItem("Faux Professional Tool Pouch", 48.00)
+  val justSomeCoatRack = UselessItem("honest abe", 90.39)
+  val cheeseParkingSpot = UselessItem("fancy cheese board", 39.95)
+  val whatIsThis = UselessItem("faux professional tool pouch", 48.00)
 }
 
 object PlacesNormalPeopleDoNotGo {
@@ -52,11 +52,14 @@ object PurchaseLocation extends Column((p: Purchase) => p.from.location)
 // date of purchase
 object DateOfPurchase extends Column((p: Purchase) => p.date)
 
+// transformer column: capitalize words
+object Capitalize extends Column(capitalize)
+
 // let's do it!
 class ShowcaseSpec extends Specification {
   "a purchase history" should {
     val columns =
-      "Item Name" -> ItemName |:
+      "Item Name" -> (ItemName | Capitalize) |:
         "Item Price" -> ItemPrice |:
         "Bought At" -> PurchaseLocation |:
         "Date of Purchase" -> DateOfPurchase

@@ -81,11 +81,12 @@ object Deps {
 
   val nscala_time = "com.github.nscala-time" %% "nscala-time" % NScalaTimeVersion
   val specs = "org.scala-tools.testing" %% "specs" % SpecsVersion % "test"
+  val commons_lang = "org.apache.commons" % "commons-lang3" % "3.1" % "test"
   val poi = "org.apache.poi" % "poi" % PoiVersion
   val lift_json = "net.liftweb" %% "lift-json" % LiftVersion
   val shapeless = "com.chuusai" %% "shapeless" % ShapelessVersion
 
-  val TabulaDeps = Seq(nscala_time, specs, poi, shapeless)
+  val TabulaDeps = Seq(nscala_time, specs, commons_lang, poi, shapeless)
   val JsonDeps = Seq(lift_json)
 }
 
