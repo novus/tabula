@@ -23,23 +23,16 @@ trait Cell[A] {
 }
 
 abstract class Column[F, T, C](val f: F => Option[T])(implicit val cz: Cellulizer[T, C], val mf: Manifest[F], val mc: Manifest[C]) extends ColFun[F, T, C] {
-  column =>
-
   def apply(x: F): ColumnAndCell[F, T, C] = this -> (f andThen cz)(x)
 
   class Transform[TT, CC](
-      val right: Column[T, TT, CC])(implicit mcc: Manifest[CC]) extends Column[F, TT, CC](column.f(_).flatMap(right.f))(right.cz, mf, mcc) {
-    override def toString = "(%s | %s)(%s -> %s -> %s)".format(column.getClass.getSimpleName, right.getClass.getSimpleName, mf.runtimeClass.getSimpleName, mc.runtimeClass.getSimpleName, mcc.runtimeClass.getSimpleName)
-  }
+    val next: Column[T, TT, CC])(implicit mcc: Manifest[CC]) extends Column[F, TT, CC](f(_).flatMap(next.f))(next.cz, mf, mcc)
 
-  def |[TT, CC](right: Column[T, TT, CC])(implicit mcc: Manifest[CC]) = new Transform[TT, CC](right)
-
-  override def toString = "%s(%s -> %s)".format(getClass.getSimpleName, mf.runtimeClass.getSimpleName, mc.runtimeClass.getSimpleName)
+  def |[TT, CC](next: Column[T, TT, CC])(implicit mcc: Manifest[CC]) = new Transform[TT, CC](next)
 
   def `@@`(name: String) = new NamedColumn[F, T, C](cellulize(name), this)
 }
 
 case class NamedColumn[F, T, C](name: Cell[String], column: Column[F, T, C]) extends Column[F, T, C](column.f)(column.cz, column.mf, column.mc) with ColFun[F, T, C] {
   def |:[TT, CC](next: NamedColumn[F, TT, CC]) = next :: this :: HNil
-  override def toString = "%s(%s)".format(column, name.value.getOrElse("N/A"))
 }
