@@ -13,7 +13,7 @@ object Tabula extends Cellulizers with Aggregators {
   implicit def ncspimp[F, T, C, NcT <: HList](ncs: NamedColumn[F, T, C] :: NcT) = new {
     def |:[TT, CC](next: NamedColumn[F, TT, CC]) = next :: ncs
   }
-  def row[F, T, C, NcT <: HList, O <: HList](cols: NamedColumn[F, T, C] :: NcT)(implicit aa: ApplyAll[F, tabula.NamedColumn[F, T, C] :: NcT, ColumnAndCell[F, T, C] :: O]) =
+  def row[F, T, C, NcT <: HList, O <: HList](cols: NamedColumn[F, T, C] :: NcT)(implicit aa: ApplyAll[F, NamedColumn[F, T, C] :: NcT, ColumnAndCell[F, T, C] :: O]) =
     (x: F) => ApplyAll(x)(cols)
 }
 
@@ -25,8 +25,7 @@ trait Cell[A] {
 abstract class Column[F, T, C](val f: F => Option[T])(implicit val cz: Cellulizer[T, C], val mf: Manifest[F], val mc: Manifest[C]) extends ColFun[F, T, C] {
   def apply(x: F): ColumnAndCell[F, T, C] = this -> (f andThen cz)(x)
 
-  class Transform[TT, CC](
-    val next: Column[T, TT, CC])(implicit mcc: Manifest[CC]) extends Column[F, TT, CC](f(_).flatMap(next.f))(next.cz, mf, mcc)
+  class Transform[TT, CC](next: Column[T, TT, CC])(implicit mcc: Manifest[CC]) extends Column[F, TT, CC](f(_).flatMap(next.f))(next.cz, mf, mcc)
 
   def |[TT, CC](next: Column[T, TT, CC])(implicit mcc: Manifest[CC]) = new Transform[TT, CC](next)
 

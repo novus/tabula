@@ -4,9 +4,9 @@ import com.github.nscala_time.time.Imports._
 import scala.math.{ BigDecimal => ScalaBigDecimal }
 import java.math.{ BigDecimal => JavaBigDecimal }
 
-trait Cellulizer[F, T] extends (Option[F] => Cell[T]) {
-  implicit def convert(f: Option[F]): Cell[T] = apply(f)
-  implicit def convert(f: F): Cell[T] = apply(Option(f))
+trait Cellulizer[T, C] extends (Option[T] => Cell[C]) {
+  implicit def convert(f: Option[T]): Cell[C] = apply(f)
+  implicit def convert(f: T): Cell[C] = apply(Option(f))
 }
 
 trait Cellulizers {
