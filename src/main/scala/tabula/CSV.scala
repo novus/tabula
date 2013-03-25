@@ -25,4 +25,4 @@ abstract class CSV extends Output[String] {
   }
 }
 
-object CSV extends CSV
+object DefaultCSV extends CSV

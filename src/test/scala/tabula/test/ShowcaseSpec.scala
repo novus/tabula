@@ -60,6 +60,12 @@ object Capitalize extends Column(capitalize)
 
 object TotalPaid extends Fold(ItemPrice)(0)(_ + _)
 
+// create custom CSV output
+object MyCSV extends CSV {
+  override protected def dateTimeFormat = org.joda.time.format.DateTimeFormat.forPattern("dd MMM yyyy")
+  override protected def bigDecimalFormat = new java.text.DecimalFormat("#,##0.00000;-#,##0.00000")
+}
+
 // let's do it!
 class ShowcaseSpec extends Specification {
   "a purchase history" should {
@@ -74,7 +80,7 @@ class ShowcaseSpec extends Specification {
 
     "print out a list of things we've bought" in {
       for (purchase <- Purchases.*)
-        println(rowF(purchase).map(CSV).toList.mkString(","))
+        println(rowF(purchase).map(MyCSV).toList.mkString(","))
     }
   }
 }
