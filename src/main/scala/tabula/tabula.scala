@@ -10,11 +10,11 @@ object Tabula extends Cellulizers with Aggregators {
   type ColFun[F, T, C] = F => ColumnAndCell[F, T, C]
 
   implicit def optionize[T](t: T): Option[T] = Option(t)
-  implicit def ncspimp[F, T, C, NcT <: HList](ncs: NamedColumn[F, T, C] :: NcT) = new {
-    def |:[TT, CC](next: NamedColumn[F, TT, CC]) = next :: ncs
-  }
-  def row[F, T, C, NcT <: HList, O <: HList](cols: NamedColumn[F, T, C] :: NcT)(implicit aa: ApplyAll[F, NamedColumn[F, T, C] :: NcT, ColumnAndCell[F, T, C] :: O]) =
+
+  def row[F, T, C, NcT <: HList, O <: HList, Col](cols: Col :: NcT)(implicit ev: Col <:< Column[F, T, C], aa: ApplyAll[F, Col :: NcT, ColumnAndCell[F, T, C] :: O]) =
     (x: F) => ApplyAll(x)(cols)
+
+  def column[F, T, C, Col](col: Col)(implicit ev: Col <:< Column[F, T, C]): Column[F, T, C] = ev(col)
 }
 
 trait Cell[A] {
@@ -29,9 +29,7 @@ abstract class Column[F, T, C](val f: F => Option[T])(implicit val cz: Cellulize
 
   def |[TT, CC](next: Column[T, TT, CC])(implicit mcc: Manifest[CC]) = new Transform[TT, CC](next)
 
-  def `@@`(name: String) = new NamedColumn[F, T, C](cellulize(name), this)
+  def `@@`(name: String) = new NamedColumn(cellulize(name), this)
 }
 
-case class NamedColumn[F, T, C](name: Cell[String], column: Column[F, T, C]) extends Column[F, T, C](column.f)(column.cz, column.mf, column.mc) with ColFun[F, T, C] {
-  def |:[TT, CC](next: NamedColumn[F, TT, CC]) = next :: this :: HNil
-}
+class NamedColumn[F, T, C, Col](name: Cell[String], column: Col)(implicit ev: Col <:< Column[F, T, C]) extends Column[F, T, C](column.f)(column.cz, column.mf, column.mc) with ColFun[F, T, C]

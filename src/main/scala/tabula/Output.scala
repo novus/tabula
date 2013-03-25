@@ -12,7 +12,7 @@ abstract class Output[CellForm] extends Pullback1[CellForm] {
   protected def dateTime(cell: Cell[DateTime]): CellForm
   protected def bigDecimal(cell: Cell[BigDecimal]): CellForm
 
-  implicit def forString[F, T] = at[ColumnAndCell[F, T, String]](cac => string(cac._2))
-  implicit def forDateTime[F, T] = at[ColumnAndCell[F, T, DateTime]](cac => dateTime(cac._2))
-  implicit def forBigDecimal[F, T] = at[ColumnAndCell[F, T, BigDecimal]](cac => bigDecimal(cac._2))
+  implicit def forString[F, T, CAC](implicit ev: CAC <:< (Column[F, T, String], Cell[String])) = at[CAC](cac => string(cac._2))
+  implicit def forDateTime[F, T, CAC](implicit ev: CAC <:< (Column[F, T, DateTime], Cell[DateTime])) = at[CAC](cac => dateTime(cac._2))
+  implicit def forBigDecimal[F, T, CAC](implicit ev: CAC <:< (Column[F, T, BigDecimal], Cell[BigDecimal])) = at[CAC](cac => bigDecimal(cac._2))
 }

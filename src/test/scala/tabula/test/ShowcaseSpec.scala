@@ -3,6 +3,7 @@ package tabula.test
 import tabula._
 import Tabula._
 import tabula.util._
+import shapeless._
 import shapeless.HList._
 import org.specs._
 import com.github.nscala_time.time.Imports._
@@ -63,21 +64,17 @@ object TotalPaid extends Fold(ItemPrice)(0)(_ + _)
 class ShowcaseSpec extends Specification {
   "a purchase history" should {
     val columns =
-      (ItemName | Capitalize) @@ "Item Name" |:
-        ItemPrice @@ "Item Price" |:
-        PurchaseLocation @@ "Bought At" |:
-        DateOfPurchase @@ "Date of Purchase"
-
-    println(columns)
+      (ItemName | Capitalize) @@ "Item Name" ::
+        ItemPrice @@ "Item Price" ::
+        PurchaseLocation @@ "Bought At" ::
+        DateOfPurchase @@ "Date of Purchase" ::
+        HNil
 
     val rowF = row(columns)
 
     "print out a list of things we've bought" in {
-      for (purchase <- Purchases.*) {
-        val cells = rowF(purchase)
-        println(cells)
-        println(cells.map(CSV).toList.mkString(","))
-      }
+      for (purchase <- Purchases.*)
+        println(rowF(purchase).map(CSV).toList.mkString(","))
     }
   }
 }
