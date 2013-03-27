@@ -10,7 +10,7 @@ object Versions {
   val ShapelessVersion = "1.2.4"
   val SpecsVersion = "1.6.9"
   val PoiVersion = "3.7"
-  val LiftVersion = "2.4"
+  val Json4sVersion = "3.1.0"
 }
 
 object BuildSettings {
@@ -84,11 +84,11 @@ object Deps {
   val specs = "org.scala-tools.testing" %% "specs" % SpecsVersion % "test"
   val commons_lang = "org.apache.commons" % "commons-lang3" % "3.1" % "test"
   val poi = "org.apache.poi" % "poi" % PoiVersion
-  val lift_json = "net.liftweb" %% "lift-json" % LiftVersion
+  val json4s = "org.json4s" %% "json4s-native" % Json4sVersion
   val shapeless = "com.chuusai" %% "shapeless" % ShapelessVersion
 
   val TabulaDeps = Seq(nscala_time, specs, commons_lang, poi, shapeless)
-  val JsonDeps = Seq(lift_json)
+  val JsonDeps = Seq(json4s)
 }
 
 object TabulaBuild extends Build {

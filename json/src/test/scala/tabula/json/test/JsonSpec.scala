@@ -5,15 +5,16 @@ import Tabula._
 import tabula.json._
 import tabula.test._
 import org.specs._
-import net.liftweb.json._
-import net.liftweb.json.{ pretty => prettyJson }
-import net.liftweb.json.JsonDSL._
+import org.json4s._
+import org.json4s.native.JsonMethods._
+import shapeless.HList._
 
 class JsonSpec extends Specification {
+  import ShowcaseSpec._
   "a JSON output" should {
     "produce JSON" in {
-      // import ShowcaseSpec._
-      // println(prettyJson(render(JSON(table))))
+      val jos = Purchases.*.map(purchase => JObject(rowF(purchase).map(JSON).toList))
+      println(jos)
     }
   }
 }
