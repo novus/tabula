@@ -23,7 +23,7 @@ trait Cell[A] {
 }
 
 abstract class Column[F, T, C](val f: F => Option[T])(implicit val cz: Cellulizer[T, C], val mf: Manifest[F], val mc: Manifest[C]) extends ColFun[F, T, C] {
-  def apply(x: F): ColumnAndCell[F, T, C] = this -> (f andThen cz)(x)
+  def apply(source: F): ColumnAndCell[F, T, C] = this -> cz(source, f)
 
   class Transform[TT, CC](next: Column[T, TT, CC])(implicit mcc: Manifest[CC]) extends Column[F, TT, CC](f(_).flatMap(next.f))(next.cz, mf, mcc)
 
@@ -32,4 +32,4 @@ abstract class Column[F, T, C](val f: F => Option[T])(implicit val cz: Cellulize
   def `@@`(name: String) = new NamedColumn(cellulize(name), this)
 }
 
-class NamedColumn[F, T, C, Col](name: Cell[String], column: Col)(implicit ev: Col <:< Column[F, T, C]) extends Column[F, T, C](column.f)(column.cz, column.mf, column.mc) with ColFun[F, T, C]
+class NamedColumn[F, T, C, Col](val name: Cell[String], column: Col)(implicit ev: Col <:< Column[F, T, C]) extends Column[F, T, C](column.f)(column.cz, column.mf, column.mc) with ColFun[F, T, C]

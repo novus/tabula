@@ -15,7 +15,7 @@ abstract class Reduce[F, T, C](val col: Column[F, T, C])(f: (Option[C], Option[C
 abstract class Fold[F, T, C](val col: Column[F, T, C])(init: => T)(f: (Option[C], Option[C]) => Option[T])(implicit cz: Cellulizer[T, C]) extends Aggregator[F, T, C] {
   import cz._
   def apply(cs: List[Cell[C]]): Cell[C] =
-    cs.foldLeft[Cell[C]](init)((a, b) => f(a.value, b.value))
+    cs.foldLeft[Cell[C]](cellulize(init))((a, b) => cellulize(f(a.value, b.value)))
 }
 
 trait Aggregators {

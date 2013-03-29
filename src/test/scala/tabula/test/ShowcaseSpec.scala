@@ -66,18 +66,21 @@ object MyCSV extends CSV {
   override protected def bigDecimalFormat = new java.text.DecimalFormat("#,##0.00000;-#,##0.00000")
 }
 
+object ShowcaseSpec {
+  val columns =
+    (ItemName | Capitalize) @@ "Item Name" ::
+      ItemPrice @@ "Item Price" ::
+      PurchaseLocation @@ "Bought At" ::
+      DateOfPurchase @@ "Date of Purchase" ::
+      HNil
+
+  val rowF = row(columns)
+}
+
 // let's do it!
 class ShowcaseSpec extends Specification {
   "a purchase history" should {
-    val columns =
-      (ItemName | Capitalize) @@ "Item Name" ::
-        ItemPrice @@ "Item Price" ::
-        PurchaseLocation @@ "Bought At" ::
-        DateOfPurchase @@ "Date of Purchase" ::
-        HNil
-
-    val rowF = row(columns)
-
+    import ShowcaseSpec._
     "print out a list of things we've bought" in {
       for (purchase <- Purchases.*)
         println(rowF(purchase).map(MyCSV).toList.mkString(","))
