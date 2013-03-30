@@ -60,11 +60,32 @@ object Capitalize extends Column(capitalize)
 
 object TotalPaid extends Fold(ItemPrice)(0)(_ + _)
 
-// create custom CSV output
-object MyCSV extends CSV {
-  override protected def dateTimeFormat = org.joda.time.format.DateTimeFormat.forPattern("dd MMM yyyy")
-  override protected def bigDecimalFormat = new java.text.DecimalFormat("#,##0.00000;-#,##0.00000")
+// unlimited extensibility via type classes!
+object Extensibility {
+  import scala.xml._
+
+  // we'll output cells of type Cell[NodeSeq] via a function that
+  // procudes objects of type HTML
+  case class HTML(nodes: NodeSeq)
+
+  // provide a way of lazily converting HTML => Cell[NodeSeq]
+  implicit object HTMLNodeSeqCellulizer extends Cellulizer[HTML, NodeSeq](_.nodes)
+
+  // here's a column that produces HTML from Purchase-s
+  object Title extends Column((p: Purchase) => HTML(<title>{ p.item.name }</title>))
+
+  // create custom CSV output that overrides some default formats and
+  // implements conversion of NodeSeq-s to text (which is what CSV
+  // ultimately is)
+  object MyCSV extends CSV {
+    override protected def dateTimeFormat = org.joda.time.format.DateTimeFormat.forPattern("dd MMM yyyy")
+    override protected def bigDecimalFormat = new java.text.DecimalFormat("#,##0.00000;-#,##0.00000")
+    implicit def forNodeSeq[F, T, CAC](implicit ev: CAC <:< (Column[F, T, NodeSeq], Cell[NodeSeq])) =
+      at[CAC](_._2.value.map(_ \\ "title").map(_.toString).getOrElse("no title"))
+  }
 }
+
+import Extensibility._
 
 object ShowcaseSpec {
   val columns =
@@ -72,6 +93,7 @@ object ShowcaseSpec {
       ItemPrice @@ "Item Price" ::
       PurchaseLocation @@ "Bought At" ::
       DateOfPurchase @@ "Date of Purchase" ::
+      Title ::
       HNil
 
   val rowF = row(columns)
