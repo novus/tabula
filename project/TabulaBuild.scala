@@ -20,8 +20,9 @@ object BuildSettings {
     "[%s]> ".format(Project.extract(state).currentProject.id)
 
   lazy val buildSettings = Defaults.defaultSettings ++ Seq(
-    organization := "tabula",
-    version := "0.0.1-SNAPSHOT",
+    organization := "com.bumnetworks",
+    name := "tabula",
+    version := "0.0.1",
     scalaVersion := ScalaVersion,
     scalacOptions ++= Seq("-deprecation",  "-unchecked", "-feature", "-language:implicitConversions", "-language:reflectiveCalls"),
     shellPrompt := prompt,
@@ -38,7 +39,14 @@ object BuildSettings {
     import tabula.test._
     import shapeless._
     import shapeless.HList._
-    """
+    """,
+    publishTo <<= (version, baseDirectory)({
+      (v, base) =>
+        val repo = base / ".." / "repo"
+      Some(Resolver.file("repo",
+                         if (v.trim.endsWith("SNAPSHOT")) repo / "snapshots"
+                         else repo / "releases"))
+    })
   ) ++ scalariformSettings ++ formatSettings
 
   lazy val formatSettings = Seq(
