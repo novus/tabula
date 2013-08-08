@@ -100,15 +100,15 @@ object TabulaBuild extends Build {
     settings = buildSettings ++ Seq(libraryDependencies ++= TabulaDeps)
   )
 
-  lazy val macros = Project(
-    id = "tabula-macros", base = file("macros"),
-    settings = buildSettings ++ Seq(libraryDependencies <+= (scalaVersion)("org.scala-lang" % "scala-reflect" % _))
-  ) dependsOn(tabula % "compile->test")
+  // lazy val macros = Project(
+  //   id = "tabula-macros", base = file("macros"),
+  //   settings = buildSettings ++ Seq(libraryDependencies <+= (scalaVersion)("org.scala-lang" % "scala-reflect" % _))
+  // ) dependsOn(tabula % "compile->test")
 
-  lazy val output = Project(
-    id = "tabula-output", base = file("output"),
-    settings = buildSettings
-  ) dependsOn(macros % "compile->test")
+  // lazy val output = Project(
+  //   id = "tabula-output", base = file("output"),
+  //   settings = buildSettings
+  // ) dependsOn(macros % "compile->test")
 
   // lazy val json = Project(
   //   id = "json", base = file("json"),
