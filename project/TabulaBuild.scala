@@ -4,13 +4,13 @@ import com.typesafe.sbt.SbtScalariform._
 import scalariform.formatter.preferences._
 
 object Versions {
-  val ScalaVersion = "2.10.0"
+  val ScalaVersion = "2.10.2"
   val ScalaTimeVersion = "0.6"
   val NScalaTimeVersion = "0.2.0"
   val ShapelessVersion = "1.2.4"
   val SpecsVersion = "1.6.9"
   val PoiVersion = "3.7"
-  val Json4sVersion = "3.1.0"
+  // val Json4sVersion = "3.1.0"
 }
 
 object BuildSettings {
@@ -84,11 +84,11 @@ object Deps {
   val specs = "org.scala-tools.testing" %% "specs" % SpecsVersion % "test"
   val commons_lang = "org.apache.commons" % "commons-lang3" % "3.1" % "test"
   val poi = "org.apache.poi" % "poi" % PoiVersion
-  val json4s = "org.json4s" %% "json4s-native" % Json4sVersion
+  // val json4s = "org.json4s" %% "json4s-native" % Json4sVersion
   val shapeless = "com.chuusai" %% "shapeless" % ShapelessVersion
 
   val TabulaDeps = Seq(nscala_time, specs, commons_lang, poi, shapeless)
-  val JsonDeps = Seq(json4s)
+  // val JsonDeps = Seq(json4s)
 }
 
 object TabulaBuild extends Build {
@@ -99,8 +99,19 @@ object TabulaBuild extends Build {
     id = "tabula", base = file("."),
     settings = buildSettings ++ Seq(libraryDependencies ++= TabulaDeps)
   )
-  lazy val json = Project(
-    id = "json", base = file("json"),
-    settings = buildSettings ++ Seq(libraryDependencies ++= (TabulaDeps ++ JsonDeps))
+
+  lazy val macros = Project(
+    id = "tabula-macros", base = file("macros"),
+    settings = buildSettings ++ Seq(libraryDependencies <+= (scalaVersion)("org.scala-lang" % "scala-reflect" % _))
   ) dependsOn(tabula % "compile->test")
+
+  lazy val output = Project(
+    id = "tabula-output", base = file("output"),
+    settings = buildSettings
+  ) dependsOn(macros % "compile->test")
+
+  // lazy val json = Project(
+  //   id = "json", base = file("json"),
+  //   settings = buildSettings ++ Seq(libraryDependencies ++= (TabulaDeps ++ JsonDeps))
+  // ) dependsOn(tabula % "compile->test")
 }
