@@ -22,7 +22,7 @@ object BuildSettings {
   lazy val buildSettings = Defaults.defaultSettings ++ Seq(
     organization := "com.bumnetworks",
     name := "tabula",
-    version := "0.0.2-SNAPSHOT",
+    version := "0.0.2",
     scalaVersion := ScalaVersion,
     scalacOptions ++= Seq("-deprecation",  "-unchecked", "-feature", "-language:implicitConversions", "-language:reflectiveCalls"),
     shellPrompt := prompt,
