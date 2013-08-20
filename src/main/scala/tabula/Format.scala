@@ -7,7 +7,12 @@ trait Format[B] extends Pullback1[B] {
   type Base = B
 
   trait Formatter[C] {
-    def apply(cell: Cell[C]): Base
+    type Local <: Base
+    def apply(cell: Cell[C]): Local
+  }
+
+  trait SimpleFormatter[C] extends Formatter[C] {
+    type Local = Base
   }
 
   def apply[C](cell: Cell[C])(implicit fter: Formatter[C]) = fter(cell)

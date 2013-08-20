@@ -80,7 +80,7 @@ object Extensibility {
   object MyCSV extends CSV {
     implicit val BigDecimalFormatter = new BigDecimalFormatter(new java.text.DecimalFormat("#,##0.00000;-#,##0.00000"))
     implicit val DateTimeFormatter = new DateTimeFormatter(org.joda.time.format.DateTimeFormat.forPattern("dd MMM yyyy"))
-    implicit object NodeSeqFormatter extends Formatter[NodeSeq] {
+    implicit object NodeSeqFormatter extends SimpleFormatter[NodeSeq] {
       def apply(cell: Cell[NodeSeq]) = StringFormatter.quote(cell.value.map(_ \\ "title").map(_.toString))
     }
   }

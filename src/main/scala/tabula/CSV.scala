@@ -4,7 +4,7 @@ import org.joda.time.DateTime
 import scala.math.{ BigDecimal => ScalaBigDecimal }
 
 trait CSV extends Format[String] {
-  implicit object StringFormatter extends Formatter[String] {
+  implicit object StringFormatter extends SimpleFormatter[String] {
     def scrub(x: Option[String]) = {
       x
         .flatMap(Option(_))
@@ -21,11 +21,11 @@ trait CSV extends Format[String] {
     def apply(cell: Cell[String]) = quote(cell.value)
   }
 
-  class DateTimeFormatter(df: => org.joda.time.format.DateTimeFormatter) extends Formatter[DateTime] {
+  class DateTimeFormatter(df: => org.joda.time.format.DateTimeFormatter) extends SimpleFormatter[DateTime] {
     def apply(cell: Cell[DateTime]) = StringFormatter.quote(cell.value.map(df.print))
   }
 
-  class BigDecimalFormatter(df: => java.text.DecimalFormat) extends Formatter[ScalaBigDecimal] {
+  class BigDecimalFormatter(df: => java.text.DecimalFormat) extends SimpleFormatter[ScalaBigDecimal] {
     def apply(cell: Cell[ScalaBigDecimal]) = StringFormatter.scrub(cell.value.map(df.format)).getOrElse("")
   }
 }
