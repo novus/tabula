@@ -1,28 +1,38 @@
 package tabula
 
-import com.github.nscala_time.time.Imports._
+import org.joda.time.DateTime
 import scala.math.{ BigDecimal => ScalaBigDecimal }
 
-abstract class CSV extends Output[String] {
-  protected def dateTimeFormat = org.joda.time.format.DateTimeFormat.fullDateTime
-  protected def bigDecimalFormat = new java.text.DecimalFormat("#,##0.00;-#,##0.00")
+trait CSV extends Format[String] {
+  implicit object StringFormatter extends Formatter[String] {
+    def scrub(x: Option[String]) = {
+      x
+        .flatMap(Option(_))
+        .map(_.trim)
+        .filterNot(_ == "")
+    }
 
-  protected def string(cell: Cell[String]) = quote(cell.value)
-  protected def dateTime(cell: Cell[DateTime]) = quote(cell.value.map(dateTimeFormat.print))
-  protected def bigDecimal(cell: Cell[BigDecimal]) = scrub(cell.value.map(bigDecimalFormat.format)).getOrElse("")
+    def quote(x: Option[String]) = {
+      scrub(x)
+        .map("\"%s\"".format(_))
+        .getOrElse("")
+    }
 
-  private def scrub(x: Option[String]) = {
-    x
-      .flatMap(Option(_))
-      .map(_.trim)
-      .filterNot(_ == "")
+    def apply(cell: Cell[String]) = quote(cell.value)
   }
 
-  private def quote(x: Option[String]) = {
-    scrub(x)
-      .map("\"%s\"".format(_))
-      .getOrElse("")
+  class DateTimeFormatter(df: => org.joda.time.format.DateTimeFormatter) extends Formatter[DateTime] {
+    def apply(cell: Cell[DateTime]) = StringFormatter.quote(cell.value.map(df.print))
+  }
+
+  class BigDecimalFormatter(df: => java.text.DecimalFormat) extends Formatter[ScalaBigDecimal] {
+    def apply(cell: Cell[ScalaBigDecimal]) = StringFormatter.scrub(cell.value.map(df.format)).getOrElse("")
   }
 }
 
-object DefaultCSV extends CSV
+object CSV {
+  object default extends CSV {
+    implicit val DateTimeFormatter = new DateTimeFormatter(org.joda.time.format.DateTimeFormat.fullDateTime)
+    implicit val BigDecimalFormatter = new BigDecimalFormatter(new java.text.DecimalFormat("#,##0.00;-#,##0.00"))
+  }
+}

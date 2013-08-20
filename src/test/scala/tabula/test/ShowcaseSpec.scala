@@ -78,10 +78,11 @@ object Extensibility {
   // implements conversion of NodeSeq-s to text (which is what CSV
   // ultimately is)
   object MyCSV extends CSV {
-    override protected def dateTimeFormat = org.joda.time.format.DateTimeFormat.forPattern("dd MMM yyyy")
-    override protected def bigDecimalFormat = new java.text.DecimalFormat("#,##0.00000;-#,##0.00000")
-    implicit def forNodeSeq[F, T, CAC](implicit ev: CAC <:< (Column[F, T, NodeSeq], Cell[NodeSeq])) =
-      at[CAC](_._2.value.map(_ \\ "title").map(_.toString).getOrElse("no title"))
+    implicit val BigDecimalFormatter = new BigDecimalFormatter(new java.text.DecimalFormat("#,##0.00000;-#,##0.00000"))
+    implicit val DateTimeFormatter = new DateTimeFormatter(org.joda.time.format.DateTimeFormat.forPattern("dd MMM yyyy"))
+    implicit object NodeSeqFormatter extends Formatter[NodeSeq] {
+      def apply(cell: Cell[NodeSeq]) = StringFormatter.quote(cell.value.map(_ \\ "title").map(_.toString))
+    }
   }
 }
 
