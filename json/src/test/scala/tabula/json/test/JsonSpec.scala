@@ -1,7 +1,6 @@
 package tabula.json.test
 
 import tabula._
-import Tabula._
 import tabula.json._
 import tabula.test._
 import org.specs._
