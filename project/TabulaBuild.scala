@@ -31,7 +31,7 @@ object BuildSettings {
     testFrameworks += TestFrameworks.Specs,
     libraryDependencies += Deps.specs,
     offline := false,
-    initialCommands in console := """
+    initialCommands in console in Test := """
     import tabula._
     import Tabula._
     import tabula.test._
