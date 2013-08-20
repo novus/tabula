@@ -10,7 +10,7 @@ object Versions {
   val ShapelessVersion = "1.2.4"
   val SpecsVersion = "1.6.9"
   val PoiVersion = "3.7"
-  // val Json4sVersion = "3.1.0"
+  val Json4sVersion = "3.2.5"
 }
 
 object BuildSettings {
@@ -21,7 +21,6 @@ object BuildSettings {
 
   lazy val buildSettings = Defaults.defaultSettings ++ Seq(
     organization := "com.bumnetworks",
-    name := "tabula",
     version := "0.0.3-SNAPSHOT",
     scalaVersion := ScalaVersion,
     scalacOptions ++= Seq("-deprecation",  "-unchecked", "-feature", "-language:implicitConversions", "-language:reflectiveCalls"),
@@ -31,7 +30,6 @@ object BuildSettings {
     parallelExecution in Test := false,
     testFrameworks += TestFrameworks.Specs,
     libraryDependencies += Deps.specs,
-    resolvers ++= Resolvers.All,
     offline := false,
     initialCommands in console := """
     import tabula._
@@ -75,51 +73,36 @@ object BuildSettings {
   }
 }
 
-object Resolvers {
-  val All = Seq(
-    ScalaToolsSnapshots,
-    "Novus Releases" at "http://repo.novus.com/releases",
-    "Novus Snapshots" at "http://repo.novus.com/snapshots",
-    "Coda Hale's repo" at "http://repo.codahale.com",
-    "localRels" at "file:/home/max/work/repo/releases",
-    "localSnaps" at "file:/home/max/work/repo/snapshots")
-}
-
 object Deps {
   import Versions._
 
   val nscala_time = "com.github.nscala-time" %% "nscala-time" % NScalaTimeVersion
   val specs = "org.scala-tools.testing" %% "specs" % SpecsVersion % "test"
   val commons_lang = "org.apache.commons" % "commons-lang3" % "3.1" % "test"
-  val poi = "org.apache.poi" % "poi" % PoiVersion
-  // val json4s = "org.json4s" %% "json4s-native" % Json4sVersion
+  // val poi = "org.apache.poi" % "poi" % PoiVersion
+  val json4s = "org.json4s" %% "json4s-native" % Json4sVersion
   val shapeless = "com.chuusai" %% "shapeless" % ShapelessVersion
 
-  val TabulaDeps = Seq(nscala_time, specs, commons_lang, poi, shapeless)
-  // val JsonDeps = Seq(json4s)
+  val CoreDeps = Seq(nscala_time, specs, commons_lang, /*poi, */shapeless)
+  val JsonDeps = Seq(json4s)
 }
 
 object TabulaBuild extends Build {
   import BuildSettings._
   import Deps._
 
-  lazy val tabula = Project(
+  lazy val root = Project(
     id = "tabula", base = file("."),
-    settings = buildSettings ++ Seq(libraryDependencies ++= TabulaDeps)
+    settings = buildSettings ++ Seq(publish := {})
+  ) aggregate(core, json)
+
+  lazy val core = Project(
+    id = "tabula-core", base = file("core"),
+    settings = buildSettings ++ Seq(libraryDependencies ++= CoreDeps)
   )
 
-  // lazy val macros = Project(
-  //   id = "tabula-macros", base = file("macros"),
-  //   settings = buildSettings ++ Seq(libraryDependencies <+= (scalaVersion)("org.scala-lang" % "scala-reflect" % _))
-  // ) dependsOn(tabula % "compile->test")
-
-  // lazy val output = Project(
-  //   id = "tabula-output", base = file("output"),
-  //   settings = buildSettings
-  // ) dependsOn(macros % "compile->test")
-
-  // lazy val json = Project(
-  //   id = "json", base = file("json"),
-  //   settings = buildSettings ++ Seq(libraryDependencies ++= (TabulaDeps ++ JsonDeps))
-  // ) dependsOn(tabula % "compile->test")
+  lazy val json = Project(
+    id = "tabula-json", base = file("json"),
+    settings = buildSettings ++ Seq(libraryDependencies ++= JsonDeps)
+  ) dependsOn(core % "compile->test")
 }
