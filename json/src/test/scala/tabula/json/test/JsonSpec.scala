@@ -1,6 +1,7 @@
 package tabula.json.test
 
 import tabula._
+import Tabula._
 import tabula.json._
 import tabula.test._
 import org.specs._
@@ -19,8 +20,10 @@ class JsonSpec extends Specification {
   import ShowcaseSpec._
   "a JSON output" should {
     "produce JSON" in {
-      val jos = Purchases.*.map(purchase => JArray(rowF(purchase).map(MyJSON).toList))
-      println(jos)
+      for (purchase <- Purchases.*) {
+        val row = cellsF(purchase).row(MyJSON)
+        println(row)
+      }
     }
   }
 }

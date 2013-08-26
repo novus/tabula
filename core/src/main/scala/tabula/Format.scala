@@ -3,12 +3,15 @@ package tabula
 import shapeless._
 import Tabula._
 
-trait Format[B] extends Pullback1[B] {
+trait Format[B] extends Poly2 {
   type Base = B
+
+  type CellT[C] = ColumnAndCell[_, _, C]
 
   trait Formatter[C] {
     type Local <: Base
     def apply(cell: Cell[C]): Local
+    def apply(cell: CellT[C]): Local = apply(cell._2)
   }
 
   trait SimpleFormatter[C] extends Formatter[C] {
@@ -17,6 +20,15 @@ trait Format[B] extends Pullback1[B] {
 
   def apply[C](cell: Cell[C])(implicit fter: Formatter[C]) = fter(cell)
 
-  implicit def default[F, T, CAC, C](implicit ev: CAC <:< (Column[F, T, C], Cell[C]), fter: Formatter[C]) =
-    at[CAC](cac => fter(cac._2))
+  type Row
+
+  trait RowOps {
+    def emptyRow: Row
+    def appendCell[C](cell: CellT[C])(row: Row)(implicit fter: Formatter[C]): Row
+  }
+
+  val RowOps: RowOps
+
+  implicit def caseRowCell[F, T, C](implicit fter: Formatter[C]) =
+    at[Row, ColumnAndCell[F, T, C]]((r, c) => RowOps.appendCell(c)(r))
 }

@@ -11,10 +11,14 @@ object Tabula extends Cellulizers with Aggregators {
 
   implicit def optionize[T](t: T): Option[T] = Option(t)
 
-  def row[F, T, C, NcT <: HList, O <: HList, Col](cols: Col :: NcT)(implicit ev: Col <:< Column[F, T, C], aa: ApplyAll[F, Col :: NcT, ColumnAndCell[F, T, C] :: O]) =
+  def cells[F, T, C, NcT <: HList, O <: HList, Col](cols: Col :: NcT)(implicit ev: Col <:< Column[F, T, C], aa: ApplyAll[F, Col :: NcT, ColumnAndCell[F, T, C] :: O]): F => ColumnAndCell[F, T, C] :: O =
     (x: F) => ApplyAll(x)(cols)
 
-  def column[F, T, C, Col](col: Col)(implicit ev: Col <:< Column[F, T, C]): Column[F, T, C] = ev(col)
+  implicit def pimpCells[F, T, C, O <: HList](cells: ColumnAndCell[F, T, C] :: O) = new {
+    type Cells = ColumnAndCell[F, T, C] :: O
+    def row[Fmt <: Format[_]](format: Fmt)(implicit ev: Fmt <:< Format[_], lf: LeftFolder[Cells, format.Row, Fmt]) =
+      cells.foldLeft(format.RowOps.emptyRow)(format)
+  }
 }
 
 trait Cell[A] {
@@ -32,4 +36,4 @@ abstract class Column[F, T, C](val f: F => Option[T])(implicit val cz: Cellulize
   def `@@`(name: String) = new NamedColumn(cellulize(name), this)
 }
 
-class NamedColumn[F, T, C, Col](val name: Cell[String], column: Col)(implicit ev: Col <:< Column[F, T, C]) extends Column[F, T, C](column.f)(column.cz, column.mf, column.mc) with ColFun[F, T, C]
+class NamedColumn[F, T, C, Col](name: Cell[String], column: Col)(implicit ev: Col <:< Column[F, T, C]) extends Column[F, T, C](column.f)(column.cz, column.mf, column.mc) with ColFun[F, T, C]

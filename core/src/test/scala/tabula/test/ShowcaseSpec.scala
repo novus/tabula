@@ -97,7 +97,7 @@ object ShowcaseSpec {
       Title ::
       HNil
 
-  val rowF = row(columns)
+  val cellsF = cells(columns)
 }
 
 // let's do it!
@@ -105,8 +105,10 @@ class ShowcaseSpec extends Specification {
   "a purchase history" should {
     import ShowcaseSpec._
     "print out a list of things we've bought" in {
-      for (purchase <- Purchases.*)
-        println(rowF(purchase).map(MyCSV).toList.mkString(","))
+      for (purchase <- Purchases.*) {
+        val row = cellsF(purchase).row(MyCSV)
+        println(row)
+      }
     }
   }
 }
