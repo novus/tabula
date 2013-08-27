@@ -3,8 +3,8 @@ package tabula
 import shapeless._
 import Tabula._
 
-trait Format[B] extends Poly2 {
-  type Base = B
+trait Format extends Poly2 {
+  type Base
 
   type CellT[C] = ColumnAndCell[_, _, C]
 

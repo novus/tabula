@@ -4,7 +4,9 @@ import Tabula._
 import org.joda.time.DateTime
 import scala.math.{ BigDecimal => ScalaBigDecimal }
 
-trait CSV extends Format[String] {
+trait CSV extends Format {
+  type Base = String
+
   implicit object StringFormatter extends SimpleFormatter[String] {
     def scrub(x: Option[String]) = {
       x
