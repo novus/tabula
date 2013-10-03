@@ -2,6 +2,7 @@ package tabula.test
 
 import tabula._
 import Tabula._
+import Column._
 import tabula.util._
 import shapeless._
 import shapeless.HList._
