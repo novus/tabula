@@ -26,7 +26,7 @@ trait JSON extends Format {
 
   type Row = JArray
 
-  object RowOps extends RowOps {
+  object RowProto extends RowProto {
     def emptyRow = JArray(Nil)
     def appendCell[C](cell: CellT[C])(row: JArray)(implicit fter: Formatter[C]) =
       row.copy(arr = row.arr ::: fter(cell._2) :: Nil)

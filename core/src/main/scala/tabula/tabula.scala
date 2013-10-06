@@ -15,13 +15,22 @@ object Tabula extends Cellulizers with Aggregators {
   implicit def pimpCells[F, T, C, O <: HList](cells: ColumnAndCell[F, T, C] :: O) = new {
     type Cells = ColumnAndCell[F, T, C] :: O
     def row[Fmt <: Format](format: Fmt)(implicit ev: Fmt <:< Format, lf: LeftFolder[Cells, format.Row, Fmt]) =
-      cells.foldLeft(format.RowOps.emptyRow)(format)
+      cells.foldLeft(format.RowProto.emptyRow)(format)
   }
 }
 
 trait Cell[A] {
+  cell =>
   def value: Option[A]
   def m: Manifest[A]
+  def map[B: Manifest](f: A => B): Cell[B] = new Cell[B] {
+    lazy val value = cell.value.map(f)
+    lazy val m = manifest[B]
+  }
+  def flatMap[B: Manifest](f: A => Option[B]): Cell[B] = new Cell[B] {
+    lazy val value = cell.value.flatMap(f)
+    lazy val m = manifest[B]
+  }
 }
 
 object Column {

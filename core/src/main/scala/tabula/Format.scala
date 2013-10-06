@@ -22,13 +22,13 @@ trait Format extends Poly2 {
 
   type Row
 
-  trait RowOps {
+  trait RowProto {
     def emptyRow: Row
     def appendCell[C](cell: CellT[C])(row: Row)(implicit fter: Formatter[C]): Row
   }
 
-  val RowOps: RowOps
+  val RowProto: RowProto
 
   implicit def caseRowCell[F, T, C](implicit fter: Formatter[C]) =
-    at[Row, ColumnAndCell[F, T, C]]((r, c) => RowOps.appendCell(c)(r))
+    at[Row, ColumnAndCell[F, T, C]]((r, c) => RowProto.appendCell(c)(r))
 }

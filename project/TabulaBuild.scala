@@ -9,7 +9,7 @@ object Versions {
   val NScalaTimeVersion = "0.2.0"
   val ShapelessVersion = "1.2.4"
   val SpecsVersion = "1.6.9"
-  val PoiVersion = "3.7"
+  val PoiVersion = "3.9"
   val Json4sVersion = "3.2.5"
 }
 
@@ -79,12 +79,13 @@ object Deps {
   val nscala_time = "com.github.nscala-time" %% "nscala-time" % NScalaTimeVersion
   val specs = "org.scala-tools.testing" %% "specs" % SpecsVersion % "test"
   val commons_lang = "org.apache.commons" % "commons-lang3" % "3.1" % "test"
-  // val poi = "org.apache.poi" % "poi" % PoiVersion
+  val poi = "org.apache.poi" % "poi" % PoiVersion
   val json4s = "org.json4s" %% "json4s-native" % Json4sVersion
   val shapeless = "com.chuusai" %% "shapeless" % ShapelessVersion
 
   val CoreDeps = Seq(nscala_time, specs, commons_lang, /*poi, */shapeless)
   val JsonDeps = Seq(json4s)
+  val ExcelDeps = Seq(poi)
 }
 
 object TabulaBuild extends Build {
@@ -94,7 +95,7 @@ object TabulaBuild extends Build {
   lazy val root = Project(
     id = "tabula", base = file("."),
     settings = buildSettings ++ Seq(publish := {})
-  ) aggregate(core, json)
+  ) aggregate(core, json, excel)
 
   lazy val core = Project(
     id = "tabula-core", base = file("core"),
@@ -104,5 +105,10 @@ object TabulaBuild extends Build {
   lazy val json = Project(
     id = "tabula-json", base = file("json"),
     settings = buildSettings ++ Seq(libraryDependencies ++= JsonDeps)
+  ) dependsOn(core % "compile->test")
+
+  lazy val excel = Project(
+    id = "tabula-excel", base = file("excel"),
+    settings = buildSettings ++ Seq(libraryDependencies ++= ExcelDeps)
   ) dependsOn(core % "compile->test")
 }

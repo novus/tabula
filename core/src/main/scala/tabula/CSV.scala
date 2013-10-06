@@ -4,7 +4,7 @@ import Tabula._
 import org.joda.time.DateTime
 import scala.math.{ BigDecimal => ScalaBigDecimal }
 
-trait CSV extends Format {
+class CSV extends Format {
   type Base = String
 
   implicit object StringFormatter extends SimpleFormatter[String] {
@@ -34,7 +34,7 @@ trait CSV extends Format {
 
   type Row = String
 
-  object RowOps extends RowOps {
+  object RowProto extends RowProto {
     def emptyRow = ""
     def appendCell[C](cell: CellT[C])(row: String)(implicit fter: Formatter[C]) = {
       val base = fter(cell)
@@ -42,11 +42,7 @@ trait CSV extends Format {
       else s"${row},${base}"
     }
   }
-}
 
-object CSV {
-  abstract class default extends CSV {
-    implicit val DateTimeFormatter = new DateTimeFormatter(org.joda.time.format.DateTimeFormat.fullDateTime)
-    implicit val BigDecimalFormatter = new BigDecimalFormatter(new java.text.DecimalFormat("#,##0.00;-#,##0.00"))
-  }
+  class DefaultDateTimeFormatter extends DateTimeFormatter(org.joda.time.format.DateTimeFormat.fullDateTime)
+  class DefaultBigDecimalFormatter extends BigDecimalFormatter(new java.text.DecimalFormat("#,##0.00;-#,##0.00"))
 }
