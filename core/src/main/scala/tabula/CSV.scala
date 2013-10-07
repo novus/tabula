@@ -4,6 +4,7 @@ import shapeless._
 import Tabula._
 import org.joda.time.DateTime
 import scala.math.{ BigDecimal => ScalaBigDecimal }
+import java.io.{ OutputStream, PrintWriter }
 
 class CSV extends Format {
   type Base = String
@@ -48,8 +49,8 @@ class CSV extends Format {
   class DefaultBigDecimalFormatter extends BigDecimalFormatter(new java.text.DecimalFormat("#,##0.00;-#,##0.00"))
 
   def writer[F, T, C, NcT <: HList, Col](cols: Col :: NcT)(implicit ev: Col <:< Column[F, T, C], tl: ToList[Col :: NcT, Column[_, _, _]]) = new WriterSpawn(NamedColumn.names(cols)) {
-    def toStream(out: java.io.OutputStream) = new Writer(out) {
-      lazy val pw = new java.io.PrintWriter(out)
+    def toStream(out: OutputStream) = new Writer(out) {
+      lazy val pw = new PrintWriter(out)
       override def start() = pw.println(names.map(StringFormatter.quote).mkString(","))
       def writeMore(rows: Iterator[String]) = for (row <- rows) pw.println(row)
       override def finish() = pw.flush()

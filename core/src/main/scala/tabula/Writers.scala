@@ -1,7 +1,7 @@
 package tabula
 
 import shapeless._
-import java.io.{ File, OutputStream }
+import java.io.{ File, OutputStream, FileOutputStream }
 
 trait Writers {
   self: Format =>
@@ -21,8 +21,7 @@ trait Writers {
 
   abstract class WriterSpawn(protected val names: List[Option[String]]) {
     def toStream(out: OutputStream): Writer[OutputStream]
-    def toFile(file: java.io.File) =
-      toStream(new java.io.FileOutputStream(file)).asInstanceOf[Writer[java.io.File]]
+    def toFile(file: File) = toStream(new FileOutputStream(file)).asInstanceOf[Writer[File]]
     def toConsole() = toStream(System.out)
   }
 

@@ -6,6 +6,7 @@ import Tabula._
 import org.apache.poi.ss.usermodel.{ Workbook, Sheet, Row => ExcelRow, Cell => ExcelCell, CellStyle }
 import com.github.nscala_time.time.Imports._
 import scala.math.{ BigDecimal => ScalaBigDecimal }
+import java.io.OutputStream
 
 class ExcelSheet(name: String)(implicit protected val workbook: Workbook) extends Format {
   type Row = (Int, ExcelRow)
@@ -64,16 +65,12 @@ class ExcelSheet(name: String)(implicit protected val workbook: Workbook) extend
   }
 
   def writer[F, T, C, NcT <: HList, Col](cols: Col :: NcT)(implicit ev: Col <:< Column[F, T, C], tl: ToList[Col :: NcT, Column[_, _, _]]) = new WriterSpawn(NamedColumn.names(cols)) {
-    def toStream(out: java.io.OutputStream) = new Writer(out) {
-      override def start() {
-        RowProto.header(names)
-      }
-
+    def toStream(out: OutputStream) = new Writer(out) {
+      override def start() = RowProto.header(names)
       def writeMore(rows: Iterator[Row]) {
         rows.foreach(identity)
         workbook.write(out)
       }
-
       override def finish() = out.flush()
     }
   }

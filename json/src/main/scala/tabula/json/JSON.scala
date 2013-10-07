@@ -7,6 +7,7 @@ import scala.math.{ BigDecimal => ScalaBigDecimal }
 import org.json4s._
 import org.json4s.native.JsonMethods._
 import shapeless._
+import java.io.{ OutputStream, PrintWriter }
 
 trait JSON extends Format {
   type Base = JValue
@@ -35,8 +36,8 @@ trait JSON extends Format {
   }
 
   def writer[F, T, C, NcT <: HList, Col](cols: Col :: NcT)(implicit ev: Col <:< Column[F, T, C], tl: ToList[Col :: NcT, Column[_, _, _]]) = new WriterSpawn(NamedColumn.names(cols)) {
-    def toStream(out: java.io.OutputStream) = new Writer(out) {
-      val pw = new java.io.PrintWriter(out)
+    def toStream(out: OutputStream) = new Writer(out) {
+      val pw = new PrintWriter(out)
 
       override def start() {
         pw.print("[")
