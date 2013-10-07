@@ -64,7 +64,7 @@ class ExcelSheet(name: String)(implicit protected val workbook: Workbook) extend
     }
   }
 
-  def writer[F, T, C, NcT <: HList, Col](cols: Col :: NcT)(implicit ev: Col <:< Column[F, T, C], tl: ToList[Col :: NcT, Column[_, _, _]]) = new WriterSpawn(NamedColumn.names(cols)) {
+  def writer(names: List[Option[String]]) = new WriterSpawn(names) {
     def toStream(out: OutputStream) = new Writer(out) {
       override def start() = RowProto.header(names)
       def writeMore(rows: Iterator[Row]) {

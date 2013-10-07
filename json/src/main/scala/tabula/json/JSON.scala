@@ -35,7 +35,7 @@ trait JSON extends Format {
       row.copy(arr = row.arr ::: fter(cell._2) :: Nil)
   }
 
-  def writer[F, T, C, NcT <: HList, Col](cols: Col :: NcT)(implicit ev: Col <:< Column[F, T, C], tl: ToList[Col :: NcT, Column[_, _, _]]) = new WriterSpawn(NamedColumn.names(cols)) {
+  def writer(names: List[Option[String]]) = new WriterSpawn(names) {
     def toStream(out: OutputStream) = new Writer(out) {
       val pw = new PrintWriter(out)
 
