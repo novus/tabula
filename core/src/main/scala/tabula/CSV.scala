@@ -1,5 +1,6 @@
 package tabula
 
+import shapeless._
 import Tabula._
 import org.joda.time.DateTime
 import scala.math.{ BigDecimal => ScalaBigDecimal }
@@ -45,4 +46,18 @@ class CSV extends Format {
 
   class DefaultDateTimeFormatter extends DateTimeFormatter(org.joda.time.format.DateTimeFormat.fullDateTime)
   class DefaultBigDecimalFormatter extends BigDecimalFormatter(new java.text.DecimalFormat("#,##0.00;-#,##0.00"))
+
+  def writer[F, T, C, NcT <: HList, Col](cols: Col :: NcT)(implicit ev: Col <:< Column[F, T, C], tl: ToList[Col :: NcT, Column[_, _, _]]) = new WriterSpawn(NamedColumn.names(cols)) {
+    def toStream(out: java.io.OutputStream) = new Writer(out) {
+      lazy val pw = new java.io.PrintWriter(out)
+      override def before() =
+        pw.println(names.map(StringFormatter.quote).mkString(","))
+      def write(rows: Iterator[String]) {
+        before()
+        for (row <- rows) pw.println(row)
+        after()
+      }
+      override def after() = pw.flush()
+    }
+  }
 }

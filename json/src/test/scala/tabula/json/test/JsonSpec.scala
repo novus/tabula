@@ -6,7 +6,7 @@ import tabula.json._
 import tabula.test._
 import org.specs._
 import org.json4s._
-import shapeless.HList._
+import shapeless._
 import scala.xml._
 
 object MyJSON extends JSON {
@@ -20,10 +20,8 @@ class JsonSpec extends Specification {
   import ShowcaseSpec._
   "a JSON output" should {
     "produce JSON" in {
-      for (purchase <- Purchases.*) {
-        val row = cellsF(purchase).row(MyJSON)
-        println(row)
-      }
+      val writer = MyJSON.writer(columns).toConsole()
+      writer.write(for (purchase <- Purchases.*.iterator) yield cellsF(purchase).row(MyJSON))
     }
   }
 }

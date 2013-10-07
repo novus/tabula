@@ -1,5 +1,6 @@
 package tabula.excel
 
+import shapeless._
 import tabula._
 import Tabula._
 import org.apache.poi.ss.usermodel.{ Workbook, Sheet, Row => ExcelRow, Cell => ExcelCell, CellStyle }
@@ -59,6 +60,23 @@ class ExcelSheet(name: String)(implicit protected val workbook: Workbook) extend
       val (lastCellIndex, row) = row0
       (fter(cell): Base)(lastCellIndex, row)
       (lastCellIndex + 1, row)
+    }
+  }
+
+  def writer[F, T, C, NcT <: HList, Col](cols: Col :: NcT)(implicit ev: Col <:< Column[F, T, C], tl: ToList[Col :: NcT, Column[_, _, _]]) = new WriterSpawn(NamedColumn.names(cols)) {
+    def toStream(out: java.io.OutputStream) = new Writer(out) {
+      override def before() {
+        RowProto.header(names)
+      }
+
+      def write(rows: Iterator[Row]) {
+        before()
+        rows.foreach(identity)
+        workbook.write(out)
+        after()
+      }
+
+      override def after() = out.flush()
     }
   }
 }

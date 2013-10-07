@@ -5,6 +5,8 @@ import Tabula._
 import com.github.nscala_time.time.Imports._
 import scala.math.{ BigDecimal => ScalaBigDecimal }
 import org.json4s._
+import org.json4s.native.JsonMethods._
+import shapeless._
 
 trait JSON extends Format {
   type Base = JValue
@@ -30,5 +32,27 @@ trait JSON extends Format {
     def emptyRow = JArray(Nil)
     def appendCell[C](cell: CellT[C])(row: JArray)(implicit fter: Formatter[C]) =
       row.copy(arr = row.arr ::: fter(cell._2) :: Nil)
+  }
+
+  def writer[F, T, C, NcT <: HList, Col](cols: Col :: NcT)(implicit ev: Col <:< Column[F, T, C], tl: ToList[Col :: NcT, Column[_, _, _]]) = new WriterSpawn(NamedColumn.names(cols)) {
+    def toStream(out: java.io.OutputStream) = new Writer(out) {
+      val pw = new java.io.PrintWriter(out)
+
+      override def before() {
+        pw.println("[")
+        pw.println(pretty(render(RowProto.header(names)))+",")
+      }
+
+      def write(rows: Iterator[Row]) {
+        before()
+        rows.map(render).map(pretty).foreach(pw.println)
+        after()
+      }
+
+      override def after() {
+        pw.println("]")
+        pw.flush()
+      }
+    }
   }
 }

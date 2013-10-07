@@ -23,15 +23,11 @@ class ExcelSpec extends Specification {
       val workbook = Excel(() => new HSSFWorkbook()) {
         implicit wb =>
           object sheet extends MyExcelSheet("excel spec")
-          for (purchase <- Purchases.*)
-            cellsF(purchase).row(sheet)
+          val file = File.createTempFile(getClass.getName+".", ".xls")
+          val writer = sheet.writer(columns).toFile(file)
+          writer.write(for (purchase <- Purchases.*.iterator) yield cellsF(purchase).row(sheet))
+          println(file)
       }
-      val file = File.createTempFile(getClass.getName+".", ".xls")
-      val out = new FileOutputStream(file)
-      workbook.write(out)
-      out.flush()
-      out.close()
-      println(file)
     }
   }
 }

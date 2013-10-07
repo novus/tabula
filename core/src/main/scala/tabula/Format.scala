@@ -3,7 +3,7 @@ package tabula
 import shapeless._
 import Tabula._
 
-trait Format extends Poly2 {
+trait Format extends Poly2 with Writers {
   type Base
 
   type CellT[C] = ColumnAndCell[_, _, C]
@@ -25,6 +25,15 @@ trait Format extends Poly2 {
   trait RowProto {
     def emptyRow: Row
     def appendCell[C](cell: CellT[C])(row: Row)(implicit fter: Formatter[C]): Row
+    object Name extends Column(identity: Option[String] => Option[String])
+    def header(names: List[Option[String]])(implicit fter: Formatter[String]) = {
+      names
+        .iterator
+        .map(cellulize[String, String])
+        .map(Name -> _)
+        .foldLeft(RowProto.emptyRow)(
+          (r, c) => RowProto.appendCell[String](c)(r))
+    }
   }
 
   val RowProto: RowProto
