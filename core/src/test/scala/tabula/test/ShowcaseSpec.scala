@@ -3,7 +3,6 @@ package tabula.test
 import tabula._
 import Tabula._
 import Column._
-import tabula.util._
 import shapeless._
 import shapeless.HList._
 import org.specs2.mutable._
@@ -59,7 +58,7 @@ object DateOfPurchase extends Column((_: Purchase).date)
 // transformer column: capitalize words
 object Capitalize extends Column(capitalize)
 
-object TotalPaid extends Fold(ItemPrice)(0)(_ + _)
+// object TotalPaid extends Fold(ItemPrice)(0)(_ + _)
 
 // unlimited extensibility via type classes!
 object Extensibility {
@@ -79,7 +78,7 @@ object Extensibility {
   // implements conversion of NodeSeq-s to text (which is what CSV
   // ultimately is)
   object MyCSV extends CSV {
-    implicit val BigDecimalFormatter = new BigDecimalFormatter(new java.text.DecimalFormat("#,##0.00000;-#,##0.00000"))
+    implicit val DoubleFormatter = new DoubleFormatter(new java.text.DecimalFormat("#,##0.00000;-#,##0.00000"))
     implicit val DateTimeFormatter = new DateTimeFormatter(org.joda.time.format.DateTimeFormat.forPattern("dd MMM yyyy"))
     implicit object NodeSeqFormatter extends SimpleFormatter[NodeSeq] {
       def apply(cell: Cell[NodeSeq]) = StringFormatter.quote(cell.value.map(_ \\ "title").map(_.toString))

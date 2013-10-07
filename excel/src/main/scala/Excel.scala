@@ -5,7 +5,6 @@ import tabula._
 import Tabula._
 import org.apache.poi.ss.usermodel.{ Workbook, Sheet, Row => ExcelRow, Cell => ExcelCell, CellStyle }
 import org.joda.time._
-import scala.math.{ BigDecimal => ScalaBigDecimal }
 import java.io.OutputStream
 
 class ExcelSheet(name: String)(implicit protected val workbook: Workbook) extends Format {
@@ -45,8 +44,8 @@ class ExcelSheet(name: String)(implicit protected val workbook: Workbook) extend
       }
   }
 
-  implicit object BigDecimalFormatter extends SimpleFormatter[ScalaBigDecimal] {
-    def apply(cell: Cell[ScalaBigDecimal]) =
+  implicit object DoubleFormatter extends SimpleFormatter[Double] {
+    def apply(cell: Cell[Double]) =
       createCell(ec => cell.value.map(_.toDouble).foreach(ec.setCellValue))
   }
 

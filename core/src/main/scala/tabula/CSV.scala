@@ -3,7 +3,6 @@ package tabula
 import shapeless._
 import Tabula._
 import org.joda.time.DateTime
-import scala.math.{ BigDecimal => ScalaBigDecimal }
 import java.io.{ OutputStream, PrintWriter }
 
 class CSV extends Format {
@@ -30,8 +29,8 @@ class CSV extends Format {
     def apply(cell: Cell[DateTime]) = StringFormatter.quote(cell.value.map(df.print))
   }
 
-  class BigDecimalFormatter(df: => java.text.DecimalFormat) extends SimpleFormatter[ScalaBigDecimal] {
-    def apply(cell: Cell[ScalaBigDecimal]) = StringFormatter.scrub(cell.value.map(df.format)).getOrElse("")
+  class DoubleFormatter(df: => java.text.DecimalFormat) extends SimpleFormatter[Double] {
+    def apply(cell: Cell[Double]) = StringFormatter.scrub(cell.value.map(df.format)).getOrElse("")
   }
 
   type Row = String
@@ -46,7 +45,7 @@ class CSV extends Format {
   }
 
   class DefaultDateTimeFormatter extends DateTimeFormatter(org.joda.time.format.DateTimeFormat.fullDateTime)
-  class DefaultBigDecimalFormatter extends BigDecimalFormatter(new java.text.DecimalFormat("#,##0.00;-#,##0.00"))
+  class DefaultDoubleFormatter extends DoubleFormatter(new java.text.DecimalFormat("#,##0.00;-#,##0.00"))
 
   def writer(names: List[Option[String]]) = new WriterSpawn(names) {
     def toStream(out: OutputStream) = new Writer(out) {
