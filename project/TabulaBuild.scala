@@ -4,12 +4,12 @@ import com.typesafe.sbt.SbtScalariform._
 import scalariform.formatter.preferences._
 
 object Versions {
-  val ScalaVersion = "2.10.2"
+  val ScalaVersion = "2.10.3"
   val ScalaTimeVersion = "0.6"
   val JodaTimeVersion = "2.3"
   val JodaConvertVersion = "1.2"
   val ShapelessVersion = "1.2.4"
-  val SpecsVersion = "1.6.9"
+  val SpecsVersion = "2.2"
   val PoiVersion = "3.9"
   val Json4sVersion = "3.2.5"
   val CommonsLangVersion = "3.1"
@@ -80,7 +80,7 @@ object Deps {
 
   val joda_time = "joda-time" % "joda-time" % JodaTimeVersion
   val joda_convert = "org.joda" % "joda-convert" % JodaConvertVersion
-  val specs = "org.scala-tools.testing" %% "specs" % SpecsVersion % "test"
+  val specs = "org.specs2" %% "specs2" % SpecsVersion % "test"
   val commons_lang = "org.apache.commons" % "commons-lang3" % CommonsLangVersion % "test"
   val poi = "org.apache.poi" % "poi" % PoiVersion
   val json4s = "org.json4s" %% "json4s-native" % Json4sVersion

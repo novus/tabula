@@ -4,7 +4,7 @@ import tabula._
 import Tabula._
 import tabula.json._
 import tabula.test._
-import org.specs._
+import org.specs2.mutable._
 import org.json4s._
 import shapeless._
 import scala.xml._
@@ -22,6 +22,7 @@ class JsonSpec extends Specification {
     "produce JSON" in {
       val writer = MyJSON.writer(columns).toConsole()
       writer.write(for (purchase <- Purchases.*.iterator) yield cellsF(purchase).row(MyJSON))
+      success
     }
   }
 }

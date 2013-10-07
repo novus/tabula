@@ -6,7 +6,7 @@ import Column._
 import tabula.util._
 import shapeless._
 import shapeless.HList._
-import org.specs._
+import org.specs2.mutable._
 import org.joda.time._
 import org.apache.commons.lang3.text.WordUtils.capitalize
 
@@ -108,6 +108,7 @@ class ShowcaseSpec extends Specification {
     "print out a list of things we've bought" in {
       val writer = MyCSV.writer(columns).toConsole()
       writer.write(for (purchase <- Purchases.*.iterator) yield cellsF(purchase).row(MyCSV))
+      success
     }
   }
 }

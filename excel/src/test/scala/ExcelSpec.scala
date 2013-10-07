@@ -5,7 +5,7 @@ import tabula._
 import Tabula._
 import tabula.excel._
 import tabula.test._
-import org.specs._
+import org.specs2.mutable._
 import scala.xml._
 import org.apache.poi.ss.usermodel.Workbook
 import org.apache.poi.hssf.usermodel.HSSFWorkbook
@@ -20,7 +20,7 @@ class ExcelSpec extends Specification {
   import ShowcaseSpec._
   "a Excel output" should {
     "produce Excel output" in {
-      val workbook = Excel(() => new HSSFWorkbook()) {
+      Excel(() => new HSSFWorkbook()) {
         implicit wb =>
           object sheet extends MyExcelSheet("excel spec")
           val file = File.createTempFile(getClass.getName+".", ".xls")
@@ -28,6 +28,7 @@ class ExcelSpec extends Specification {
           writer.write(for (purchase <- Purchases.*.iterator) yield cellsF(purchase).row(sheet))
           println(file)
       }
+      success
     }
   }
 }
