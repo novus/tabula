@@ -39,14 +39,15 @@ trait JSON extends Format {
       val pw = new java.io.PrintWriter(out)
 
       override def start() {
-        pw.println("[")
-        pw.println(pretty(render(RowProto.header(names)))+",")
+        pw.print("[")
+        pw.print(pretty(render(RowProto.header(names))))
       }
 
-      def writeMore(rows: Iterator[Row]) = rows.map(render).map(pretty).foreach(pw.println)
+      def writeMore(rows: Iterator[Row]) =
+        rows.map(render).map(pretty).map(","+_).foreach(pw.print)
 
       override def finish() {
-        pw.println("]")
+        pw.print("]")
         pw.flush()
       }
     }
