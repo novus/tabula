@@ -39,15 +39,17 @@ object BuildSettings {
     import tabula.test._
     import shapeless._
     import shapeless.HList._
-    """,
-    publishTo <<= (version, baseDirectory)({
-      (v, base) =>
-        val repo = base / ".." / "repo"
+    """) ++ scalariformSettings ++ formatSettings
+
+  lazy val publishSettings = Seq(
+    publishTo <<= (version) {
+      v =>
+      val repo = file(".") / ".." / "repo"
       Some(Resolver.file("repo",
-                         if (v.trim.endsWith("SNAPSHOT")) repo / "snapshots"
-                         else repo / "releases"))
-    })
-  ) ++ scalariformSettings ++ formatSettings
+        if (v.trim.endsWith("SNAPSHOT")) repo / "snapshots"
+        else repo / "releases"))
+    }
+  )
 
   lazy val formatSettings = Seq(
     ScalariformKeys.preferences in Compile := formattingPreferences,
@@ -102,16 +104,16 @@ object TabulaBuild extends Build {
 
   lazy val core = Project(
     id = "tabula-core", base = file("core"),
-    settings = buildSettings ++ Seq(libraryDependencies ++= CoreDeps)
+    settings = buildSettings ++ publishSettings ++ Seq(libraryDependencies ++= CoreDeps)
   )
 
   lazy val json = Project(
     id = "tabula-json", base = file("json"),
-    settings = buildSettings ++ Seq(libraryDependencies ++= JsonDeps)
+    settings = buildSettings ++ publishSettings ++ Seq(libraryDependencies ++= JsonDeps)
   ) dependsOn(core % "compile->test")
 
   lazy val excel = Project(
     id = "tabula-excel", base = file("excel"),
-    settings = buildSettings ++ Seq(libraryDependencies ++= ExcelDeps)
+    settings = buildSettings ++ publishSettings ++ Seq(libraryDependencies ++= ExcelDeps)
   ) dependsOn(core % "compile->test")
 }
