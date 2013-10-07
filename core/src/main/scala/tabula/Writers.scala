@@ -7,9 +7,16 @@ trait Writers {
   self: Format =>
 
   abstract class Writer[In](in: In) {
-    def before() {}
-    def write(rows: Iterator[Row]): Unit
-    def after() {}
+    def start() {}
+    def writeMore(rows: Iterator[Row]): Unit
+    def write(rows: Iterator[Row]) {
+      start()
+      writeMore(rows)
+      finish()
+    }
+    def writeBatched(rows: Iterator[Row], batchSize: Int) =
+      rows.sliding(batchSize, batchSize).map(_.iterator).foreach(writeMore)
+    def finish() {}
   }
 
   abstract class WriterSpawn(protected val names: List[Option[String]]) {

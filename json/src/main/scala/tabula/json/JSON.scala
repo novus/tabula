@@ -38,18 +38,14 @@ trait JSON extends Format {
     def toStream(out: java.io.OutputStream) = new Writer(out) {
       val pw = new java.io.PrintWriter(out)
 
-      override def before() {
+      override def start() {
         pw.println("[")
         pw.println(pretty(render(RowProto.header(names)))+",")
       }
 
-      def write(rows: Iterator[Row]) {
-        before()
-        rows.map(render).map(pretty).foreach(pw.println)
-        after()
-      }
+      def writeMore(rows: Iterator[Row]) = rows.map(render).map(pretty).foreach(pw.println)
 
-      override def after() {
+      override def finish() {
         pw.println("]")
         pw.flush()
       }

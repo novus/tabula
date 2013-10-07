@@ -50,14 +50,9 @@ class CSV extends Format {
   def writer[F, T, C, NcT <: HList, Col](cols: Col :: NcT)(implicit ev: Col <:< Column[F, T, C], tl: ToList[Col :: NcT, Column[_, _, _]]) = new WriterSpawn(NamedColumn.names(cols)) {
     def toStream(out: java.io.OutputStream) = new Writer(out) {
       lazy val pw = new java.io.PrintWriter(out)
-      override def before() =
-        pw.println(names.map(StringFormatter.quote).mkString(","))
-      def write(rows: Iterator[String]) {
-        before()
-        for (row <- rows) pw.println(row)
-        after()
-      }
-      override def after() = pw.flush()
+      override def start() = pw.println(names.map(StringFormatter.quote).mkString(","))
+      def writeMore(rows: Iterator[String]) = for (row <- rows) pw.println(row)
+      override def finish() = pw.flush()
     }
   }
 }
