@@ -64,6 +64,8 @@ class ExcelSheet(name: String)(implicit protected val workbook: Workbook) extend
   }
 
   def writer(names: List[Option[String]]) = new WriterSpawn(names) {
+    /* There's a better way to stream an *SSF workbook to disk:
+     http://poi.apache.org/spreadsheet/how-to.html#sxssf */
     def toStream(out: OutputStream) = new Writer(out) {
       override def start() = RowProto.header(names)
       def writeMore(rows: Iterator[Row]) {

@@ -68,6 +68,7 @@ object BuildSettings {
     setPreference(IndentPackageBlocks, true).
     setPreference(IndentSpaces, 2).
     setPreference(MultilineScaladocCommentsStartOnFirstLine, true).
+    setPreference(PlaceScaladocAsterisksBeneathSecondAsterisk, true).
     setPreference(PreserveSpaceBeforeArguments, false).
     setPreference(PreserveDanglingCloseParenthesis, false).
     setPreference(RewriteArrowSymbols, false).
