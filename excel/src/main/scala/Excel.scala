@@ -4,7 +4,7 @@ import shapeless._
 import tabula._
 import Tabula._
 import org.apache.poi.ss.usermodel.{ Workbook, Sheet, Row => ExcelRow, Cell => ExcelCell, CellStyle }
-import com.github.nscala_time.time.Imports._
+import org.joda.time._
 import scala.math.{ BigDecimal => ScalaBigDecimal }
 import java.io.OutputStream
 

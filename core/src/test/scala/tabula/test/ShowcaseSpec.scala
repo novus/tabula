@@ -7,7 +7,7 @@ import tabula.util._
 import shapeless._
 import shapeless.HList._
 import org.specs._
-import com.github.nscala_time.time.Imports._
+import org.joda.time._
 import org.apache.commons.lang3.text.WordUtils.capitalize
 
 // a pretend data model

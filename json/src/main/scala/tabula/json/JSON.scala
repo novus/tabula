@@ -2,7 +2,7 @@ package tabula.json
 
 import tabula._
 import Tabula._
-import com.github.nscala_time.time.Imports._
+import org.joda.time._
 import scala.math.{ BigDecimal => ScalaBigDecimal }
 import org.json4s._
 import org.json4s.native.JsonMethods._
