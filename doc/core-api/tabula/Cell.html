@@ -89,20 +89,7 @@ Tabula components downstream of <a href="Column.html" class="extype" name="tabul
 
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="tabula.Cell#m" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="m:Manifest[A]"></a>
-      <a id="m:Manifest[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">m</span><span class="result">: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="tabula.Cell.A">A</span>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Witness of original compile-time type of A.</p>
-    </li><li name="tabula.Cell#value" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+              <ol><li name="tabula.Cell#value" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="value:Option[A]"></a>
       <a id="value:Option[A]"></a>
       <h4 class="signature">
@@ -265,15 +252,15 @@ consumers must be able to handle missing values.
               
         </dd></dl></div>
     </li><li name="tabula.Cell#flatMap" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="flatMap[B](f:A=&gt;Option[B])(implicitevidence$2:Manifest[B]):tabula.Cell[B]"></a>
-      <a id="flatMap[B]((A)⇒Option[B])(Manifest[B]):Cell[B]"></a>
+      <a id="flatMap[B](f:A=&gt;Option[B]):tabula.Cell[B]"></a>
+      <a id="flatMap[B]((A)⇒Option[B]):Cell[B]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">flatMap</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="tabula.Cell.A">A</span>) ⇒ <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="tabula.Cell.flatMap.B">B</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="tabula.Cell.flatMap.B">B</span>]</span>)</span><span class="result">: <a href="" class="extype" name="tabula.Cell">Cell</a>[<span class="extype" name="tabula.Cell.flatMap.B">B</span>]</span>
+        <span class="name">flatMap</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="tabula.Cell.A">A</span>) ⇒ <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="tabula.Cell.flatMap.B">B</span>]</span>)</span><span class="result">: <a href="" class="extype" name="tabula.Cell">Cell</a>[<span class="extype" name="tabula.Cell.flatMap.B">B</span>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Transforms Cell[A] to Cell[B].</p><div class="fullcomment"><div class="comment cmt"><p>Transforms Cell[A] to Cell[B]. Missing A will result in missing
@@ -320,19 +307,19 @@ None.
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="tabula.Cell#map" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="map[B](f:A=&gt;B)(implicitevidence$1:Manifest[B]):tabula.Cell[B]"></a>
-      <a id="map[B]((A)⇒B)(Manifest[B]):Cell[B]"></a>
+      <a id="map[B](f:A=&gt;B):tabula.Cell[B]"></a>
+      <a id="map[B]((A)⇒B):Cell[B]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">map</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="tabula.Cell.A">A</span>) ⇒ <span class="extype" name="tabula.Cell.map.B">B</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="tabula.Cell.map.B">B</span>]</span>)</span><span class="result">: <a href="" class="extype" name="tabula.Cell">Cell</a>[<span class="extype" name="tabula.Cell.map.B">B</span>]</span>
+        <span class="name">map</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="tabula.Cell.A">A</span>) ⇒ <span class="extype" name="tabula.Cell.map.B">B</span></span>)</span><span class="result">: <a href="" class="extype" name="tabula.Cell">Cell</a>[<span class="extype" name="tabula.Cell.map.B">B</span>]</span>
       </span>
       </h4>
       <p class="shortcomment cmt">Transforms Cell[A] to Cell[B].</p><div class="fullcomment"><div class="comment cmt"><p>Transforms Cell[A] to Cell[B].  Missing A will result in missing
-B. Use <a href="#flatMap[B](f:A=&gt;Option[B])(implicitevidence$2:Manifest[B]):tabula.Cell[B]" class="extmbr" name="tabula.Cell#flatMap">flatMap</a> to coerce a present A into a (potentially)
+B. Use <a href="#flatMap[B](f:A=&gt;Option[B]):tabula.Cell[B]" class="extmbr" name="tabula.Cell#flatMap">flatMap</a> to coerce a present A into a (potentially)
 missing B.
 </p></div></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">

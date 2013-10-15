@@ -88,7 +88,7 @@ types.
           <div class="superTypes hiddenContent">(<span class="extype" name="tabula.Column.F">F</span>) ⇒ (<a href="" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.Column.F">F</span>, <span class="extype" name="tabula.Column.T">T</span>, <span class="extype" name="tabula.Column.C">C</span>], <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[<span class="extype" name="tabula.Column.C">C</span>]), <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div><div class="toggleContainer block">
           <span class="toggle">Known Subclasses</span>
-          <div class="subClasses hiddenContent"><a href="Format$RowProto$Name$.html" class="extype" name="tabula.Format.RowProto.Name">Name</a>, <a href="NamedColumn.html" class="extype" name="tabula.NamedColumn">NamedColumn</a>, <a href="Column$Transform.html" class="extype" name="tabula.Column.Transform">Transform</a></div>
+          <div class="subClasses hiddenContent"><a href="ListColumn.html" class="extype" name="tabula.ListColumn">ListColumn</a>, <a href="Format$RowProto$Name$.html" class="extype" name="tabula.Format.RowProto.Name">Name</a>, <a href="NamedColumn.html" class="extype" name="tabula.NamedColumn">NamedColumn</a>, <a href="Column$Transform.html" class="extype" name="tabula.Column.Transform">Transform</a></div>
         </div></div>
         
 
@@ -127,7 +127,7 @@ types.
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="tabula.Column#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(f:F=&gt;Option[T])(implicitcz:tabula.Cellulizer[T,C],implicitmf:Manifest[F],implicitmc:Manifest[C]):tabula.Column[F,T,C]"></a>
+      <a id="&lt;init&gt;(f:F=&gt;Option[T])(implicitcz:tabula.Cellulizer[T,C],implicitmf:Manifest[F]):tabula.Column[F,T,C]"></a>
       <a id="&lt;init&gt;:Column[F,T,C]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -135,7 +135,7 @@ types.
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">Column</span><span class="params">(<span name="f">f: (<span class="extype" name="tabula.Column.F">F</span>) ⇒ <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="tabula.Column.T">T</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="cz">cz: <a href="Cellulizer.html" class="extype" name="tabula.Cellulizer">Cellulizer</a>[<span class="extype" name="tabula.Column.T">T</span>, <span class="extype" name="tabula.Column.C">C</span>]</span>, <span name="mf">mf: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="tabula.Column.F">F</span>]</span>, <span name="mc">mc: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="tabula.Column.C">C</span>]</span>)</span>
+        <span class="name">Column</span><span class="params">(<span name="f">f: (<span class="extype" name="tabula.Column.F">F</span>) ⇒ <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="tabula.Column.T">T</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="cz">cz: <a href="Cellulizer.html" class="extype" name="tabula.Cellulizer">Cellulizer</a>[<span class="extype" name="tabula.Column.T">T</span>, <span class="extype" name="tabula.Column.C">C</span>]</span>, <span name="mf">mf: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="tabula.Column.F">F</span>]</span>)</span>
       </span>
       </h4>
       
@@ -429,19 +429,6 @@ types.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="tabula.Column#mc" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="mc:Manifest[C]"></a>
-      <a id="mc:Manifest[C]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">mc</span><span class="result">: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="tabula.Column.C">C</span>]</span>
-      </span>
-      </h4>
-      
     </li><li name="tabula.Column#mf" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="mf:Manifest[F]"></a>
       <a id="mf:Manifest[F]"></a>
@@ -578,15 +565,15 @@ types.
               
         </dd></dl></div>
     </li><li name="tabula.Column#|" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="|[TT,CC](next:tabula.Column[T,TT,CC])(implicitmcc:Manifest[CC]):Column.this.Transform[TT,CC]"></a>
-      <a id="|[TT,CC](Column[T,TT,CC])(Manifest[CC]):Transform[TT,CC]"></a>
+      <a id="|[TT,CC](next:tabula.Column[T,TT,CC]):Column.this.Transform[TT,CC]"></a>
+      <a id="|[TT,CC](Column[T,TT,CC]):Transform[TT,CC]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bar" class="name">|</span><span class="tparams">[<span name="TT">TT</span>, <span name="CC">CC</span>]</span><span class="params">(<span name="next">next: <a href="" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.Column.T">T</span>, <span class="extype" name="tabula.Column.|.TT">TT</span>, <span class="extype" name="tabula.Column.|.CC">CC</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="mcc">mcc: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="tabula.Column.|.CC">CC</span>]</span>)</span><span class="result">: <a href="Column$Transform.html" class="extype" name="tabula.Column.Transform">Transform</a>[<span class="extype" name="tabula.Column.|.TT">TT</span>, <span class="extype" name="tabula.Column.|.CC">CC</span>]</span>
+        <span title="gt4s: $bar" class="name">|</span><span class="tparams">[<span name="TT">TT</span>, <span name="CC">CC</span>]</span><span class="params">(<span name="next">next: <a href="" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.Column.T">T</span>, <span class="extype" name="tabula.Column.|.TT">TT</span>, <span class="extype" name="tabula.Column.|.CC">CC</span>]</span>)</span><span class="result">: <a href="Column$Transform.html" class="extype" name="tabula.Column.Transform">Transform</a>[<span class="extype" name="tabula.Column.|.TT">TT</span>, <span class="extype" name="tabula.Column.|.CC">CC</span>]</span>
       </span>
       </h4>
       

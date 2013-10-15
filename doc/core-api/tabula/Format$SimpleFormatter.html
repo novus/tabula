@@ -108,18 +108,18 @@ specific to this particular <code>C</code>.
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
               <ol><li name="tabula.Format.Formatter#apply" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="apply(cell:tabula.Cell[C]):Formatter.this.Local"></a>
-      <a id="apply(Cell[C]):Local"></a>
+      <a id="apply(value:Option[C]):List[Formatter.this.Local]"></a>
+      <a id="apply(Option[C]):List[Local]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier">abstract </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="params">(<span name="cell">cell: <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[<span class="extype" name="tabula.Format.SimpleFormatter.C">C</span>]</span>)</span><span class="result">: <a href="#Local=Format.this.Base" class="extmbr" name="tabula.Format.SimpleFormatter.Local">Local</a></span>
+        <span class="name">apply</span><span class="params">(<span name="value">value: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="tabula.Format.SimpleFormatter.C">C</span>]</span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[<a href="#Local=Format.this.Base" class="extmbr" name="tabula.Format.SimpleFormatter.Local">Local</a>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Turn a <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[C] into <a href="#Local=Format.this.Base" class="extmbr" name="tabula.Format.SimpleFormatter.Local">Local</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Turn a <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[C] into <a href="#Local=Format.this.Base" class="extmbr" name="tabula.Format.SimpleFormatter.Local">Local</a>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Format$Formatter.html" class="extype" name="tabula.Format.Formatter">Formatter</a></dd></dl></div>
+      <p class="shortcomment cmt">Turn a [C] into <a href="#Local=Format.this.Base" class="extmbr" name="tabula.Format.SimpleFormatter.Local">Local</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Turn a [C] into <a href="#Local=Format.this.Base" class="extmbr" name="tabula.Format.SimpleFormatter.Local">Local</a>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Format$Formatter.html" class="extype" name="tabula.Format.Formatter">Formatter</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -191,21 +191,34 @@ specific to this particular <code>C</code>.
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="tabula.Format.Formatter#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="apply(cell:Format.this.CellT[C]):Formatter.this.Local"></a>
-      <a id="apply(CellT[C]):Local"></a>
+      <a id="apply(cell:Format.this.CellT[C]):List[Formatter.this.Local]"></a>
+      <a id="apply(CellT[C]):List[Local]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="params">(<span name="cell">cell: <a href="Format.html#CellT[C]=tabula.Tabula.ColumnAndCell[_,_,C]" class="extmbr" name="tabula.Format.CellT">CellT</a>[<span class="extype" name="tabula.Format.SimpleFormatter.C">C</span>]</span>)</span><span class="result">: <a href="#Local=Format.this.Base" class="extmbr" name="tabula.Format.SimpleFormatter.Local">Local</a></span>
+        <span class="name">apply</span><span class="params">(<span name="cell">cell: <a href="Format.html#CellT[C]=tabula.Tabula.ColumnAndCell[_,_,C]" class="extmbr" name="tabula.Format.CellT">CellT</a>[<span class="extype" name="tabula.Format.SimpleFormatter.C">C</span>]</span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[<a href="#Local=Format.this.Base" class="extmbr" name="tabula.Format.SimpleFormatter.Local">Local</a>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Extract <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[C] from <a href="Tabula$.html#ColumnAndCell[F,T,C]=(tabula.Column[F,T,C],tabula.Cell[C])" class="extmbr" name="tabula.Tabula.ColumnAndCell">Tabula.ColumnAndCell</a> tuple &amp; turn it
-into a <a href="#Local=Format.this.Base" class="extmbr" name="tabula.Format.SimpleFormatter.Local">Local</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Extract <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[C] from <a href="Tabula$.html#ColumnAndCell[F,T,C]=(tabula.Column[F,T,C],tabula.Cell[C])" class="extmbr" name="tabula.Tabula.ColumnAndCell">Tabula.ColumnAndCell</a> tuple &amp; turn it
-into a <a href="#Local=Format.this.Base" class="extmbr" name="tabula.Format.SimpleFormatter.Local">Local</a>.
+      <p class="shortcomment cmt">Extract <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[C] from a <a href="Tabula$.html#ColumnAndCell[F,T,C]=(tabula.Column[F,T,C],tabula.Cell[C])" class="extmbr" name="tabula.Tabula.ColumnAndCell">Tabula.ColumnAndCell</a> tuple &amp; turn
+it into a <a href="#Local=Format.this.Base" class="extmbr" name="tabula.Format.SimpleFormatter.Local">Local</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Extract <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[C] from a <a href="Tabula$.html#ColumnAndCell[F,T,C]=(tabula.Column[F,T,C],tabula.Cell[C])" class="extmbr" name="tabula.Tabula.ColumnAndCell">Tabula.ColumnAndCell</a> tuple &amp; turn
+it into a <a href="#Local=Format.this.Base" class="extmbr" name="tabula.Format.SimpleFormatter.Local">Local</a>.
 </p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Format$Formatter.html" class="extype" name="tabula.Format.Formatter">Formatter</a></dd></dl></div>
+    </li><li name="tabula.Format.Formatter#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply(cell:tabula.Cell[C]):List[Formatter.this.Local]"></a>
+      <a id="apply(Cell[C]):List[Local]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="params">(<span name="cell">cell: <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[<span class="extype" name="tabula.Format.SimpleFormatter.C">C</span>]</span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[<a href="#Local=Format.this.Base" class="extmbr" name="tabula.Format.SimpleFormatter.Local">Local</a>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Turn a <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[C] into <a href="#Local=Format.this.Base" class="extmbr" name="tabula.Format.SimpleFormatter.Local">Local</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Turn a <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[C] into <a href="#Local=Format.this.Base" class="extmbr" name="tabula.Format.SimpleFormatter.Local">Local</a>.</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Format$Formatter.html" class="extype" name="tabula.Format.Formatter">Formatter</a></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>

@@ -39,7 +39,9 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A column that has a name, most commonly produced by calling the
+<code><a href="Column.html#@@(name:String):tabula.NamedColumn[F,T,C,tabula.Column[F,T,C]]" class="extmbr" name="tabula.Column#@@">Column.@@</a></code> method on a column.
+</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="Column.html" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.NamedColumn.F">F</span>, <span class="extype" name="tabula.NamedColumn.T">T</span>, <span class="extype" name="tabula.NamedColumn.C">C</span>], (<span class="extype" name="tabula.NamedColumn.F">F</span>) ⇒ (<a href="Column.html" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.NamedColumn.F">F</span>, <span class="extype" name="tabula.NamedColumn.T">T</span>, <span class="extype" name="tabula.NamedColumn.C">C</span>], <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[<span class="extype" name="tabula.NamedColumn.C">C</span>]), <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -80,7 +82,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="tabula.NamedColumn#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(name:tabula.Cell[String],column:Col)(implicitev:&lt;:&lt;[Col,tabula.Column[F,T,C]]):tabula.NamedColumn[F,T,C,Col]"></a>
+      <a id="&lt;init&gt;(name:tabula.Cell[String],underlying:Col)(implicitev:&lt;:&lt;[Col,tabula.Column[F,T,C]]):tabula.NamedColumn[F,T,C,Col]"></a>
       <a id="&lt;init&gt;:NamedColumn[F,T,C,Col]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -88,7 +90,7 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">NamedColumn</span><span class="params">(<span name="name">name: <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="column">column: <span class="extype" name="tabula.NamedColumn.Col">Col</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="tabula.NamedColumn.Col">Col</span>, <a href="Column.html" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.NamedColumn.F">F</span>, <span class="extype" name="tabula.NamedColumn.T">T</span>, <span class="extype" name="tabula.NamedColumn.C">C</span>]]</span>)</span>
+        <span class="name">NamedColumn</span><span class="params">(<span name="name">name: <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>, <span name="underlying">underlying: <span class="extype" name="tabula.NamedColumn.Col">Col</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="ev">ev: <span class="extype" name="scala.Predef.&lt;:&lt;">&lt;:&lt;</span>[<span class="extype" name="tabula.NamedColumn.Col">Col</span>, <a href="Column.html" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.NamedColumn.F">F</span>, <span class="extype" name="tabula.NamedColumn.T">T</span>, <span class="extype" name="tabula.NamedColumn.C">C</span>]]</span>)</span>
       </span>
       </h4>
       
@@ -382,19 +384,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="tabula.Column#mc" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="mc:Manifest[C]"></a>
-      <a id="mc:Manifest[C]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">implicit </span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">mc</span><span class="result">: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="tabula.NamedColumn.C">C</span>]</span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Column.html" class="extype" name="tabula.Column">Column</a></dd></dl></div>
     </li><li name="tabula.Column#mf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="mf:Manifest[F]"></a>
       <a id="mf:Manifest[F]"></a>
@@ -486,6 +475,19 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1 → AnyRef → Any</dd></dl></div>
+    </li><li name="tabula.NamedColumn#underlying" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="underlying:Col"></a>
+      <a id="underlying:Col"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">underlying</span><span class="result">: <span class="extype" name="tabula.NamedColumn.Col">Col</span></span>
+      </span>
+      </h4>
+      
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -544,15 +546,15 @@
               
         </dd></dl></div>
     </li><li name="tabula.Column#|" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="|[TT,CC](next:tabula.Column[T,TT,CC])(implicitmcc:Manifest[CC]):Column.this.Transform[TT,CC]"></a>
-      <a id="|[TT,CC](Column[T,TT,CC])(Manifest[CC]):Transform[TT,CC]"></a>
+      <a id="|[TT,CC](next:tabula.Column[T,TT,CC]):Column.this.Transform[TT,CC]"></a>
+      <a id="|[TT,CC](Column[T,TT,CC]):Transform[TT,CC]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bar" class="name">|</span><span class="tparams">[<span name="TT">TT</span>, <span name="CC">CC</span>]</span><span class="params">(<span name="next">next: <a href="Column.html" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.NamedColumn.T">T</span>, <span class="extype" name="tabula.Column.|.TT">TT</span>, <span class="extype" name="tabula.Column.|.CC">CC</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="mcc">mcc: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="tabula.Column.|.CC">CC</span>]</span>)</span><span class="result">: <a href="#Transform[TT,CC]extendsColumn[F,TT,CC]" class="extmbr" name="tabula.Column.Transform">Transform</a>[<span class="extype" name="tabula.Column.|.TT">TT</span>, <span class="extype" name="tabula.Column.|.CC">CC</span>]</span>
+        <span title="gt4s: $bar" class="name">|</span><span class="tparams">[<span name="TT">TT</span>, <span name="CC">CC</span>]</span><span class="params">(<span name="next">next: <a href="Column.html" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.NamedColumn.T">T</span>, <span class="extype" name="tabula.Column.|.TT">TT</span>, <span class="extype" name="tabula.Column.|.CC">CC</span>]</span>)</span><span class="result">: <a href="#Transform[TT,CC]extendsColumn[F,TT,CC]" class="extmbr" name="tabula.Column.Transform">Transform</a>[<span class="extype" name="tabula.Column.|.TT">TT</span>, <span class="extype" name="tabula.Column.|.CC">CC</span>]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Column.html" class="extype" name="tabula.Column">Column</a></dd></dl></div>

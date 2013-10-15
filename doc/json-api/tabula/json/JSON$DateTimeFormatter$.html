@@ -167,28 +167,41 @@
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="tabula.json.JSON.DateTimeFormatter#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="apply(cell:tabula.Cell[org.joda.time.DateTime]):org.json4s.JsonAST.JInt"></a>
-      <a id="apply(Cell[DateTime]):JInt"></a>
+      <a id="apply(value:Option[org.joda.time.DateTime]):List[org.json4s.JsonAST.JInt]"></a>
+      <a id="apply(Option[DateTime]):List[JInt]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="params">(<span name="cell">cell: <span class="extype" name="tabula.Cell">Cell</span>[<span class="extype" name="org.joda.time.DateTime">DateTime</span>]</span>)</span><span class="result">: <span class="extype" name="org.json4s.JsonAST.JInt">JInt</span></span>
+        <span class="name">apply</span><span class="params">(<span name="value">value: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="org.joda.time.DateTime">DateTime</span>]</span>)</span><span class="result">: <span class="extype" name="scala.collection.immutable.List">List</span>[<span class="extype" name="org.json4s.JsonAST.JInt">JInt</span>]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="tabula.json.JSON.DateTimeFormatter">DateTimeFormatter</a> → Formatter</dd></dl></div>
     </li><li name="tabula.Format.Formatter#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="apply(cell:Format.this.CellT[C]):Formatter.this.Local"></a>
-      <a id="apply(JSON.CellT[DateTime]):Local"></a>
+      <a id="apply(cell:Format.this.CellT[C]):List[Formatter.this.Local]"></a>
+      <a id="apply(JSON.CellT[DateTime]):List[Local]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="params">(<span name="cell">cell: <a href="JSON.html#CellT[C]=tabula.Tabula.ColumnAndCell[_,_,C]" class="extmbr" name="tabula.json.JSON.CellT">JSON.CellT</a>[<span class="extype" name="org.joda.time.DateTime">DateTime</span>]</span>)</span><span class="result">: <a href="#Local=org.json4s.JInt" class="extmbr" name="tabula.json.JSON.DateTimeFormatter.Local">Local</a></span>
+        <span class="name">apply</span><span class="params">(<span name="cell">cell: <a href="JSON.html#CellT[C]=tabula.Tabula.ColumnAndCell[_,_,C]" class="extmbr" name="tabula.json.JSON.CellT">JSON.CellT</a>[<span class="extype" name="org.joda.time.DateTime">DateTime</span>]</span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[<a href="#Local=org.json4s.JInt" class="extmbr" name="tabula.json.JSON.DateTimeFormatter.Local">Local</a>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Formatter</dd></dl></div>
+    </li><li name="tabula.Format.Formatter#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply(cell:tabula.Cell[C]):List[Formatter.this.Local]"></a>
+      <a id="apply(Cell[DateTime]):List[Local]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="params">(<span name="cell">cell: <span class="extype" name="tabula.Cell">Cell</span>[<span class="extype" name="org.joda.time.DateTime">DateTime</span>]</span>)</span><span class="result">: <span class="extype" name="scala.List">List</span>[<a href="#Local=org.json4s.JInt" class="extmbr" name="tabula.json.JSON.DateTimeFormatter.Local">Local</a>]</span>
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Formatter</dd></dl></div>

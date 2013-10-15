@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>LazyCell - tabula.Cellulizer.LazyCell</title>
-          <meta name="description" content="LazyCell - tabula.Cellulizer.LazyCell" />
-          <meta name="keywords" content="LazyCell tabula.Cellulizer.LazyCell" />
+          <title>ListColumn - tabula.ListColumn</title>
+          <meta name="description" content="ListColumn - tabula.ListColumn" />
+          <meta name="keywords" content="ListColumn tabula.ListColumn" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -12,7 +12,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../index.html';
-            var hash = 'tabula.Cellulizer$LazyCell';
+            var hash = 'tabula.ListColumn';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -25,25 +25,28 @@
         <body class="type">
       <div id="definition">
         <img src="../lib/class_big.png" />
-        <p id="owner"><a href="package.html" class="extype" name="tabula">tabula</a>.<a href="Cellulizer.html" class="extype" name="tabula.Cellulizer">Cellulizer</a></p>
-        <h1>LazyCell</h1>
+        <p id="owner"><a href="package.html" class="extype" name="tabula">tabula</a></p>
+        <h1>ListColumn</h1>
       </div>
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
+        <span class="modifier">abstract </span>
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">LazyCell</span><span class="tparams">[<span name="F">F</span>]</span><span class="result"> extends <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[<span class="extype" name="tabula.Cellulizer.C">C</span>]</span>
+        <span class="name">ListColumn</span><span class="tparams">[<span name="F">F</span>, <span name="T">T</span>, <span name="C">C</span>, <span name="Cols">Cols</span>]</span><span class="result"> extends <a href="Column.html" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.ListColumn.F">F</span>, <span class="extype" name="scala.List">List</span>[(<a href="Column.html" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.ListColumn.F">F</span>, <span class="extype" name="tabula.ListColumn.T">T</span>, <span class="extype" name="tabula.ListColumn.C">C</span>], <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[<span class="extype" name="tabula.ListColumn.C">C</span>])], <span class="extype" name="scala.List">List</span>[<span class="extype" name="tabula.ListColumn.C">C</span>]]</span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Lazy implementation of a <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[C] that defers computation of
-the <code>C</code> until a Tabula component requires it.
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Wrapper around a List[Column] that allows a single column to
+produce a list of <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>s the length of which will only be known
+at runtime. Requires appropriate support within <a href="Format.html" class="extype" name="tabula.Format">Format</a> and
+<a href="Cellulizer.html" class="extype" name="tabula.Cellulizer">Cellulizer</a> in order to enable other Tabula components to work
+with cells of type <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[List[_]].
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[<span class="extype" name="tabula.Cellulizer.C">C</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="Column.html" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.ListColumn.F">F</span>, <span class="extype" name="scala.List">List</span>[(<a href="Column.html" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.ListColumn.F">F</span>, <span class="extype" name="tabula.ListColumn.T">T</span>, <span class="extype" name="tabula.ListColumn.C">C</span>], <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[<span class="extype" name="tabula.ListColumn.C">C</span>])], <span class="extype" name="scala.List">List</span>[<span class="extype" name="tabula.ListColumn.C">C</span>]], (<span class="extype" name="tabula.ListColumn.F">F</span>) ⇒ (<a href="Column.html" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.ListColumn.F">F</span>, <span class="extype" name="scala.List">List</span>[(<a href="Column.html" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.ListColumn.F">F</span>, <span class="extype" name="tabula.ListColumn.T">T</span>, <span class="extype" name="tabula.ListColumn.C">C</span>], <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[<span class="extype" name="tabula.ListColumn.C">C</span>])], <span class="extype" name="scala.List">List</span>[<span class="extype" name="tabula.ListColumn.C">C</span>]], <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[<span class="extype" name="scala.List">List</span>[<span class="extype" name="tabula.ListColumn.C">C</span>]]), <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -61,7 +64,7 @@ the <code>C</code> until a Tabula component requires it.
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="tabula.Cellulizer.LazyCell"><span>LazyCell</span></li><li class="in" name="tabula.Cell"><span>Cell</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="tabula.ListColumn"><span>ListColumn</span></li><li class="in" name="tabula.Column"><span>Column</span></li><li class="in" name="scala.Function1"><span>Function1</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -81,24 +84,39 @@ the <code>C</code> until a Tabula component requires it.
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="tabula.Cellulizer.LazyCell#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(source:F,f:F=&gt;Option[T]):Cellulizer.this.LazyCell[F]"></a>
-      <a id="&lt;init&gt;:LazyCell[F]"></a>
+              <ol><li name="tabula.ListColumn#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(underlying:List[tabula.Column[F,T,C]])(implicitevidence$1:Manifest[F],implicitcz:tabula.Cellulizer[List[(tabula.Column[F,T,C],tabula.Cell[C])],List[C]]):tabula.ListColumn[F,T,C,Cols]"></a>
+      <a id="&lt;init&gt;:ListColumn[F,T,C,Cols]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">LazyCell</span><span class="params">(<span name="source">source: <span class="extype" name="tabula.Cellulizer.LazyCell.F">F</span></span>, <span name="f">f: (<span class="extype" name="tabula.Cellulizer.LazyCell.F">F</span>) ⇒ <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="tabula.Cellulizer.T">T</span>]</span>)</span>
+        <span class="name">ListColumn</span><span class="params">(<span name="underlying">underlying: <span class="extype" name="scala.List">List</span>[<a href="Column.html" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.ListColumn.F">F</span>, <span class="extype" name="tabula.ListColumn.T">T</span>, <span class="extype" name="tabula.ListColumn.C">C</span>]]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="tabula.ListColumn.F">F</span>]</span>, <span name="cz">cz: <a href="Cellulizer.html" class="extype" name="tabula.Cellulizer">Cellulizer</a>[<span class="extype" name="scala.List">List</span>[(<a href="Column.html" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.ListColumn.F">F</span>, <span class="extype" name="tabula.ListColumn.T">T</span>, <span class="extype" name="tabula.ListColumn.C">C</span>], <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[<span class="extype" name="tabula.ListColumn.C">C</span>])], <span class="extype" name="scala.List">List</span>[<span class="extype" name="tabula.ListColumn.C">C</span>]]</span>)</span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">source</dt><dd class="cmt"><p>Some arbitrary <code>F</code> - domain type from which cell data is extracted</p></dd><dt class="param">f</dt><dd class="cmt"><p>Function for extracting intermediate type <code>T</code> from <code>F</code>
-</p></dd></dl></div>
+      
     </li></ol>
             </div>
 
-        
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="tabula.Column.Transform" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="Transform[TT,CC]extendsColumn[F,TT,CC]"></a>
+      <a id="Transform[TT,CC]:Transform[TT,CC]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Column$Transform.html"><span class="name">Transform</span></a><span class="tparams">[<span name="TT">TT</span>, <span name="CC">CC</span>]</span><span class="result"> extends <a href="Column.html" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.Column.F">F</span>, <span class="extype" name="tabula.Column.Transform.TT">TT</span>, <span class="extype" name="tabula.Column.Transform.CC">CC</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Column.html" class="extype" name="tabula.Column">Column</a></dd></dl></div>
+    </li></ol>
+            </div>
 
         
 
@@ -169,6 +187,48 @@ the <code>C</code> until a Tabula component requires it.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="tabula.Column#@@" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="@@(name:String):tabula.NamedColumn[F,T,C,tabula.Column[F,T,C]]"></a>
+      <a id="@@(String):NamedColumn[F,List[(Column[F,T,C],Cell[C])],List[C],Column[F,List[(Column[F,T,C],Cell[C])],List[C]]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $at$at" class="name">@@</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="NamedColumn.html" class="extype" name="tabula.NamedColumn">NamedColumn</a>[<span class="extype" name="tabula.ListColumn.F">F</span>, <span class="extype" name="scala.List">List</span>[(<a href="Column.html" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.ListColumn.F">F</span>, <span class="extype" name="tabula.ListColumn.T">T</span>, <span class="extype" name="tabula.ListColumn.C">C</span>], <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[<span class="extype" name="tabula.ListColumn.C">C</span>])], <span class="extype" name="scala.List">List</span>[<span class="extype" name="tabula.ListColumn.C">C</span>], <a href="Column.html" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.ListColumn.F">F</span>, <span class="extype" name="scala.List">List</span>[(<a href="Column.html" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.ListColumn.F">F</span>, <span class="extype" name="tabula.ListColumn.T">T</span>, <span class="extype" name="tabula.ListColumn.C">C</span>], <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[<span class="extype" name="tabula.ListColumn.C">C</span>])], <span class="extype" name="scala.List">List</span>[<span class="extype" name="tabula.ListColumn.C">C</span>]]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Column.html" class="extype" name="tabula.Column">Column</a></dd></dl></div>
+    </li><li name="scala.Function1#andThen" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="andThen[A](g:R=&gt;A):T1=&gt;A"></a>
+      <a id="andThen[A](((Column[F,List[(Column[F,T,C],Cell[C])],List[C]],Cell[List[C]]))⇒A):(F)⇒A"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">andThen</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="g">g: ((<a href="Column.html" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.ListColumn.F">F</span>, <span class="extype" name="scala.List">List</span>[(<a href="Column.html" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.ListColumn.F">F</span>, <span class="extype" name="tabula.ListColumn.T">T</span>, <span class="extype" name="tabula.ListColumn.C">C</span>], <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[<span class="extype" name="tabula.ListColumn.C">C</span>])], <span class="extype" name="scala.List">List</span>[<span class="extype" name="tabula.ListColumn.C">C</span>]], <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[<span class="extype" name="scala.List">List</span>[<span class="extype" name="tabula.ListColumn.C">C</span>]])) ⇒ <span class="extype" name="scala.Function1.andThen.A">A</span></span>)</span><span class="result">: (<span class="extype" name="tabula.ListColumn.F">F</span>) ⇒ <span class="extype" name="scala.Function1.andThen.A">A</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1</dd><dt>Annotations</dt><dd>
+                <span class="name">@unspecialized</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="tabula.Column#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply(source:F):(tabula.Column[F,T,C],tabula.Cell[C])"></a>
+      <a id="apply(F):(Column[F,List[(Column[F,T,C],Cell[C])],List[C]],Cell[List[C]])"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">apply</span><span class="params">(<span name="source">source: <span class="extype" name="tabula.ListColumn.F">F</span></span>)</span><span class="result">: (<a href="Column.html" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.ListColumn.F">F</span>, <span class="extype" name="scala.List">List</span>[(<a href="Column.html" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.ListColumn.F">F</span>, <span class="extype" name="tabula.ListColumn.T">T</span>, <span class="extype" name="tabula.ListColumn.C">C</span>], <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[<span class="extype" name="tabula.ListColumn.C">C</span>])], <span class="extype" name="scala.List">List</span>[<span class="extype" name="tabula.ListColumn.C">C</span>]], <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[<span class="extype" name="scala.List">List</span>[<span class="extype" name="tabula.ListColumn.C">C</span>]])</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Column.html" class="extype" name="tabula.Column">Column</a> → Function1</dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -201,6 +261,22 @@ the <code>C</code> until a Tabula component requires it.
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="scala.Function1#compose" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="compose[A](g:A=&gt;T1):A=&gt;R"></a>
+      <a id="compose[A]((A)⇒F):(A)⇒(Column[F,List[(Column[F,T,C],Cell[C])],List[C]],Cell[List[C]])"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">compose</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="g">g: (<span class="extype" name="scala.Function1.compose.A">A</span>) ⇒ <span class="extype" name="tabula.ListColumn.F">F</span></span>)</span><span class="result">: (<span class="extype" name="scala.Function1.compose.A">A</span>) ⇒ (<a href="Column.html" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.ListColumn.F">F</span>, <span class="extype" name="scala.List">List</span>[(<a href="Column.html" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.ListColumn.F">F</span>, <span class="extype" name="tabula.ListColumn.T">T</span>, <span class="extype" name="tabula.ListColumn.C">C</span>], <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[<span class="extype" name="tabula.ListColumn.C">C</span>])], <span class="extype" name="scala.List">List</span>[<span class="extype" name="tabula.ListColumn.C">C</span>]], <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[<span class="extype" name="scala.List">List</span>[<span class="extype" name="tabula.ListColumn.C">C</span>]])</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1</dd><dt>Annotations</dt><dd>
+                <span class="name">@unspecialized</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -227,6 +303,19 @@ the <code>C</code> until a Tabula component requires it.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="tabula.Column#f" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="f:F=&gt;Option[T]"></a>
+      <a id="f:(F)⇒Option[List[(Column[F,T,C],Cell[C])]]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">f</span><span class="result">: (<span class="extype" name="tabula.ListColumn.F">F</span>) ⇒ <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="scala.List">List</span>[(<a href="Column.html" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.ListColumn.F">F</span>, <span class="extype" name="tabula.ListColumn.T">T</span>, <span class="extype" name="tabula.ListColumn.C">C</span>], <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[<span class="extype" name="tabula.ListColumn.C">C</span>])]]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Column.html" class="extype" name="tabula.Column">Column</a></dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -246,22 +335,6 @@ the <code>C</code> until a Tabula component requires it.
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="tabula.Cell#flatMap" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="flatMap[B](f:A=&gt;Option[B]):tabula.Cell[B]"></a>
-      <a id="flatMap[B]((C)⇒Option[B]):Cell[B]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">flatMap</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="tabula.Cellulizer.C">C</span>) ⇒ <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="tabula.Cell.flatMap.B">B</span>]</span>)</span><span class="result">: <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[<span class="extype" name="tabula.Cell.flatMap.B">B</span>]</span>
-      </span>
-      </h4>
-      <p class="shortcomment cmt">Transforms Cell[A] to Cell[B].</p><div class="fullcomment"><div class="comment cmt"><p>Transforms Cell[A] to Cell[B]. Missing A will result in missing
-B. At its discretion, <code>f</code> may decide to drop the B by returning
-None.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Cell.html" class="extype" name="tabula.Cell">Cell</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -301,22 +374,19 @@ None.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="tabula.Cell#map" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="map[B](f:A=&gt;B):tabula.Cell[B]"></a>
-      <a id="map[B]((C)⇒B):Cell[B]"></a>
+    </li><li name="tabula.Column#mf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="mf:Manifest[F]"></a>
+      <a id="mf:Manifest[F]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
+        <span class="modifier">implicit </span>
+        <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">map</span><span class="tparams">[<span name="B">B</span>]</span><span class="params">(<span name="f">f: (<span class="extype" name="tabula.Cellulizer.C">C</span>) ⇒ <span class="extype" name="tabula.Cell.map.B">B</span></span>)</span><span class="result">: <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[<span class="extype" name="tabula.Cell.map.B">B</span>]</span>
+        <span class="name">mf</span><span class="result">: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="tabula.ListColumn.F">F</span>]</span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Transforms Cell[A] to Cell[B].</p><div class="fullcomment"><div class="comment cmt"><p>Transforms Cell[A] to Cell[B].  Missing A will result in missing
-B. Use <a href="#flatMap[B](f:A=&gt;Option[B]):tabula.Cell[B]" class="extmbr" name="tabula.Cellulizer.LazyCell#flatMap">flatMap</a> to coerce a present A into a (potentially)
-missing B.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Cell.html" class="extype" name="tabula.Cell">Cell</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Column.html" class="extype" name="tabula.Column">Column</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -369,7 +439,7 @@ missing B.
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="scala.Function1#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
       <h4 class="signature">
@@ -381,20 +451,20 @@ missing B.
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="tabula.Cellulizer.LazyCell#value" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="value:Option[C]"></a>
-      <a id="value:Option[C]"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function1 → AnyRef → Any</dd></dl></div>
+    </li><li name="tabula.ListColumn#underlying" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="underlying:List[tabula.Column[F,T,C]]"></a>
+      <a id="underlying:List[Column[F,T,C]]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">lazy val</span>
+        <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">value</span><span class="result">: <span class="extype" name="scala.Option">Option</span>[<span class="extype" name="tabula.Cellulizer.C">C</span>]</span>
+        <span class="name">underlying</span><span class="result">: <span class="extype" name="scala.List">List</span>[<a href="Column.html" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.ListColumn.F">F</span>, <span class="extype" name="tabula.ListColumn.T">T</span>, <span class="extype" name="tabula.ListColumn.C">C</span>]]</span>
       </span>
       </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="tabula.Cellulizer.LazyCell">LazyCell</a> → <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a></dd></dl></div>
+      
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -452,6 +522,19 @@ missing B.
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="tabula.Column#|" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="|[TT,CC](next:tabula.Column[T,TT,CC]):Column.this.Transform[TT,CC]"></a>
+      <a id="|[TT,CC](Column[List[(Column[F,T,C],Cell[C])],TT,CC]):Transform[TT,CC]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span title="gt4s: $bar" class="name">|</span><span class="tparams">[<span name="TT">TT</span>, <span name="CC">CC</span>]</span><span class="params">(<span name="next">next: <a href="Column.html" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="scala.List">List</span>[(<a href="Column.html" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.ListColumn.F">F</span>, <span class="extype" name="tabula.ListColumn.T">T</span>, <span class="extype" name="tabula.ListColumn.C">C</span>], <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[<span class="extype" name="tabula.ListColumn.C">C</span>])], <span class="extype" name="tabula.Column.|.TT">TT</span>, <span class="extype" name="tabula.Column.|.CC">CC</span>]</span>)</span><span class="result">: <a href="#Transform[TT,CC]extendsColumn[F,TT,CC]" class="extmbr" name="tabula.Column.Transform">Transform</a>[<span class="extype" name="tabula.Column.|.TT">TT</span>, <span class="extype" name="tabula.Column.|.CC">CC</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="Column.html" class="extype" name="tabula.Column">Column</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -461,8 +544,10 @@ missing B.
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="tabula.Cell">
-              <h3>Inherited from <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[<span class="extype" name="tabula.Cellulizer.C">C</span>]</h3>
+        <div class="parent" name="tabula.Column">
+              <h3>Inherited from <a href="Column.html" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.ListColumn.F">F</span>, <span class="extype" name="scala.List">List</span>[(<a href="Column.html" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.ListColumn.F">F</span>, <span class="extype" name="tabula.ListColumn.T">T</span>, <span class="extype" name="tabula.ListColumn.C">C</span>], <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[<span class="extype" name="tabula.ListColumn.C">C</span>])], <span class="extype" name="scala.List">List</span>[<span class="extype" name="tabula.ListColumn.C">C</span>]]</h3>
+            </div><div class="parent" name="scala.Function1">
+              <h3>Inherited from (<span class="extype" name="tabula.ListColumn.F">F</span>) ⇒ (<a href="Column.html" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.ListColumn.F">F</span>, <span class="extype" name="scala.List">List</span>[(<a href="Column.html" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.ListColumn.F">F</span>, <span class="extype" name="tabula.ListColumn.T">T</span>, <span class="extype" name="tabula.ListColumn.C">C</span>], <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[<span class="extype" name="tabula.ListColumn.C">C</span>])], <span class="extype" name="scala.List">List</span>[<span class="extype" name="tabula.ListColumn.C">C</span>]], <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[<span class="extype" name="scala.List">List</span>[<span class="extype" name="tabula.ListColumn.C">C</span>]])</h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

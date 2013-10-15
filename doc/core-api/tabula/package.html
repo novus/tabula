@@ -191,6 +191,35 @@ a cell type <code>C</code>.</p>
       </h4>
       <p class="comment cmt">Facility to format cells, rows, and tables according to an
 external data interchange format.</p>
+    </li><li name="tabula.ListCellulizer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ListCellulizer[F,T,C]extendsCellulizer[List[(tabula.Column[F,T,C],tabula.Cell[C])],List[C]]"></a>
+      <a id="ListCellulizer[F,T,C]:ListCellulizer[F,T,C]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ListCellulizer.html"><span class="name">ListCellulizer</span></a><span class="tparams">[<span name="F">F</span>, <span name="T">T</span>, <span name="C">C</span>]</span><span class="result"> extends <a href="Cellulizer.html" class="extype" name="tabula.Cellulizer">Cellulizer</a>[<span class="extype" name="scala.List">List</span>[(<a href="Column.html" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.ListCellulizer.F">F</span>, <span class="extype" name="tabula.ListCellulizer.T">T</span>, <span class="extype" name="tabula.ListCellulizer.C">C</span>], <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[<span class="extype" name="tabula.ListCellulizer.C">C</span>])], <span class="extype" name="scala.List">List</span>[<span class="extype" name="tabula.ListCellulizer.C">C</span>]]</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Derived <a href="Cellulizer.html" class="extype" name="tabula.Cellulizer">Cellulizer</a> that supports <a href="ListColumn.html" class="extype" name="tabula.ListColumn">ListColumn</a> as a means of
+producing <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[List[C]] cells.</p>
+    </li><li name="tabula.ListColumn" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ListColumn[F,T,C,Cols]extendsColumn[F,List[(tabula.Column[F,T,C],tabula.Cell[C])],List[C]]"></a>
+      <a id="ListColumn[F,T,C,Cols]:ListColumn[F,T,C,Cols]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ListColumn.html"><span class="name">ListColumn</span></a><span class="tparams">[<span name="F">F</span>, <span name="T">T</span>, <span name="C">C</span>, <span name="Cols">Cols</span>]</span><span class="result"> extends <a href="Column.html" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.ListColumn.F">F</span>, <span class="extype" name="scala.List">List</span>[(<a href="Column.html" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.ListColumn.F">F</span>, <span class="extype" name="tabula.ListColumn.T">T</span>, <span class="extype" name="tabula.ListColumn.C">C</span>], <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[<span class="extype" name="tabula.ListColumn.C">C</span>])], <span class="extype" name="scala.List">List</span>[<span class="extype" name="tabula.ListColumn.C">C</span>]]</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Wrapper around a List[Column] that allows a single column to
+produce a list of <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>s the length of which will only be known
+at runtime.</p>
     </li><li name="tabula.NamedColumn" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="NamedColumn[F,T,C,Col]extendsColumn[F,T,C]withF=&gt;(tabula.Column[F,T,C],tabula.Cell[C])"></a>
       <a id="NamedColumn[F,T,C,Col]:NamedColumn[F,T,C,Col]"></a>
@@ -203,7 +232,8 @@ external data interchange format.</p>
         <a href="NamedColumn.html"><span class="name">NamedColumn</span></a><span class="tparams">[<span name="F">F</span>, <span name="T">T</span>, <span name="C">C</span>, <span name="Col">Col</span>]</span><span class="result"> extends <a href="Column.html" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.NamedColumn.F">F</span>, <span class="extype" name="tabula.NamedColumn.T">T</span>, <span class="extype" name="tabula.NamedColumn.C">C</span>] with (<span class="extype" name="tabula.NamedColumn.F">F</span>) ⇒ (<a href="Column.html" class="extype" name="tabula.Column">Column</a>[<span class="extype" name="tabula.NamedColumn.F">F</span>, <span class="extype" name="tabula.NamedColumn.T">T</span>, <span class="extype" name="tabula.NamedColumn.C">C</span>], <a href="Cell.html" class="extype" name="tabula.Cell">Cell</a>[<span class="extype" name="tabula.NamedColumn.C">C</span>])</span>
       </span>
       </h4>
-      
+      <p class="comment cmt">A column that has a name, most commonly produced by calling the
+<code><a href="Column.html#@@(name:String):tabula.NamedColumn[F,T,C,tabula.Column[F,T,C]]" class="extmbr" name="tabula.Column#@@">Column.@@</a></code> method on a column.</p>
     </li><li name="tabula.Reduce" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="Reduce[F,T,C]extendsAggregator[F,T,C]"></a>
       <a id="Reduce[F,T,C]:Reduce[F,T,C]"></a>
