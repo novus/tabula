@@ -26,13 +26,16 @@ trait Format extends Poly2 with Writers {
       */
     type Local <: Base
 
-    /** Turn a [[Cell]][C] into [[Local]]. */
-    def apply(cell: Cell[C]): Local
+    /** Turn a [C] into [[Local]]. */
+    def apply(value: Option[C]): List[Local]
 
-    /** Extract [[Cell]][C] from [[Tabula.ColumnAndCell]] tuple & turn it
-      * into a [[Local]].
+    /** Turn a [[Cell]][C] into [[Local]]. */
+    def apply(cell: Cell[C]): List[Local] = apply(cell.value)
+
+    /** Extract [[Cell]][C] from a [[Tabula.ColumnAndCell]] tuple & turn
+      * it into a [[Local]].
       */
-    def apply(cell: CellT[C]): Local = apply(cell._2)
+    def apply(cell: CellT[C]): List[Local] = apply(cell._2)
   }
 
   /** "Simple" [[Formatter]] subclass which assumes that `[[Local]] =:=
@@ -41,6 +44,8 @@ trait Format extends Poly2 with Writers {
   trait SimpleFormatter[C] extends Formatter[C] {
     type Local = Base
   }
+
+  implicit def listFormatter[C](implicit fter: Formatter[C]): Formatter[List[C]]
 
   /** Convert a single cell directly to a [[Format]]-specific
     * representation, using an implicitly injected [[Format]]-specific

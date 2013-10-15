@@ -22,26 +22,33 @@ class CSV extends Format {
         .getOrElse("")
     }
 
-    def apply(cell: Cell[String]) = quote(cell.value)
+    def apply(value: Option[String]) = quote(value) :: Nil
   }
 
   class DateTimeFormatter(df: => org.joda.time.format.DateTimeFormatter) extends SimpleFormatter[DateTime] {
-    def apply(cell: Cell[DateTime]) = StringFormatter.quote(cell.value.map(df.print))
+    def apply(value: Option[DateTime]) = StringFormatter.quote(value.map(df.print)) :: Nil
   }
 
   class DoubleFormatter(df: => java.text.DecimalFormat) extends SimpleFormatter[Double] {
-    def apply(cell: Cell[Double]) = StringFormatter.scrub(cell.value.map(df.format)).getOrElse("")
+    def apply(value: Option[Double]) = StringFormatter.scrub(value.map(df.format)).getOrElse("") :: Nil
   }
+
+  def listFormatter[C](implicit fter: Formatter[C]): Formatter[List[C]] =
+    new Formatter[List[C]] {
+      type Local = fter.Local
+      def apply(value: Option[List[C]]): List[Local] =
+        value match {
+          case None         => Nil
+          case Some(values) => values.map(Some(_)).map(fter(_)).flatten
+        }
+    }
 
   type Row = String
 
   object RowProto extends RowProto {
     def emptyRow = ""
-    def appendCell[C](cell: CellT[C])(row: String)(implicit fter: Formatter[C]) = {
-      val base = fter(cell)
-      if (row == emptyRow) base
-      else s"${row},${base}"
-    }
+    def appendCell[C](cell: CellT[C])(row: String)(implicit fter: Formatter[C]) =
+      fter(cell).foldLeft(row)((acc, elem) => if (acc == emptyRow) elem else acc+","+elem)
   }
 
   class DefaultDateTimeFormatter extends DateTimeFormatter(org.joda.time.format.DateTimeFormat.fullDateTime)

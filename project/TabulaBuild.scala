@@ -81,6 +81,7 @@ object BuildSettings {
 object Deps {
   import Versions._
 
+  val scalaz = "org.scalaz" %% "scalaz-core" % "7.0.3"
   val joda_time = "joda-time" % "joda-time" % JodaTimeVersion
   val joda_convert = "org.joda" % "joda-convert" % JodaConvertVersion
   val specs = "org.specs2" %% "specs2" % SpecsVersion % "test"
@@ -89,7 +90,7 @@ object Deps {
   val json4s = "org.json4s" %% "json4s-native" % Json4sVersion
   val shapeless = "com.chuusai" %% "shapeless" % ShapelessVersion
 
-  val CoreDeps = Seq(joda_time, joda_convert, specs, commons_lang, shapeless)
+  val CoreDeps = Seq(scalaz, joda_time, joda_convert, specs, commons_lang, shapeless)
   val JsonDeps = Seq(json4s)
   val ExcelDeps = Seq(poi)
 }

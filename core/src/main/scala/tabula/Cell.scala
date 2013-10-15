@@ -12,24 +12,19 @@ trait Cell[A] {
     */
   def value: Option[A]
 
-  /** Witness of original compile-time type of A. */
-  def m: Manifest[A]
-
   /** Transforms Cell[A] to Cell[B].  Missing A will result in missing
     * B. Use [[flatMap]] to coerce a present A into a (potentially)
     * missing B.
     */
-  def map[B: Manifest](f: A => B): Cell[B] = new Cell[B] {
+  def map[B](f: A => B): Cell[B] = new Cell[B] {
     lazy val value = cell.value.map(f)
-    lazy val m = manifest[B]
   }
 
   /** Transforms Cell[A] to Cell[B]. Missing A will result in missing
     * B. At its discretion, `f` may decide to drop the B by returning
     * None.
     */
-  def flatMap[B: Manifest](f: A => Option[B]): Cell[B] = new Cell[B] {
+  def flatMap[B](f: A => Option[B]): Cell[B] = new Cell[B] {
     lazy val value = cell.value.flatMap(f)
-    lazy val m = manifest[B]
   }
 }

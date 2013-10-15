@@ -8,10 +8,12 @@ import shapeless.HList._
 import org.specs2.mutable._
 import org.joda.time._
 import org.apache.commons.lang3.text.WordUtils.capitalize
+import scalaz._
+import Scalaz._
 
 // a pretend data model
 
-case class UselessItem(name: String, price: Double)
+case class UselessItem(name: String, price: Double, tags: Map[String, String] = Map.empty)
 case class PretentiousPurveyor(name: String, location: String)
 case class Purchase(item: UselessItem, date: Option[DateTime], from: PretentiousPurveyor)
 
@@ -55,6 +57,10 @@ object PurchaseLocation extends Column((_: Purchase).from.location)
 // date of purchase
 object DateOfPurchase extends Column((_: Purchase).date)
 
+// tags
+case class Tag(name: String) extends Column((_: Purchase).item.tags.get(name))
+object Tags extends ListColumn(Tag("foo") :: Tag("bar") :: Tag("baz") :: Tag("quux") :: Nil)
+
 // transformer column: capitalize words
 object Capitalize extends Column(capitalize)
 
@@ -81,7 +87,7 @@ object Extensibility {
     implicit val DoubleFormatter = new DoubleFormatter(new java.text.DecimalFormat("#,##0.00000;-#,##0.00000"))
     implicit val DateTimeFormatter = new DateTimeFormatter(org.joda.time.format.DateTimeFormat.forPattern("dd MMM yyyy"))
     implicit object NodeSeqFormatter extends SimpleFormatter[NodeSeq] {
-      def apply(cell: Cell[NodeSeq]) = StringFormatter.quote(cell.value.map(_ \\ "title").map(_.toString))
+      def apply(value: Option[NodeSeq]) = StringFormatter.quote(value.map(_ \\ "title").map(_.toString)) :: Nil
     }
   }
 }
@@ -95,6 +101,7 @@ object ShowcaseSpec {
       ItemPrice @@ "Item Price" ::
       PurchaseLocation @@ "Bought At" ::
       DateOfPurchase @@ "Date of Purchase" ::
+      Tags @@ "tags" ::
       HNil
 
   val cellsF = cells(columns)
