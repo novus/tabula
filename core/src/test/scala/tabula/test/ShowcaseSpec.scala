@@ -59,7 +59,11 @@ object DateOfPurchase extends Column((_: Purchase).date)
 
 // tags
 case class Tag(name: String) extends Column((_: Purchase).item.tags.get(name))
-object Tags extends ListColumn(Tag("foo") :: Tag("bar") :: Tag("baz") :: Tag("quux") :: Nil)
+object Tags extends ListColumn(
+  Tag("foo") @@ "tag foo" ::
+    Tag("bar") @@ "tag bar" ::
+    Tag("baz") @@ "tag baz" ::
+    Tag("quux") @@ "tag quux" :: Nil)
 
 // transformer column: capitalize words
 object Capitalize extends Column(capitalize)
@@ -101,7 +105,7 @@ object ShowcaseSpec {
       ItemPrice @@ "Item Price" ::
       PurchaseLocation @@ "Bought At" ::
       DateOfPurchase @@ "Date of Purchase" ::
-      Tags @@ "tags" ::
+      Tags ::
       HNil
 
   val cellsF = cells(columns)
