@@ -3,6 +3,9 @@ package tabula
 import Tabula._
 import shapeless._
 
+/** A column that has a name, most commonly produced by calling the
+  * `[[Column.@@]]` method on a column.
+  */
 class NamedColumn[F, T, C, Col](val name: Cell[String], val underlying: Col)(implicit ev: Col <:< Column[F, T, C]) extends Column[F, T, C](underlying.f)(underlying.cz, underlying.mf) with ColFun[F, T, C]
 
 object NamedColumn {

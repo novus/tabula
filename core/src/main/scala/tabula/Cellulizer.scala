@@ -40,6 +40,12 @@ abstract class Cellulizer[T, C](convert: T => C) {
   def apply(value: Option[T]): Cell[C] = new LazyCell(value, identity: Option[T] => Option[T])
 }
 
+/** Derived [[Cellulizer]] that supports [[ListColumn]] as a means of
+  * producing [[Cell]][List[C]] cells.
+  */
+class ListCellulizer[F, T, C](implicit mc: Monoid[C]) extends Cellulizer[List[ColumnAndCell[F, T, C]], List[C]](
+  cacs => cacs.map(cac => cac._2.value.getOrElse(mc.zero)))
+
 /** Cellulizer starter kit. Contains [[Cellulizer]]s for enabling
   * commonly used conversions, making Tabula immediately useful in an
   * uncomplicated environment that doesn't require additional
@@ -88,7 +94,5 @@ trait Cellulizers {
     */
   def cellulize[F, C](value: Option[F])(implicit cz: Cellulizer[F, C]): Cell[C] = cz(value)
 
-  class ListCellulizer[F, T, C](implicit mc: Monoid[C]) extends Cellulizer[List[ColumnAndCell[F, T, C]], List[C]](
-    cacs => cacs.map(cac => cac._2.value.getOrElse(mc.zero)))
   implicit def lcz[F, T, C](implicit mc: Monoid[C]) = new ListCellulizer[F, T, C]
 }
