@@ -13,17 +13,17 @@ trait JSON extends Format {
 
   implicit object StringFormatter extends Formatter[String] {
     type Local = JString
-    def apply(cell: Cell[String]) = JString(cell.value.getOrElse(""))
+    def apply(value: Option[String]) = JString(value.getOrElse("")) :: Nil
   }
 
   implicit object DateTimeFormatter extends Formatter[DateTime] {
     type Local = JInt
-    def apply(cell: Cell[DateTime]) = cell.value.map(dt => JInt(dt.getMillis)).getOrElse(JInt(0))
+    def apply(value: Option[DateTime]) = value.map(dt => JInt(dt.getMillis)).getOrElse(JInt(0)) :: Nil
   }
 
   implicit object DoubleFormatter extends Formatter[Double] {
     type Local = JDouble
-    def apply(cell: Cell[Double]) = JDouble(cell.value.getOrElse(0d))
+    def apply(value: Option[Double]) = JDouble(value.getOrElse(0d)) :: Nil
   }
 
   type Row = JArray
@@ -31,7 +31,7 @@ trait JSON extends Format {
   object RowProto extends RowProto {
     def emptyRow = JArray(Nil)
     def appendCell[C](cell: CellT[C])(row: JArray)(implicit fter: Formatter[C]) =
-      row.copy(arr = row.arr ::: fter(cell._2) :: Nil)
+      row.copy(arr = row.arr ::: fter(cell._2))
   }
 
   def writer(names: List[Option[String]]) = new WriterSpawn(names) {

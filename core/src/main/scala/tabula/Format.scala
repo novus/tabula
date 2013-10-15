@@ -45,7 +45,15 @@ trait Format extends Poly2 with Writers {
     type Local = Base
   }
 
-  implicit def listFormatter[C](implicit fter: Formatter[C]): Formatter[List[C]]
+  implicit def listFormatter[C](implicit fter: Formatter[C]): Formatter[List[C]] =
+    new Formatter[List[C]] {
+      type Local = fter.Local
+      def apply(value: Option[List[C]]): List[Local] =
+        value match {
+          case None         => Nil
+          case Some(values) => values.map(Some(_)).map(fter(_)).flatten
+        }
+    }
 
   /** Convert a single cell directly to a [[Format]]-specific
     * representation, using an implicitly injected [[Format]]-specific

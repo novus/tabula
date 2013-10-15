@@ -8,6 +8,7 @@ import shapeless.HList._
 import org.specs2.mutable._
 import org.joda.time._
 import org.apache.commons.lang3.text.WordUtils.capitalize
+import org.apache.commons.lang3.RandomStringUtils.randomAscii
 import scalaz._
 import Scalaz._
 
@@ -20,9 +21,9 @@ case class Purchase(item: UselessItem, date: Option[DateTime], from: Pretentious
 // some test data
 
 object Items {
-  val justSomeCoatRack = UselessItem("honest abe", 90.39)
-  val cheeseParkingSpot = UselessItem("fancy cheese board", 39.95)
-  val whatIsThis = UselessItem("faux professional tool pouch", 48.00)
+  val justSomeCoatRack = UselessItem("honest abe", 90.39, tags = Map("foo" -> randomAscii(10)))
+  val cheeseParkingSpot = UselessItem("fancy cheese board", 39.95, tags = Map("foo" -> randomAscii(10), "bar" -> randomAscii(10)))
+  val whatIsThis = UselessItem("faux professional tool pouch", 48.00, tags = Map("foo" -> randomAscii(10), "quux" -> randomAscii(10)))
 }
 
 object PlacesNormalPeopleDoNotGo {

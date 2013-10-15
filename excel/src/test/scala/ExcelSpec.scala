@@ -12,7 +12,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook
 
 abstract class MyExcelSheet(name: String)(implicit workbook: Workbook) extends ExcelSheet(name) {
   implicit object NodeSeqFormatter extends SimpleFormatter[NodeSeq] {
-    def apply(cell: Cell[NodeSeq]) = implicitly[Formatter[String]].apply(cell.map(_.toString))
+    def apply(value: Option[NodeSeq]) = implicitly[Formatter[String]].apply(value.map(_.toString))
   }
 }
 

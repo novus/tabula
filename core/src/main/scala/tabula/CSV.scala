@@ -33,16 +33,6 @@ class CSV extends Format {
     def apply(value: Option[Double]) = StringFormatter.scrub(value.map(df.format)).getOrElse("") :: Nil
   }
 
-  def listFormatter[C](implicit fter: Formatter[C]): Formatter[List[C]] =
-    new Formatter[List[C]] {
-      type Local = fter.Local
-      def apply(value: Option[List[C]]): List[Local] =
-        value match {
-          case None         => Nil
-          case Some(values) => values.map(Some(_)).map(fter(_)).flatten
-        }
-    }
-
   type Row = String
 
   object RowProto extends RowProto {

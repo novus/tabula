@@ -26,7 +26,7 @@ class ExcelSheet(name: String)(implicit protected val workbook: Workbook) extend
     }
 
   implicit object StringFormatter extends SimpleFormatter[String] {
-    def apply(cell: Cell[String]) = createCell(ec => cell.value.foreach(ec.setCellValue))
+    def apply(value: Option[String]) = createCell(ec => value.foreach(ec.setCellValue)) :: Nil
   }
 
   implicit object DateTimeFormatter extends SimpleFormatter[DateTime] {
@@ -35,18 +35,18 @@ class ExcelSheet(name: String)(implicit protected val workbook: Workbook) extend
       style.setDataFormat(workbook.createDataFormat().getFormat("m/d/yy h:mm"))
       style
     }
-    def apply(cell: Cell[DateTime]) =
+    def apply(value: Option[DateTime]) =
       createCellAnd {
         ec =>
           ec.setCellStyle(cellStyle)
-          cell.value.map(_.toDate).foreach(ec.setCellValue)
+          value.map(_.toDate).foreach(ec.setCellValue)
           ec
-      }
+      } :: Nil
   }
 
   implicit object DoubleFormatter extends SimpleFormatter[Double] {
-    def apply(cell: Cell[Double]) =
-      createCell(ec => cell.value.map(_.toDouble).foreach(ec.setCellValue))
+    def apply(value: Option[Double]) =
+      createCell(ec => value.map(_.toDouble).foreach(ec.setCellValue)) :: Nil
   }
 
   object RowProto extends RowProto {
@@ -58,8 +58,9 @@ class ExcelSheet(name: String)(implicit protected val workbook: Workbook) extend
     }
     def appendCell[C](cell: CellT[C])(row0: Row)(implicit fter: Formatter[C]) = {
       val (lastCellIndex, row) = row0
-      (fter(cell): Base)(lastCellIndex, row)
-      (lastCellIndex + 1, row)
+      val formatted: List[(Row => ExcelCell, Int)] = fter(cell).zipWithIndex
+      for ((elem, idx) <- formatted) elem((lastCellIndex + idx) -> row)
+      (lastCellIndex + formatted.size, row)
     }
   }
 
