@@ -22,10 +22,13 @@ class ExcelSpec extends Specification {
     "produce Excel output" in {
       Excel(() => new HSSFWorkbook()) {
         implicit wb =>
-          object sheet extends MyExcelSheet("excel spec")
+          object sheet1 extends MyExcelSheet("excel spec - sheet one")
+          object sheet2 extends MyExcelSheet("excel spec - sheet two")
           val file = File.createTempFile(getClass.getName+".", ".xls")
-          val writer = sheet.writer(columns).toFile(file)
-          writer.write(for (purchase <- Purchases.*.iterator) yield cellsF(purchase).row(sheet))
+          val writer1 = sheet1.writer(columns).toFile(file)
+          val writer2 = sheet2.writer(columns).toFile(file)
+          writer1.write(for (purchase <- Purchases.*.iterator) yield cellsF(purchase).row(sheet1))
+          writer2.write(for (purchase <- Purchases.*.iterator) yield cellsF(purchase).row(sheet2))
           println(file)
       }
       success
