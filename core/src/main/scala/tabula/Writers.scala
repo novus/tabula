@@ -14,8 +14,6 @@ trait Writers {
       writeMore(rows)
       finish()
     }
-    def writeBatched(rows: Iterator[Row], batchSize: Int) =
-      rows.sliding(batchSize, batchSize).map(_.iterator).foreach(writeMore)
     def finish() {}
   }
 
@@ -25,6 +23,8 @@ trait Writers {
     def toConsole() = toStream(System.out)
   }
 
-  def writer[F, T, C, NcT <: HList, Col](cols: Col :: NcT)(implicit ev: Col <:< Column[F, T, C], tl: ToList[Col :: NcT, Column[_, _, _]]): WriterSpawn = writer(NamedColumn.names(cols))
-  def writer(names: List[Option[String]]): WriterSpawn
+  type Spawn <: WriterSpawn
+
+  def writer[F, T, C, NcT <: HList, Col](cols: Col :: NcT)(implicit ev: Col <:< Column[F, T, C], tl: ToList[Col :: NcT, Column[_, _, _]]): Spawn = writer(NamedColumn.names(cols))
+  def writer(names: List[Option[String]]): Spawn
 }
