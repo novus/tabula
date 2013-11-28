@@ -6,7 +6,6 @@ import Tabula._
 import tabula.excel._
 import tabula.test._
 import tabula.test.Extensibility._
-import shapeless._
 import org.specs2.mutable._
 import scala.xml._
 import org.apache.poi.ss.usermodel.Workbook
@@ -19,6 +18,8 @@ object MyExcel extends Excel {
 }
 
 object Sheet1 {
+  import shapeless._
+
   val columns =
     (ItemName | Capitalize) @@ "Item Name" ::
       Title ::
@@ -31,6 +32,8 @@ object Sheet1 {
 }
 
 object Sheet2 {
+  import shapeless._
+
   val columns =
     (ItemName | Capitalize) @@ "Item Name" ::
       Tags ::
@@ -61,6 +64,39 @@ class ExcelSpec extends Specification {
       out.flush()
       out.close()
       println(file)
+
+      val workbook :: Nil = me.workbooks()
+      val sheet1 :: sheet2 :: Nil = workbook.sheets()
+      sheet1.rows().size must_== 4
+      sheet2.rows().size must_== 4
+
+      val header1 :: rows1 = sheet1.rows()
+      Purchases.*.zip(rows1).foreach {
+        case (Purchase(UselessItem(_name, _price, _), _date, PretentiousPurveyor(_, _location)), row) =>
+          val name :: _ :: price :: location :: date :: Nil = row.cells()
+          name.value() must beSome.which { case x: String => x.toLowerCase == _name }
+          price.value() must_== Some(_price)
+          location.value() must_== Some(_location)
+          date.value() must_== _date.map(_.toDate)
+          _date match {
+            case Some(_) => date.style() must beSome
+            case _       => date.style() must beNone
+          }
+      }
+
+      sheet2.rows().forall(_.cells().forall(_.style().isEmpty)) must beTrue
+
+      val header2 :: rows2 = sheet2.rows()
+      Purchases.*.zip(rows2).foreach {
+        case (Purchase(UselessItem(_name, _, tags), _, _), row) =>
+          val name :: tag_foo :: tag_bar :: tag_baz :: tag_quux :: Nil = row.cells()
+          name.value() must beSome.which { case x: String => x.toLowerCase == _name }
+          tag_foo.value().filterNot(_ == "") must_== tags.get("foo")
+          tag_bar.value().filterNot(_ == "") must_== tags.get("bar")
+          tag_baz.value().filterNot(_ == "") must_== tags.get("baz")
+          tag_quux.value().filterNot(_ == "") must_== tags.get("quux")
+      }
+
       success
     }
   }
