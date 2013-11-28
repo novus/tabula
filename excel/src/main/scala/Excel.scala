@@ -92,16 +92,26 @@ abstract class Excel extends Format {
       override def write(rows: Iterator[Row]) {
         start()
         Excel(() => new HSSFWorkbook()) {
-          workbook =>
-            val ctx = ExcelContext(workbook)
-            val sheet = workbook.createSheet()
-            for ((row, rowIdx) <- (Iterator.single(RowProto.header(names)) ++ rows).zipWithIndex)
-              row(ctx, sheet, rowIdx)
-            workbook.write(out)
+          ctx =>
+            val underlying = toWorkbook(ctx)
+            underlying.write(rows)
+            ctx.workbook.write(out)
         }
         finish()
       }
       override def finish() = out.flush()
+    }
+    def toWorkbook(ctx: ExcelContext) = new Writer(ctx) {
+      def writeMore(rows: Iterator[Row]) {
+        val sheet = ctx.workbook.createSheet()
+        for ((row, rowIdx) <- (Iterator.single(RowProto.header(names)) ++ rows).zipWithIndex)
+          row(ctx, sheet, rowIdx)
+      }
+      override def write(rows: Iterator[Row]) {
+        start()
+        writeMore(rows)
+        finish()
+      }
     }
   }
 
@@ -109,9 +119,9 @@ abstract class Excel extends Format {
 }
 
 object Excel {
-  def apply[WB <: Workbook](init: () => WB)(f: WB => Unit): WB = {
-    val book = init()
-    f(book)
-    book
+  def apply[WB <: Workbook](init: () => WB)(f: ExcelContext => Unit): ExcelContext = {
+    val ctx = ExcelContext(init())
+    f(ctx)
+    ctx
   }
 }

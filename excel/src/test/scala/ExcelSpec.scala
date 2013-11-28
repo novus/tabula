@@ -5,6 +5,8 @@ import tabula._
 import Tabula._
 import tabula.excel._
 import tabula.test._
+import tabula.test.Extensibility._
+import shapeless._
 import org.specs2.mutable._
 import scala.xml._
 import org.apache.poi.ss.usermodel.Workbook
@@ -16,13 +18,42 @@ object MyExcel extends Excel {
   }
 }
 
+object Sheet1 {
+  val columns =
+    (ItemName | Capitalize) @@ "Item Name" ::
+      Title ::
+      ItemPrice @@ "Item Price" ::
+      PurchaseLocation @@ "Bought At" ::
+      DateOfPurchase @@ "Date of Purchase" ::
+      HNil
+
+  val cellsF = cells(columns)
+}
+
+object Sheet2 {
+  val columns =
+    (ItemName | Capitalize) @@ "Item Name" ::
+      Tags ::
+      HNil
+
+  val cellsF = cells(columns)
+}
+
 class ExcelSpec extends Specification {
   import ShowcaseSpec._
   "a Excel output" should {
     "produce Excel output" in {
       val file = File.createTempFile(getClass.getName+".", ".xls")
-      val writer = MyExcel.writer(columns).toFile(file)
-      writer.write(for (purchase <- Purchases.*.iterator) yield cellsF(purchase).row(MyExcel))
+      val out = new FileOutputStream(file)
+      Excel(() => new HSSFWorkbook()) {
+        ctx =>
+          val writer1 = MyExcel.writer(Sheet1.columns).toWorkbook(ctx)
+          val writer2 = MyExcel.writer(Sheet2.columns).toWorkbook(ctx)
+          writer1.write(for (purchase <- Purchases.*.iterator) yield Sheet1.cellsF(purchase).row(MyExcel))
+          writer2.write(for (purchase <- Purchases.*.iterator) yield Sheet2.cellsF(purchase).row(MyExcel))
+      }.workbook.write(out)
+      out.flush()
+      out.close()
       println(file)
       success
     }
