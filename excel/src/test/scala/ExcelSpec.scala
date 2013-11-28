@@ -43,13 +43,19 @@ class ExcelSpec extends Specification {
   import ShowcaseSpec._
   "a Excel output" should {
     "produce Excel output" in {
+      implicit object me extends MockExcel
       val file = File.createTempFile(getClass.getName+".", ".xls")
       val out = new FileOutputStream(file)
-      Excel(() => new HSSFWorkbook()) {
+      Excel(() => new MockWorkbook(new HSSFWorkbook())) {
         ctx =>
           val writer1 = MyExcel.writer(Sheet1.columns).toWorkbook(ctx)
           val writer2 = MyExcel.writer(Sheet2.columns).toWorkbook(ctx)
-          writer1.write(for (purchase <- Purchases.*.iterator) yield Sheet1.cellsF(purchase).row(MyExcel))
+          writer1.start()
+          for (purchase <- Purchases.*) {
+            val row = Sheet1.cellsF(purchase).row(MyExcel)
+            writer1.writeMore(Iterator.single(row))
+          }
+          writer1.finish()
           writer2.write(for (purchase <- Purchases.*.iterator) yield Sheet2.cellsF(purchase).row(MyExcel))
       }.workbook.write(out)
       out.flush()

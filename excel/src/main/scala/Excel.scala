@@ -102,10 +102,20 @@ abstract class Excel extends Format {
       override def finish() = out.flush()
     }
     def toWorkbook(ctx: ExcelContext) = new Writer(ctx) {
+      private val sheet = ctx.workbook.createSheet()
+      private var offset = 0
+      override def start() {
+        val header = RowProto.header(names)
+        header(ctx, sheet, 0)
+        offset += 1
+      }
       def writeMore(rows: Iterator[Row]) {
-        val sheet = ctx.workbook.createSheet()
-        for ((row, rowIdx) <- (Iterator.single(RowProto.header(names)) ++ rows).zipWithIndex)
-          row(ctx, sheet, rowIdx)
+        var written = 0
+        for ((row, rowIdx) <- rows.zipWithIndex) {
+          row(ctx, sheet, offset + rowIdx)
+          written += 1
+        }
+        offset += written
       }
       override def write(rows: Iterator[Row]) {
         start()
