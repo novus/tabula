@@ -18,7 +18,7 @@ object Versions {
   val ScalaVersion210 = "2.10.3"
   val ScalaVersion29 = "2.9.2"
   val ScalaTimeVersion = "0.6"
-  val JodaTimeVersion = "2.3"
+  val JodaTimeVersion = "2.1"
   val JodaConvertVersion = "1.2"
   val ShapelessVersion = "1.2.4"
   val PoiVersion = "3.9"
@@ -107,13 +107,13 @@ object BuildSettings {
 object Deps {
   import Versions._
 
-  val scalaz = "org.scalaz" %% "scalaz-core" % "7.0.3"
-  val joda_time = "joda-time" % "joda-time" % JodaTimeVersion
-  val joda_convert = "org.joda" % "joda-convert" % JodaConvertVersion
+  val scalaz = "org.scalaz" %% "scalaz-core" % "7.0.3" % "provided"
+  val joda_time = "joda-time" % "joda-time" % JodaTimeVersion % "provided"
+  val joda_convert = "org.joda" % "joda-convert" % JodaConvertVersion % "provided"
   val commons_lang = "org.apache.commons" % "commons-lang3" % CommonsLangVersion % "test"
-  val poi = "org.apache.poi" % "poi" % PoiVersion
-  val json4s = "org.json4s" %% "json4s-native" % Json4sVersion
-  val shapeless = "com.chuusai" %% "shapeless" % ShapelessVersion
+  val poi = "org.apache.poi" % "poi" % PoiVersion % "provided"
+  val json4s = "org.json4s" %% "json4s-native" % Json4sVersion % "provided"
+  val shapeless = "com.chuusai" %% "shapeless" % ShapelessVersion % "provided"
 
   val CoreDeps = Seq(scalaz, joda_time, joda_convert, commons_lang, shapeless)
   val JsonDeps = Seq(json4s)
@@ -136,11 +136,11 @@ object TabulaBuild extends Build {
 
   lazy val json = Project(
     id = "tabula-json", base = file("json"),
-    settings = buildSettings ++ publishSettings ++ Seq(libraryDependencies ++= JsonDeps)
+    settings = buildSettings ++ publishSettings ++ Seq(libraryDependencies ++= CoreDeps ++ JsonDeps)
   ) dependsOn(core % "compile->test")
 
   lazy val excel = Project(
     id = "tabula-excel", base = file("excel"),
-    settings = buildSettings ++ publishSettings ++ Seq(libraryDependencies ++= ExcelDeps)
+    settings = buildSettings ++ publishSettings ++ Seq(libraryDependencies ++= CoreDeps ++ ExcelDeps)
   ) dependsOn(core % "compile->test")
 }
