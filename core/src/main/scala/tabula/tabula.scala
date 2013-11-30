@@ -12,7 +12,7 @@ object Tabula extends Cellulizers with Aggregators {
 
   implicit def pimpCells[F, T, C, O <: HList](cells: ColumnAndCell[F, T, C] :: O) = new {
     type Cells = ColumnAndCell[F, T, C] :: O
-    def row[Fmt <: Format](format: Fmt)(implicit ev: Fmt <:< Format, lf: LeftFolder[Cells, format.Row, Fmt]) =
-      cells.foldLeft(format.RowProto.emptyRow)(format)
+    def row[Fmt <: Format](format: Fmt)(implicit ev: Fmt <:< Format, lf: LeftFolder[Cells, format.Row, Fmt]): format.Row =
+      cells.foldLeft(format.RowProto.emptyRow)(format).asInstanceOf[format.Row]
   }
 }
