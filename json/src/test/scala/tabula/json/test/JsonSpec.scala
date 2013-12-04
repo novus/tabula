@@ -20,8 +20,7 @@ class JsonSpec extends Specification {
   import ShowcaseSpec._
   "a JSON output" should {
     "produce JSON" in {
-      val writer = MyJSON.writer(columns).toConsole()
-      writer.write(for (purchase <- Purchases.*.iterator) yield cellsF(purchase).row(MyJSON))
+      columns.write(MyJSON)(_.toConsole())(Purchases.*.iterator)
       success
     }
   }

@@ -100,16 +100,14 @@ object Extensibility {
 import Extensibility._
 
 object ShowcaseSpec {
-  val columns =
+  object columns extends Columns(
     (ItemName | Capitalize) @@ "Item Name" ::
       Title ::
       ItemPrice @@ "Item Price" ::
       PurchaseLocation @@ "Bought At" ::
       DateOfPurchase @@ "Date of Purchase" ::
       Tags ::
-      HNil
-
-  val cellsF = cells(columns)
+      HNil)
 }
 
 // let's do it!
@@ -117,8 +115,7 @@ class ShowcaseSpec extends Specification {
   "a purchase history" should {
     import ShowcaseSpec._
     "print out a list of things we've bought" in {
-      val writer = MyCSV.writer(columns).toConsole()
-      writer.write(for (purchase <- Purchases.*.iterator) yield cellsF(purchase).row(MyCSV))
+      columns.write(MyCSV)(_.toConsole())(Purchases.*.iterator)
       success
     }
   }

@@ -20,26 +20,24 @@ object MyExcel extends Excel {
 object Sheet1 {
   import shapeless._
 
-  val columns =
+  object columns extends Columns(
     (ItemName | Capitalize) @@ "Item Name" ::
       Title ::
       ItemPrice @@ "Item Price" ::
       PurchaseLocation @@ "Bought At" ::
       DateOfPurchase @@ "Date of Purchase" ::
-      HNil
+      HNil)
 
-  val cellsF = cells(columns)
+  val cellsF = cells(columns.columns)
 }
 
 object Sheet2 {
   import shapeless._
 
-  val columns =
+  object columns extends Columns(
     (ItemName | Capitalize) @@ "Item Name" ::
       Tags ::
-      HNil
-
-  val cellsF = cells(columns)
+      HNil)
 }
 
 class ExcelSpec extends Specification {
@@ -51,15 +49,14 @@ class ExcelSpec extends Specification {
       val out = new FileOutputStream(file)
       Excel(() => new MockWorkbook(new HSSFWorkbook())) {
         ctx =>
-          val writer1 = MyExcel.writer(Sheet1.columns).toWorkbook(ctx)
-          val writer2 = MyExcel.writer(Sheet2.columns).toWorkbook(ctx)
+          val writer1 = MyExcel.writer(Sheet1.columns.columns).toWorkbook(ctx)
           writer1.start()
           for (purchase <- Purchases.*) {
             val row = Sheet1.cellsF(purchase).row(MyExcel)
             writer1.writeMore(Iterator.single(row))
           }
           writer1.finish()
-          writer2.write(for (purchase <- Purchases.*.iterator) yield Sheet2.cellsF(purchase).row(MyExcel))
+          Sheet2.columns.write(MyExcel)(_.toWorkbook(ctx))(Purchases.*.iterator)
       }.workbook.write(out)
       out.flush()
       out.close()
