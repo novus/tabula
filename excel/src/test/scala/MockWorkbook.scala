@@ -16,6 +16,12 @@ class MockWorkbook(underlying: Workbook)(implicit me: MockExcel) extends Workboo
     sheet
   }
 
+  def createSheet(x$1: String): Sheet = {
+    val sheet = new MockSheet(underlying.createSheet(x$1))
+    _sheets += sheet
+    sheet
+  }
+
   def write(x$1: java.io.OutputStream): Unit = underlying.write(x$1)
 
   // things we proxy from underlying because they're difficult (or
@@ -29,7 +35,6 @@ class MockWorkbook(underlying: Workbook)(implicit me: MockExcel) extends Workboo
   def cloneSheet(x$1: Int): org.apache.poi.ss.usermodel.Sheet = ???
   def createFont(): org.apache.poi.ss.usermodel.Font = ???
   def createName(): org.apache.poi.ss.usermodel.Name = ???
-  def createSheet(x$1: String): org.apache.poi.ss.usermodel.Sheet = ???
   def findFont(x$1: Short, x$2: Short, x$3: Short, x$4: String, x$5: Boolean, x$6: Boolean, x$7: Short, x$8: Byte): org.apache.poi.ss.usermodel.Font = ???
   def getActiveSheetIndex(): Int = ???
   def getAllPictures(): java.util.List[_ <: org.apache.poi.ss.usermodel.PictureData] = ???

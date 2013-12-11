@@ -87,13 +87,14 @@ abstract class Excel extends Format {
   class Spawn(names: List[Option[String]]) extends WriterSpawn(names) {
     /* There's a better way to stream an *SSF workbook to disk:
      http://poi.apache.org/spreadsheet/how-to.html#sxssf */
-    def toStream(out: OutputStream) = new Writer(out) {
+    def toStream(out: OutputStream): Writer[OutputStream] = toStream(out, name = None)
+    def toStream(out: OutputStream, name: Option[String] = None): Writer[OutputStream] = new Writer(out) {
       def writeMore(rows: Iterator[Row]) = throw new UnsupportedOperationException("not implemented")
       override def write(rows: Iterator[Row]) {
         start()
         Excel(() => new HSSFWorkbook()) {
           ctx =>
-            val underlying = toWorkbook(ctx)
+            val underlying = toWorkbook(ctx, name = name)
             underlying.write(rows)
             ctx.workbook.write(out)
         }
@@ -101,8 +102,8 @@ abstract class Excel extends Format {
       }
       override def finish() = out.flush()
     }
-    def toWorkbook(ctx: ExcelContext) = new Writer(ctx) {
-      private val sheet = ctx.workbook.createSheet()
+    def toWorkbook(ctx: ExcelContext, name: Option[String] = None) = new Writer(ctx) {
+      private val sheet = name.map(ctx.workbook.createSheet(_)).getOrElse(ctx.workbook.createSheet())
       private var offset = 0
       override def start() {
         val header = RowProto.header(names)

@@ -49,14 +49,14 @@ class ExcelSpec extends Specification {
       val out = new FileOutputStream(file)
       Excel(() => new MockWorkbook(new HSSFWorkbook())) {
         ctx =>
-          val writer1 = MyExcel.writer(Sheet1.columns.columns).toWorkbook(ctx)
+          val writer1 = MyExcel.writer(Sheet1.columns.columns).toWorkbook(ctx, name = Some("sheet one"))
           writer1.start()
           for (purchase <- Purchases.*) {
             val row = Sheet1.cellsF(purchase).row(MyExcel)
             writer1.writeMore(Iterator.single(row))
           }
           writer1.finish()
-          Sheet2.columns.write(MyExcel)(_.toWorkbook(ctx))(Purchases.*.iterator)
+          Sheet2.columns.write(MyExcel)(_.toWorkbook(ctx, name = Some("sheet two")))(Purchases.*.iterator)
       }.workbook.write(out)
       out.flush()
       out.close()

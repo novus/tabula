@@ -34,7 +34,7 @@ object BuildSettings {
 
   lazy val buildSettings = Defaults.defaultSettings ++ Seq(
     organization := "com.bumnetworks",
-    version := "0.0.8-SNAPSHOT",
+    version := "0.0.8",
     scalaVersion := ScalaVersion210,
     crossScalaVersions := Seq(ScalaVersion210, ScalaVersion29),
     scalacOptions <++= scalaVersion map {
