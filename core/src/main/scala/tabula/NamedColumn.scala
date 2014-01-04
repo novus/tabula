@@ -2,6 +2,7 @@ package tabula
 
 import Tabula._
 import shapeless._
+import shapeless.ops.hlist._
 
 /** A column that has a name, most commonly produced by calling the
   * `[[Column.@@]]` method on a column.

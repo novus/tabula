@@ -3,27 +3,16 @@ import Keys._
 import com.typesafe.sbt.SbtScalariform._
 import scalariform.formatter.preferences._
 
-sealed trait ScalaRelease
-case object TwoNine extends ScalaRelease
-case object TwoTen extends ScalaRelease
-object ScalaRelease {
-  val scalaVersionRegex = "(\\d+)\\.(\\d+).*".r
-  def apply(v: String) = v match {
-    case scalaVersionRegex(major, minor) if major.toInt > 2 || (major == "2" && minor.toInt >= 10) => TwoTen
-    case _ => TwoNine
-  }
-}
-
 object Versions {
   val ScalaVersion210 = "2.10.3"
-  val ScalaVersion29 = "2.9.2"
   val ScalaTimeVersion = "0.6"
   val JodaTimeVersion = "2.1"
   val JodaConvertVersion = "1.2"
-  val ShapelessVersion = "1.2.4"
+  val ShapelessVersion = "2.0.0-M1"
   val PoiVersion = "3.9"
   val Json4sVersion = "3.2.5"
   val CommonsLangVersion = "3.1"
+  val SpecsVersion = "2.3.7"
 }
 
 object BuildSettings {
@@ -34,30 +23,16 @@ object BuildSettings {
 
   lazy val buildSettings = Defaults.defaultSettings ++ Seq(
     organization := "com.bumnetworks",
-    version := "0.0.9-SNAPSHOT",
+    version := "0.1.0",
     scalaVersion := ScalaVersion210,
-    crossScalaVersions := Seq(ScalaVersion210, ScalaVersion29),
-    scalacOptions <++= scalaVersion map {
-      sv =>
-      ScalaRelease(sv) match {
-        case TwoTen =>
-          Seq("-deprecation",  "-unchecked", "-feature", "-language:implicitConversions", "-language:reflectiveCalls")
-        case _ => Seq("-deprecation", "-unchecked", "-Ydependent-method-types")
-      }
-    },
+    crossScalaVersions := Seq(ScalaVersion210),
+    scalacOptions ++= Seq("-deprecation",  "-unchecked", "-feature", "-language:implicitConversions", "-language:reflectiveCalls"),
     shellPrompt := prompt,
     showTiming := true,
     parallelExecution := true,
     parallelExecution in Test := false,
     testFrameworks += TestFrameworks.Specs,
-    libraryDependencies <+= scalaVersion {
-      sv => "org.specs2" %% "specs2" % {
-        ScalaRelease(sv) match {
-          case TwoTen => "2.2"
-          case TwoNine => "1.12.4.1"
-        }
-      } % "test"
-    },
+    libraryDependencies += "org.specs2" %% "specs2" % SpecsVersion % "test",
     offline := false,
     initialCommands in console in Test := """
     import tabula._
@@ -113,7 +88,7 @@ object Deps {
   val commons_lang = "org.apache.commons" % "commons-lang3" % CommonsLangVersion % "test"
   val poi = "org.apache.poi" % "poi" % PoiVersion % "provided"
   val json4s = "org.json4s" %% "json4s-native" % Json4sVersion % "provided"
-  val shapeless = "com.chuusai" %% "shapeless" % ShapelessVersion % "provided"
+  val shapeless = "com.chuusai" % "shapeless" % ShapelessVersion % "provided" cross CrossVersion.full
 
   val CoreDeps = Seq(scalaz, joda_time, joda_convert, commons_lang, shapeless)
   val JsonDeps = Seq(json4s)

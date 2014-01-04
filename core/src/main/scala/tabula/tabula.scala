@@ -2,6 +2,7 @@ package tabula
 
 import Tabula._
 import shapeless._
+import shapeless.ops.hlist._
 
 object Tabula extends Cellulizers with Aggregators {
   type ColumnAndCell[F, T, C] = (Column[F, T, C], Cell[C])
@@ -12,7 +13,7 @@ object Tabula extends Cellulizers with Aggregators {
 
   implicit def pimpCells[F, T, C, O <: HList](cells: ColumnAndCell[F, T, C] :: O) = new {
     type Cells = ColumnAndCell[F, T, C] :: O
-    def row[Fmt <: Format](format: Fmt)(implicit ev: Fmt <:< Format, lf: LeftFolder[Cells, format.Row, Fmt]): format.Row =
-      cells.foldLeft(format.RowProto.emptyRow)(format).asInstanceOf[format.Row]
+    def row[Fmt <: Format](format: Fmt)(implicit ev: Fmt <:< Format, lf: LeftFolder[Cells, format.Row, format.type]): format.Row =
+      cells.foldLeft(format.RowProto.emptyRow)(format)(lf).asInstanceOf[format.Row]
   }
 }
