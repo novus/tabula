@@ -23,7 +23,7 @@ object BuildSettings {
 
   lazy val buildSettings = Defaults.defaultSettings ++ Seq(
     organization := "com.bumnetworks",
-    version := "0.1.0",
+    version := "0.1.1-SNAPSHOT",
     scalaVersion := ScalaVersion210,
     crossScalaVersions := Seq(ScalaVersion210),
     scalacOptions ++= Seq("-deprecation",  "-unchecked", "-feature", "-language:implicitConversions", "-language:reflectiveCalls"),
