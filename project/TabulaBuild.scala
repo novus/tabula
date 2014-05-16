@@ -89,8 +89,16 @@ object Deps {
   val commons_lang = "org.apache.commons" % "commons-lang3" % CommonsLangVersion % "test"
   val poi = "org.apache.poi" % "poi" % PoiVersion % "provided"
   val json4s = "org.json4s" %% "json4s-native" % Json4sVersion % "provided"
-  val shapeless211 = "com.chuusai" %% "shapeless" % ShapelessVersion % "provided"
-  val shapeless210 = "com.chuusai" % "shapeless" % ShapelessVersion % "provided" cross CrossVersion.full
+  val Shapeless = {
+    val shapeless211 = "com.chuusai" %% "shapeless" % ShapelessVersion % "provided"
+    val shapeless210 = "com.chuusai" % "shapeless" % ShapelessVersion % "provided" cross CrossVersion.full
+    Seq(
+      libraryDependencies <++= (scalaVersion) {
+        sv =>
+        Seq(if (sv.startsWith("2.10")) shapeless210 else shapeless211)
+      }
+    )
+  }
 
   val CoreDeps = Seq(scalaz, joda_time, joda_convert, commons_lang)
   val JsonDeps = Seq(json4s)
@@ -108,21 +116,16 @@ object TabulaBuild extends Build {
 
   lazy val core = Project(
     id = "tabula-core", base = file("core"),
-    settings = buildSettings ++ publishSettings ++ Seq(libraryDependencies ++= CoreDeps) ++ Seq(
-      libraryDependencies <++= (scalaVersion) {
-        sv =>
-        Seq(if (sv.startsWith("2.10")) shapeless210 else shapeless211)
-      }
-    )
+    settings = buildSettings ++ publishSettings ++ Seq(libraryDependencies ++= CoreDeps) ++ Shapeless
   )
 
   lazy val json = Project(
     id = "tabula-json", base = file("json"),
-    settings = buildSettings ++ publishSettings ++ Seq(libraryDependencies ++= CoreDeps ++ JsonDeps)
+    settings = buildSettings ++ publishSettings ++ Seq(libraryDependencies ++= CoreDeps ++ JsonDeps) ++ Shapeless
   ) dependsOn(core % "compile->test")
 
   lazy val excel = Project(
     id = "tabula-excel", base = file("excel"),
-    settings = buildSettings ++ publishSettings ++ Seq(libraryDependencies ++= CoreDeps ++ ExcelDeps)
+    settings = buildSettings ++ publishSettings ++ Seq(libraryDependencies ++= CoreDeps ++ ExcelDeps) ++ Shapeless
   ) dependsOn(core % "compile->test")
 }
