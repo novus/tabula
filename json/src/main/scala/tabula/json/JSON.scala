@@ -30,8 +30,10 @@ trait JSON extends Format {
 
   object RowProto extends RowProto {
     def emptyRow = JArray(Nil)
-    def appendCell[C](cell: CellT[C])(row: JArray)(implicit fter: Formatter[C]) =
-      row.copy(arr = row.arr ::: fter(cell._2))
+    def appendCell[C](cell: Cell[C])(row: JArray)(implicit fter: Formatter[C]) =
+      row.copy(arr = row.arr ::: fter(cell))
+    def appendBase[T <: Base](value: T)(row: Row) =
+      row.copy(arr = row.arr ::: value :: Nil)
   }
 
   class Spawn(names: List[Option[String]]) extends WriterSpawn(names) {

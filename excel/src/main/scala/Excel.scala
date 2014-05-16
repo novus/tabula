@@ -52,6 +52,7 @@ case class DoubleCell(value: Double) extends ICell {
 }
 
 class IRow(cells: ArrayBuffer[ICell]) extends ((ExcelContext, Sheet, Int) => ExcelRow) {
+  def +=(more: ICell) = cells += more
   def ++=(more: Iterable[ICell]) = cells ++= more
   def apply(ctx: ExcelContext, sheet: Sheet, idx: Int) = {
     val row = sheet.createRow(idx)
@@ -78,8 +79,12 @@ abstract class Excel extends Format {
 
   object RowProto extends RowProto {
     def emptyRow = new IRow(new ArrayBuffer)
-    def appendCell[C](cell: CellT[C])(row: Row)(implicit fter: Formatter[C]) = {
-      row ++= fter(cell)
+
+    def appendCell[C](cell: Cell[C])(row: Row)(implicit fter: Formatter[C]) =
+      fter(cell).foldLeft(row)((r, v) => appendBase(v)(row))
+
+    def appendBase[T <: Base](value: T)(row: Row) = {
+      row += value
       row
     }
   }

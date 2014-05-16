@@ -99,6 +99,7 @@ object Deps {
       }
     )
   }
+  val Reflection = Seq(libraryDependencies += "org.scala-lang" % "scala-reflect" % scalaVersion.value)
 
   val CoreDeps = Seq(scalaz, joda_time, joda_convert, commons_lang)
   val JsonDeps = Seq(json4s)
@@ -116,7 +117,7 @@ object TabulaBuild extends Build {
 
   lazy val core = Project(
     id = "tabula-core", base = file("core"),
-    settings = buildSettings ++ publishSettings ++ Seq(libraryDependencies ++= CoreDeps) ++ Shapeless
+    settings = buildSettings ++ publishSettings ++ Seq(libraryDependencies ++= CoreDeps) ++ Shapeless ++ Reflection
   )
 
   lazy val json = Project(

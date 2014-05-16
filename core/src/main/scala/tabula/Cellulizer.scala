@@ -17,7 +17,7 @@ import scalaz._
   *
   * @param convert function for turning a `T` into a `C`
   */
-abstract class Cellulizer[T, C](convert: T => C) {
+abstract class Cellulizer[T, C: Manifest](convert: T => C) {
   cz =>
 
   /** Lazy implementation of a [[Cell]][C] that defers computation of
@@ -27,6 +27,7 @@ abstract class Cellulizer[T, C](convert: T => C) {
     * @param f Function for extracting intermediate type `T` from `F`
     */
   class LazyCell[F](source: F, f: F => Option[T]) extends Cell[C] {
+    def manifest = implicitly[Manifest[C]]
     lazy val value = f(source).map(convert)
   }
 
@@ -43,7 +44,7 @@ abstract class Cellulizer[T, C](convert: T => C) {
 /** Derived [[Cellulizer]] that supports [[ListColumn]] as a means of
   * producing [[Cell]][List[C]] cells.
   */
-class ListCellulizer[F, T, C](implicit mc: Monoid[C]) extends Cellulizer[List[ColumnAndCell[F, T, C]], List[C]](
+class ListCellulizer[F, T, C: Manifest](implicit mc: Monoid[C]) extends Cellulizer[List[ColumnAndCell[F, T, C]], List[C]](
   cacs => cacs.map(cac => cac._2.value.getOrElse(mc.zero)))
 
 /** Cellulizer starter kit. Contains [[Cellulizer]]s for enabling
@@ -94,5 +95,5 @@ trait Cellulizers {
     */
   def cellulize[F, C](value: Option[F])(implicit cz: Cellulizer[F, C]): Cell[C] = cz(value)
 
-  implicit def lcz[F, T, C](implicit mc: Monoid[C]) = new ListCellulizer[F, T, C]
+  implicit def lcz[F, T, C: Manifest](implicit mc: Monoid[C]) = new ListCellulizer[F, T, C]
 }

@@ -14,13 +14,12 @@ import Tabula._
 trait Format extends Poly2 with Writers {
   /** Format-specific representation of a cell type. */
   type Base
-  type CellT[C] = ColumnAndCell[_, _, C]
 
   /** Format-specific representation of a row type. */
   type Row
 
   /** Type class that turns a `C` into a subclass of `[[Base]]`. */
-  trait Formatter[C] {
+  abstract class Formatter[C](implicit val manifest: Manifest[C]) {
     /** Cell representation that is a subtype of `[[Base]]` but is
       * specific to this particular `C`.
       */
@@ -32,10 +31,7 @@ trait Format extends Poly2 with Writers {
     /** Turn a [[Cell]][C] into [[Local]]. */
     def apply(cell: Cell[C]): List[Local] = apply(cell.value)
 
-    /** Extract [[Cell]][C] from a [[Tabula.ColumnAndCell]] tuple & turn
-      * it into a [[Local]].
-      */
-    def apply(cell: CellT[C]): List[Local] = apply(cell._2)
+    private[tabula] def format(cell: Cell[C]): List[Local] = apply(cell)
   }
 
   /** "Simple" [[Formatter]] subclass which assumes that `[[Local]] =:=
@@ -45,7 +41,7 @@ trait Format extends Poly2 with Writers {
     type Local = Base
   }
 
-  implicit def listFormatter[C](implicit fter: Formatter[C]): Formatter[List[C]] =
+  implicit def listFormatter[C: Manifest](implicit fter: Formatter[C]): Formatter[List[C]] =
     new Formatter[List[C]] {
       type Local = fter.Local
       def apply(value: Option[List[C]]): List[Local] =
@@ -69,14 +65,14 @@ trait Format extends Poly2 with Writers {
     /** Construct an empty [[Row]]. */
     def emptyRow: Row
 
-    /** */
-    def appendCell[C](cell: CellT[C])(row: Row)(implicit fter: Formatter[C]): Row
-    object Name extends Column(identity: Option[String] => Option[String])
+    def appendCell[C](cell: Cell[C])(row: Row)(implicit fter: Formatter[C]): Row
+
+    def appendBase[T <: Base](value: T)(row: Row): Row
+
     def header(names: List[Option[String]])(implicit fter: Formatter[String]) = {
       names
         .iterator
         .map(cellulize[String, String])
-        .map(Name -> _)
         .foldLeft(RowProto.emptyRow)(
           (r, c) => RowProto.appendCell[String](c)(r))
     }
@@ -85,5 +81,7 @@ trait Format extends Poly2 with Writers {
   val RowProto: RowProto
 
   implicit def caseRowCell[F, T, C](implicit fter: Formatter[C]) =
-    at[Row, ColumnAndCell[F, T, C]]((r, c) => RowProto.appendCell(c)(r))
+    at[Row, ColumnAndCell[F, T, C]] {
+      case (row, (_, cell)) => RowProto.appendCell(cell)(row)
+    }
 }

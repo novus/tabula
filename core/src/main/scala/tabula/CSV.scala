@@ -37,8 +37,11 @@ class CSV extends Format {
 
   object RowProto extends RowProto {
     def emptyRow = ""
-    def appendCell[C](cell: CellT[C])(row: String)(implicit fter: Formatter[C]) =
-      fter(cell).foldLeft(row)((acc, elem) => if (acc == emptyRow) elem else acc+","+elem)
+    def appendCell[C](cell: Cell[C])(row: String)(implicit fter: Formatter[C]) =
+      fter(cell).foldLeft(row)((acc, elem) => appendBase(elem)(acc))
+    def appendBase[T <: Base](value: T)(row: Row) =
+      if (row == emptyRow) value
+      else row+","+value
   }
 
   class DefaultDateTimeFormatter extends DateTimeFormatter(org.joda.time.format.DateTimeFormat.fullDateTime)
