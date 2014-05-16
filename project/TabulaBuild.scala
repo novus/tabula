@@ -4,15 +4,16 @@ import com.typesafe.sbt.SbtScalariform._
 import scalariform.formatter.preferences._
 
 object Versions {
-  val ScalaVersion210 = "2.10.3"
+  val ScalaVersion210 = "2.10.4"
+  val ScalaVersion211 = "2.11.0"
   val ScalaTimeVersion = "0.6"
   val JodaTimeVersion = "2.1"
   val JodaConvertVersion = "1.2"
-  val ShapelessVersion = "2.0.0-M1"
+  val ShapelessVersion = "2.0.0"
   val PoiVersion = "3.9"
-  val Json4sVersion = "3.2.5"
+  val Json4sVersion = "3.2.10"
   val CommonsLangVersion = "3.1"
-  val SpecsVersion = "2.3.7"
+  val SpecsVersion = "2.3.12"
 }
 
 object BuildSettings {
@@ -24,8 +25,8 @@ object BuildSettings {
   lazy val buildSettings = Defaults.defaultSettings ++ Seq(
     organization := "com.bumnetworks",
     version := "0.1.1-SNAPSHOT",
-    scalaVersion := ScalaVersion210,
-    crossScalaVersions := Seq(ScalaVersion210),
+    scalaVersion := ScalaVersion211,
+    crossScalaVersions := Seq(ScalaVersion210, ScalaVersion211),
     scalacOptions ++= Seq("-deprecation",  "-unchecked", "-feature", "-language:implicitConversions", "-language:reflectiveCalls"),
     shellPrompt := prompt,
     showTiming := true,
@@ -82,15 +83,16 @@ object BuildSettings {
 object Deps {
   import Versions._
 
-  val scalaz = "org.scalaz" %% "scalaz-core" % "7.0.3" % "provided"
+  val scalaz = "org.scalaz" %% "scalaz-core" % "7.0.6" % "provided"
   val joda_time = "joda-time" % "joda-time" % JodaTimeVersion % "provided"
   val joda_convert = "org.joda" % "joda-convert" % JodaConvertVersion % "provided"
   val commons_lang = "org.apache.commons" % "commons-lang3" % CommonsLangVersion % "test"
   val poi = "org.apache.poi" % "poi" % PoiVersion % "provided"
   val json4s = "org.json4s" %% "json4s-native" % Json4sVersion % "provided"
-  val shapeless = "com.chuusai" % "shapeless" % ShapelessVersion % "provided" cross CrossVersion.full
+  val shapeless211 = "com.chuusai" %% "shapeless" % ShapelessVersion % "provided"
+  val shapeless210 = "com.chuusai" % "shapeless" % ShapelessVersion % "provided" cross CrossVersion.full
 
-  val CoreDeps = Seq(scalaz, joda_time, joda_convert, commons_lang, shapeless)
+  val CoreDeps = Seq(scalaz, joda_time, joda_convert, commons_lang)
   val JsonDeps = Seq(json4s)
   val ExcelDeps = Seq(poi)
 }
@@ -106,7 +108,12 @@ object TabulaBuild extends Build {
 
   lazy val core = Project(
     id = "tabula-core", base = file("core"),
-    settings = buildSettings ++ publishSettings ++ Seq(libraryDependencies ++= CoreDeps)
+    settings = buildSettings ++ publishSettings ++ Seq(libraryDependencies ++= CoreDeps) ++ Seq(
+      libraryDependencies <++= (scalaVersion) {
+        sv =>
+        Seq(if (sv.startsWith("2.10")) shapeless210 else shapeless211)
+      }
+    )
   )
 
   lazy val json = Project(
