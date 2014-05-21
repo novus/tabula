@@ -37,7 +37,7 @@ trait JSON extends Format {
   }
 
   class Spawn(names: List[Option[String]]) extends WriterSpawn(names) {
-    def toStream(out: OutputStream) = new Writer(out) {
+    def toStream(out: OutputStream) = new Writer {
       val pw = new PrintWriter(out)
 
       override def start() {

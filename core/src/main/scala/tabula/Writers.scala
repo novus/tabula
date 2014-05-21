@@ -7,7 +7,7 @@ import java.io.{ File, OutputStream, FileOutputStream }
 trait Writers {
   self: Format =>
 
-  abstract class Writer[In](in: In) {
+  abstract class Writer {
     def start() {}
     def writeMore(rows: Iterator[Row]): Unit
     def write(rows: Iterator[Row]) {
@@ -19,8 +19,8 @@ trait Writers {
   }
 
   abstract class WriterSpawn(protected val names: List[Option[String]]) {
-    def toStream(out: OutputStream): Writer[OutputStream]
-    def toFile(file: File) = toStream(new FileOutputStream(file)).asInstanceOf[Writer[File]]
+    def toStream(out: OutputStream): Writer
+    def toFile(file: File) = toStream(new FileOutputStream(file))
     def toConsole() = toStream(System.out)
   }
 

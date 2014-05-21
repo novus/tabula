@@ -48,7 +48,7 @@ class CSV extends Format {
   class DefaultDoubleFormatter extends DoubleFormatter(new java.text.DecimalFormat("#,##0.00;-#,##0.00"))
 
   class Spawn(names: List[Option[String]]) extends WriterSpawn(names) {
-    def toStream(out: OutputStream) = new Writer(out) {
+    def toStream(out: OutputStream) = new Writer {
       lazy val pw = new PrintWriter(out)
       override def start() = pw.println(names.map(StringFormatter.quote).mkString(","))
       def writeMore(rows: Iterator[String]) = for (row <- rows) pw.println(row)
