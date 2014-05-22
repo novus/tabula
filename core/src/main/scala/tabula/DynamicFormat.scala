@@ -24,12 +24,15 @@ case class DynamicFormat[F <: Format: ru.TypeTag: ClassTag](val fmt: F) {
       }
   }
 
-  lazy val mirror = ru.runtimeMirror(fmt.getClass.getClassLoader).reflect(fmt)
+  lazy val rm = ru.runtimeMirror(fmt.getClass.getClassLoader)
+  lazy val im = rm.reflect(fmt)
 
   lazy val formatters =
     formatterSymbols.foldLeft(Map.empty[Manifest[_], (String, fmt.Formatter[_])]) {
       case (acc, (name, Right(module))) =>
-        val fter = mirror.reflectModule(module).instance.asInstanceOf[fmt.Formatter[_]]
+        val fter =
+          (if (module.isStatic) rm.reflectModule(module)
+          else im.reflectModule(module)).instance.asInstanceOf[fmt.Formatter[_]]
         acc + (fter.manifest -> (name, fter))
       case (acc, (_, Left(_))) => acc
     }
